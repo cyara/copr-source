@@ -1,6 +1,6 @@
 %if 0%{?el8}
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-372.9.1.el8}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.3.1.el8}
 %endif 
 
 %if 0%{?el9}
@@ -93,7 +93,7 @@ mv %{buildroot}/usr/local/share/perl5/5.32 %{buildroot}%{_datadir}/perl5
 
 %changelog
 * Tue Oct 25 2022 Patrick Coakley <patrick.coakley@spearline.com> - 3.2.0-1
-- Upgraded Dahdi version and trying to build for el9
+- Upgraded Dahdi build for el9 and el8
 
 * Thu Jul 01 2021 Jonathan Dieter <jonathan.dieter@spearline.com> - 3.1.0-3
 - Add missing perl bindings, required for some of the binaries
