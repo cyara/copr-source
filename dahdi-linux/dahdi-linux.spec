@@ -1,13 +1,3 @@
-%if 0%{?el8}
-# If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.3.1.el8}
-%endif 
-
-%if 0%{?el9}
-# If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-70.13.1.el9_0}
-%endif 
-
 Name:		dahdi-linux
 Version:	3.2.0
 Release:	1%{?dist}

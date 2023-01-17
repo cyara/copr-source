@@ -6,7 +6,7 @@
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.3.1.el8}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.10.1.el8_7}
 %endif
 
 %if 0%{?el9}
@@ -15,7 +15,7 @@
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -233,6 +233,9 @@ exit 0
 
 
 %changelog
+* Wed Jan 18 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-9
+- Upgraded Kernel version to 4.18.0-425.10.1.el8_7 for SpearlineOS 8.7.4
+
 * Tue Oct 25 2022 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-8
 - Rebuild for AlmaLinux 9
 - Upgrade dahdi-linux to 3.2.0  
