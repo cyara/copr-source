@@ -9,10 +9,6 @@
 %{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.3.1.el8}
 %endif
 
-%if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-70.13.1.el9_0} 
-%endif
-
 Name:		telephony-kmods
 Version:	1.0
 Release:	8%{?dist}
