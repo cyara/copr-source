@@ -2,13 +2,13 @@
 %define kmod_name	hpsa
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-70.13.1.el9_0}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
 Version:	3.4.20
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -127,8 +127,11 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Fri Oct 21 2022 Jonathan Dieter <jonathan.dieter@spearline.com> - 3.4.20-8
+* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 3.4.20-9
 - Remove %post_* sections for ostree
+
+* Tue Nov 15 2022 Akemi Yagi <toracat@elrepo.org> - 3.4.20-8
+- Rebuilt against RHEL 9.1 GA kernel 5.14.0-162.6.1.el9_1
 
 * Tue May 17 2022 Akemi Yagi <toracat@elrepo.org> - 3.4.20-7
 - Rebuilt against RHEL 9.0 GA kernel 5.14.0-70.13.1.el9_0

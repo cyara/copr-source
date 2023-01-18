@@ -2,13 +2,13 @@
 %define kmod_name	megaraid_sas
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-70.13.1.el9_0}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
 Version:	07.719.03.00
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -19,7 +19,7 @@ Source0:	%{kmod_name}-%{version}.tar.gz
 Source5:	GPL-v2.0.txt
 
 # Source code patches
-Patch0:		elrepo-megaraid_sas-rhel_differences.el9_0.patch
+Patch0:		elrepo-%{kmod_name}-rhel_differences.el9_0.patch
 
 %define __spec_install_post \
 		/usr/lib/rpm/check-buildroot \
@@ -123,8 +123,12 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Mon Oct 24 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-2
+* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-3S
 - Remove %post_* sections for ostree
+
+* Tue Nov 15 2022 Philip J Perry <phil@elrepo.org> - 07.719.03.00-2
+- Rebuilt for RHEL 9.1
+- Source updated from RHEL 9.1 kernel
 
 * Tue May 17 2022 Philip J Perry <phil@elrepo.org> - 07.719.03.00-1
 - Initial build for RHEL 9
