@@ -2,13 +2,13 @@
 %define kmod_name		sata_sil
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.3.1.el8}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.10.1.el8_7}
 
 %{!?dist: %define dist .el8}
 
 Name:           kmod-%{kmod_name}
 Version:        2.4
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        %{kmod_name} kernel module(s)
 Group:          System Environment/Kernel
 License:        GPLv2
@@ -121,7 +121,9 @@ find %{buildroot} -type f -name \*.ko -exec %{__strip} --strip-debug \{\} \;
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-%changelog
+* Wed Jan 20 2023 Patrick Coakley <patrick.coakley@spearline.com> - 2.4-9
+- Updated for SpearlineOS 8.7.5
+
 * Fri Dec 09 2022 Patrick Coakley <patrick.coakley@spearline.com> - 2.4-8
 - Updated kernel version to 4.18.0-425.3.1.el8 to work on AlmaLinux 8.7
 
