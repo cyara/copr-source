@@ -10,12 +10,12 @@
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1} 
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.12.1.el9_1} 
 %endif
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -24,6 +24,8 @@ URL:		http://www.kernel.org/
 Source0:	dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}.tar.gz
 Source1:	ftp://ftp.sangoma.com/wanpipe-%{wanpipe_version}.tgz
 Patch1:		wanpipe-7.0.34-state.patch
+Patch2:         wanpipe-7.0.34-state-el9.patch
+Patch3:         dahdi_5_14_kernel.patch
 
 ExclusiveArch:	x86_64
 
@@ -95,6 +97,10 @@ of the same variant of the Linux kernel and not on any one specific build.
 %prep
 %setup -c -a 1
 %patch1 -p1
+%if 0%{?el9}
+%patch2 -p1
+%patch3 -p1
+%endif
 
 echo "override dahdi * weak-updates/dahdi" > dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}/linux/kmod-dahdi.conf
 echo "override wanpipe * weak-updates/wanpipe" > wanpipe-%{wanpipe_version}/kmod-wanpipe.conf
@@ -233,6 +239,9 @@ exit 0
 
 
 %changelog
+* Thu Jan 26 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-10
+- Created custom patches for dahdi and wanpipe to work with Kernel 5.14.0-162.12.1.el9_1
+
 * Wed Jan 18 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-9
 - Upgraded Kernel version to 4.18.0-425.10.1.el8_7 for SpearlineOS 8.7.4
 
