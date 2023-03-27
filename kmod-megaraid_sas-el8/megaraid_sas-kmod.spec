@@ -2,13 +2,13 @@
 %define kmod_name		megaraid_sas
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.10.1.el8_7}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.13.1.el8_7}
 
 %{!?dist: %define dist .el8}
 
 Name:		kmod-%{kmod_name}
 Version:	07.719.03.00
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -115,14 +115,12 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Wed Jan 20 2023 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-4
-- Updated for SpearlineOS 8.7.5
+* Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-5
+- Updated for SpearlineOS 8.7.8
 
-* Wed Dec 07 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-3
-- Updated kernel version to 4.18.0-425.3.1.el8 to work on AlmaLinux 8.7
-
-* Mon Oct 24 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-2
-- Remove %post_* sections for ostree
+* Sat Feb 11 2023 Philip J Perry <phil@elrepo.org> 07.719.03.00-2
+- Rebuilt for RHEL 8.7
+- Source code updated from RHEL kernel-4.18.0-425.3.1.el8.x86_64
 
 * Tue May 10 2022 Philip J Perry <phil@elrepo.org> 07.719.03.00-1
 - Rebuilt for RHEL 8.6

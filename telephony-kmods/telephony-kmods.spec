@@ -6,7 +6,7 @@
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.10.1.el8_7}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.13.1.el8_7}
 %endif
 
 %if 0%{?el9}
@@ -15,7 +15,7 @@
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	10%{?dist}
+Release:	11%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -239,6 +239,9 @@ exit 0
 
 
 %changelog
+* Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-11
+- Created custom patches for dahdi and wanpipe to work with Kernel 4.18.0-425.13.1.el8_7
+
 * Thu Jan 26 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-10
 - Created custom patches for dahdi and wanpipe to work with Kernel 5.14.0-162.12.1.el9_1
 
