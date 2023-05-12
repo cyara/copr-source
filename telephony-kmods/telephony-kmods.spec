@@ -10,7 +10,7 @@
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.12.1.el9_1} 
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-284.11.1.el9_2 } 
 %endif
 
 Name:		telephony-kmods
@@ -239,6 +239,9 @@ exit 0
 
 
 %changelog
+* Fri May 12 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-12
+- Created custom patches for dahdi and wanpipe to work with Kernel 5.14.0-284.11.1.el9_2.x86_64
+
 * Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-11
 - Created custom patches for dahdi and wanpipe to work with Kernel 4.18.0-425.13.1.el8_7
 
