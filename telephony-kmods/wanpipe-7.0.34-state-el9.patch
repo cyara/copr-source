@@ -38,8 +38,8 @@ diff -ru wanpipe-7.0.34-a/patches/kdrivers/include/wanpipe_kernel.h wanpipe-7.0.
  
  	int 	(*get_info)(void*, struct seq_file* m, int *);
 
---- telephony-kmods-a/wanpipe-7.0.34/wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2021-09-15 12:28:06.000000000 +0100
-+++ telephony-kmods-b/wanpipe-7.0.34/wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2023-05-15 12:19:01.291519266 +0100
+--- telephony-kmods-a/wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2021-09-15 12:28:06.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2023-05-15 12:19:01.291519266 +0100
 @@ -1688,7 +1688,9 @@
  	if (flags & MSG_OOB){	
  		skb=skb_dequeue(&sk->sk_error_queue);
