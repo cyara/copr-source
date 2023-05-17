@@ -45,8 +45,8 @@ ExclusiveArch:	x86_64
 BuildRequires:	elfutils-libelf-devel
 BuildRequires:	kernel-devel = %{kmod_kernel_version}
 BuildRequires:  kernel-modules = %{kmod_kernel_version}
-BuildRequires:	kernel-abi-stablelists
-BuildRequires:	kernel-rpm-macros
+BuildRequires:	kernel-abi-stablelists = %{kmod_kernel_version}
+BuildRequires:	kernel-rpm-macros = = %{kmod_kernel_version}
 BuildRequires:	redhat-rpm-config
 Requires:	kmod-dahdi == %{dahdi_version}
 Requires:	kmod-wanpipe == %{wanpipe_version}
