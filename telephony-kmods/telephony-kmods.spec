@@ -6,7 +6,7 @@
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.13.1.el8_7}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-477.10.1.el8_8}
 %endif
 
 %if 0%{?el9}
@@ -15,7 +15,7 @@
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	11%{?dist}
+Release:	12%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -26,7 +26,7 @@ Source1:	ftp://ftp.sangoma.com/wanpipe-%{wanpipe_version}.tgz
 Patch1:		wanpipe-7.0.34-state.patch
 Patch2:         wanpipe-7.0.34-state-el9.patch
 Patch3:         dahdi_5_14_kernel.patch
-
+Patch4:         dahdi_el8_8_kernel.patch
 ExclusiveArch:	x86_64
 
 # Source code patches
@@ -100,6 +100,9 @@ of the same variant of the Linux kernel and not on any one specific build.
 %if 0%{?el9}
 %patch2 -p1
 %patch3 -p1
+%endif
+%if 0%{?el8}
+%patch4 -p1
 %endif
 
 echo "override dahdi * weak-updates/dahdi" > dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}/linux/kmod-dahdi.conf
@@ -239,6 +242,9 @@ exit 0
 
 
 %changelog
+* Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-12
+- Updated for CyaraOS 8.8 
+
 * Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-11
 - Created custom patches for dahdi and wanpipe to work with Kernel 4.18.0-425.13.1.el8_7
 

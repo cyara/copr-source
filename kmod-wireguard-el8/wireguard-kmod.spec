@@ -2,13 +2,11 @@
 %define kmod_name		wireguard
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-425.13.1.el8_7}
-
-%{!?dist: %define dist .el8}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-477.10.1.el8_8}
 
 Name:		kmod-%{kmod_name}
 Version:	1.0.20220627
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -114,6 +112,9 @@ done
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
+* Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 1.0.20220627-7
+- Updated for CyaraOS 8.8 
+
 * Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0.20220627-6
 - Updated for SpearlineOS 8.7.8
 

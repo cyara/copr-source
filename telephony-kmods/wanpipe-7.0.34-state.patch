@@ -19,3 +19,24 @@ diff --no-dereference -urb wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanp
  	remove_wait_queue(WAN_SK_SLEEP(sk),&wait);
  
  	if (err != 0)
+--- telephony-kmods-a/wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanpipe.c	2021-09-15 12:28:06.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.34/patches/kdrivers/src/wanrouter/af_wanpipe.c	2023-05-15 12:19:01.291519266 +0100
+@@ -238,7 +238,7 @@
+ 					AF_SKB_DEC(skb->truesize);
+ 					skb_free_datagram(sk, skb);
+ 				}
+-				while ((skb=skb_recv_datagram(sk,0,1,&err)) != NULL){
++				while ((skb=skb_recv_datagram(sk,0,&err)) != NULL){
+ 					AF_SKB_DEC(skb->truesize);
+ 					skb_free_datagram(sk, skb);
+ 				}
+@@ -1688,7 +1688,7 @@
+ 	if (flags & MSG_OOB){	
+ 		skb=skb_dequeue(&sk->sk_error_queue);
+ 	}else{
+-		skb=skb_recv_datagram(sk,flags,1,&err);
++		skb=skb_recv_datagram(sk,flags,&err);
+ 	}
+ 	/*
+ 	 *	An error occurred so return it. Because skb_recv_datagram() 
+
