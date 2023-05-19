@@ -4,9 +4,11 @@
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-477.10.1.el8_8}
 
+%{!?dist: %define dist .el8}
+
 Name:		kmod-%{kmod_name}
 Version:	1.0.20220627
-Release:	7%{?dist}
+Release:	8%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -18,6 +20,7 @@ Source5:  https://raw.githubusercontent.com/elrepo/packages/master/wireguard-kmo
 
 # Source code patches
 Patch0:		elrepo-wireguard-backports.el8_7.patch
+Patch1:		elrepo-wireguard-netif_napi_add.el8_8.patch
 
 %define __spec_install_post /usr/lib/rpm/check-buildroot \
                             /usr/lib/rpm/redhat/brp-ldconfig \
@@ -105,6 +108,15 @@ done
 %clean
 %{__rm} -rf %{buildroot}
 
+%post
+modules=( $(find /lib/modules/%{kmod_kernel_version}.x86_64/extra/%{kmod_name} | grep '\.ko$') )
+printf '%s\n' "${modules[@]}" | %{_sbindir}/weak-modules --add-modules --no-initramfs
+
+mkdir -p "%{kver_state_dir}"
+touch "%{kver_state_file}"
+
+exit 0
+
 %files
 %defattr(644,root,root,755)
 /lib/modules/%{kmod_kernel_version}.%{_arch}/
@@ -112,8 +124,15 @@ done
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
+* Fri May 19 2023 Patrick Coakley <patrick.coakley@cyara.com> - 1.0.20220627-8
+- Last version failed on cyaraos 8.8.0, thankfully a wireguard kmod for 8.8 has been built since. 
+
 * Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 1.0.20220627-7
 - Updated for CyaraOS 8.8 
+
+* Tue May 16 2023 Philip J Perry <phil@elrepo.org> 1.0.20220627-5
+- Rebuilt for RHEL 8.8
+- Fix netif_napi_add() on RHEL 8.8
 
 * Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0.20220627-6
 - Updated for SpearlineOS 8.7.8
