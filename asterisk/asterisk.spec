@@ -15,13 +15,13 @@
 Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            2
-Version:          16.29.0
+Version:          16.30.0
 Release:          1%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
 
-Source0:          http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-%{version}.tar.gz
-Source1:          http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-%{version}.tar.gz.asc
+Source0:          asterisk-%{version}.tar.gz
+Source1:          asterisk-%{version}.tar.gz.asc
 Source2:          asterisk-logrotate
 Source3:          menuselect.makedeps
 Source4:          menuselect.makeopts
@@ -48,7 +48,6 @@ Source9:          https://github.com/felipem1210/asterisk-res_json/archive/aster
 
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
-Provides:         bundled(pjproject) = %{pjsip_version}
 
 # Does not build on s390x: https://bugzilla.redhat.com/show_bug.cgi?id=1465162
 #ExcludeArch:      s390x
@@ -313,6 +312,10 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
+* Mon May 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 16.30.0-1
+- Update asterisk to 16.30.0
+- Update pjproject to 2.13
+
 * Tue Nov 1 2022 Patrick Coakley <patrick.coakley@spearline.com> - 16.29.0-2
 - Update asterisk to 16.29.0
 - Update pjproject to 2.12.1
