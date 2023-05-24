@@ -47,7 +47,7 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
 #adding res_ari_stream and app_audiofork
-Source10          stream-audio
+Source10          stream-audio/
 
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
