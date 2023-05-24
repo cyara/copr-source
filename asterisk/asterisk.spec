@@ -134,8 +134,8 @@ cp %{S:3} menuselect.makedeps
 cp %{S:4} menuselect.makeopts
 
 # copy audio steaming packet to their location
-cp %{S:10} app_audiofork.c app/app_audiofork.c
-cp %{S:11} res_ari_stream.c res/res_ari_stream.c
+cp %{S:10} app/app_audiofork.c
+cp %{S:11} res/res_ari_stream.c
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__perl} -pi -e 's/^all:.*$/all:/' sounds/Makefile
