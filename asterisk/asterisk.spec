@@ -134,6 +134,7 @@ cp %{S:3} menuselect.makedeps
 cp %{S:4} menuselect.makeopts
 
 # copy audio steaming packet to their location
+mkdir app res
 cp %{S:10} app/
 cp %{S:11} res/
 ls -altr app/ res/
