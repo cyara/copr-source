@@ -46,6 +46,9 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
+#adding res_ari_stream and app_audiofork
+Source10          stream-audio
+
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
 
@@ -128,6 +131,10 @@ ls -altr cache/
 
 cp %{S:3} menuselect.makedeps
 cp %{S:4} menuselect.makeopts
+
+# copy audio steaming packet to their location
+cp %{S:10} stream-audio/app_audiofork.c asterisk-%{version}/app/
+cp %{S:10} stream-audio/res_ari_stream.c asterisk-%{version}/res/
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__perl} -pi -e 's/^all:.*$/all:/' sounds/Makefile
