@@ -2,13 +2,13 @@
 %define kmod_name	hpsa
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-284.11.1.el9_2}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
 Version:	3.4.20
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -120,6 +120,8 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %clean
 %{__rm} -rf %{buildroot}
 
+
+
 %files
 %defattr(644,root,root,755)
 /lib/modules/%{kmod_kernel_version}.%{_arch}/
@@ -127,8 +129,11 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 3.4.20-9
+* Fri May 26 2023 Patrick Coakley <patrick.coakley@spearline.com> - 3.4.20-10
 - Remove %post_* sections for ostree
+
+* Tue May 09 2023 Akemi Yagi <toracat@elrepo.org> - 3.4.20-9
+- Rebuilt against RHEL 9.2 GA kernel 5.14.0-284.11.1.el9_2
 
 * Tue Nov 15 2022 Akemi Yagi <toracat@elrepo.org> - 3.4.20-8
 - Rebuilt against RHEL 9.1 GA kernel 5.14.0-162.6.1.el9_1
