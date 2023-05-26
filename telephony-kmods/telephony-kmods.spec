@@ -103,8 +103,6 @@ of the same variant of the Linux kernel and not on any one specific build.
 %patch3 -p1
 %endif
 
-%endif
-
 echo "override dahdi * weak-updates/dahdi" > dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}/linux/kmod-dahdi.conf
 echo "override wanpipe * weak-updates/wanpipe" > wanpipe-%{wanpipe_version}/kmod-wanpipe.conf
 
