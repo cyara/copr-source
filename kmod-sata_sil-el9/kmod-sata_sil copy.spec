@@ -2,13 +2,13 @@
 %define kmod_name	sata_sil
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-284.11.1.el9_2}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
 Version:	2.4
-Release:	4%{?dist}
+Release:	3%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -130,12 +130,8 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Fri May 26 2023 Patrick Coakley <patrick.coakley@cyara.com> - 2.4-4
+* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 2.4-3
 - Remove %post_* sections for ostree
-
-* Tue May 09 2023 Akemi Yagi <toracat@elrepo.org> - 2.4-3
-- Rebuilt against RHEL 9.2 GA kernel 5.14.0-284.11.1.el9_2
-- Source code from kernel-5.14.0-284.11.1.el9_2
 
 * Tue Nov 15 2022 Akemi Yagi <toracat@elrepo.org> - 2.4-2
 - Rebuilt against RHEL 9.1 GA kernel 5.14.0-162.6.1.el9_1
