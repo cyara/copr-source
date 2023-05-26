@@ -97,12 +97,12 @@ of the same variant of the Linux kernel and not on any one specific build.
 %prep
 %setup -c -a 1
 %patch1 -p1
+%patch4 -p1
 %if 0%{?el9}
 %patch2 -p1
 %patch3 -p1
 %endif
-%if 0%{?el8}
-%patch4 -p1
+
 %endif
 
 echo "override dahdi * weak-updates/dahdi" > dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}/linux/kmod-dahdi.conf
