@@ -1,14 +1,14 @@
 # Define the kmod package name here.
-%define kmod_name	hpsa
+%define kmod_name	megaraid_sas
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-284.11.1.el9_2}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
-Version:	3.4.20
-Release:	10%{?dist}
+Version:	07.719.03.00
+Release:	3%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -18,8 +18,8 @@ URL:		http://www.kernel.org/
 Source0:	%{kmod_name}-%{version}.tar.gz
 Source5:	GPL-v2.0.txt
 
-# Fix for the SB-signing issue caused by a bug in /usr/lib/rpm/brp-strip
-# https://bugzilla.redhat.com/show_bug.cgi?id=1967291
+# Source code patches
+Patch0:		elrepo-%{kmod_name}-rhel_differences.el9_0.patch
 
 %define __spec_install_post \
 		/usr/lib/rpm/check-buildroot \
@@ -30,10 +30,6 @@ Source5:	GPL-v2.0.txt
 		/usr/lib/rpm/redhat/brp-python-bytecompile "" "1" "0" \
 		/usr/lib/rpm/brp-python-hardlink \
 		/usr/lib/rpm/redhat/brp-mangle-shebangs
-
-# Source code patches
-Patch0: elrepo-hpsa-add-removed-devices-el9.patch
-
 %define findpat %( echo "%""P" )
 %define __find_requires /usr/lib/rpm/redhat/find-requires.ksyms
 %define __find_provides /usr/lib/rpm/redhat/find-provides.ksyms %{kmod_name} %{?epoch:%{epoch}:}%{version}-%{release}
@@ -80,7 +76,7 @@ of the same variant of the Linux kernel and not on any one specific build.
 echo "override %{kmod_name} * weak-updates/%{kmod_name}" > kmod-%{kmod_name}.conf
 
 # Apply patch(es)
-%patch0 -p1
+%patch0 -p0
 
 %build
 %{__make} -C %{kernel_source} %{?_smp_mflags} V=1 modules M=$PWD
@@ -120,8 +116,6 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %clean
 %{__rm} -rf %{buildroot}
 
-
-
 %files
 %defattr(644,root,root,755)
 /lib/modules/%{kmod_kernel_version}.%{_arch}/
@@ -129,37 +123,13 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Fri May 26 2023 Patrick Coakley <patrick.coakley@cyara.com> - 3.4.20-10
+* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-3S
 - Remove %post_* sections for ostree
 
-* Tue May 09 2023 Akemi Yagi <toracat@elrepo.org> - 3.4.20-9
-- Rebuilt against RHEL 9.2 GA kernel 5.14.0-284.11.1.el9_2
+* Tue Nov 15 2022 Philip J Perry <phil@elrepo.org> - 07.719.03.00-2
+- Rebuilt for RHEL 9.1
+- Source updated from RHEL 9.1 kernel
 
-* Tue Nov 15 2022 Akemi Yagi <toracat@elrepo.org> - 3.4.20-8
-- Rebuilt against RHEL 9.1 GA kernel 5.14.0-162.6.1.el9_1
-
-* Tue May 17 2022 Akemi Yagi <toracat@elrepo.org> - 3.4.20-7
-- Rebuilt against RHEL 9.0 GA kernel 5.14.0-70.13.1.el9_0
-- Source code from kernel-5.14.0-70.13.1.el9_0
-
-* Fri Nov 12 2021 Akemi Yagi <toracat@elrepo.org> - 3.4.20-6
-- Rebuilt against RHEL 8.5 kernel
-
-* Tue May 18 2021 Philip J Perry <phil@elrepo.org> - 3.4.20-5
-- Rebuilt against RHEL 8.4 kernel
-- Fix updating of initramfs image
-  [https://elrepo.org/bugs/view.php?id=1060]
-- Revert addition of dracut conf file
-
-* Mon Nov 09 2020 Akemi Yagi <toracat@elrepo.org> - 3.4.20-4
-- Add dracut conf file to ensure module is in initramfs
-
-* Tue Nov 03 2020 Akemi Yagi <toracat@elrepo.org> - 3.4.20-3
-- Rebuilt against RHEL 8.3 kernel
-- patch updated (v3)
-
-* Mon Oct 26 2020 Akemi Yagi <toracat@elrepo.org> - 3.4.20-2
-- Patch amended to include missing device IDs (v2)
-
-* Sun Oct 25 2020 Akemi Yagi <toracat@elrepo.org> - 3.4.20-1
-- Initial build for RHEL 8.2
+* Tue May 17 2022 Philip J Perry <phil@elrepo.org> - 07.719.03.00-1
+- Initial build for RHEL 9
+- Backported from kernel-5.14.0-70.13.1.el9_0

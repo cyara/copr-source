@@ -2,13 +2,13 @@
 %define kmod_name	megaraid_sas
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-284.11.1.el9_2}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
 Version:	07.719.03.00
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -116,6 +116,15 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %clean
 %{__rm} -rf %{buildroot}
 
+%post
+modules=( $(find /lib/modules/%{kmod_kernel_version}.x86_64/extra/%{kmod_name} | grep '\.ko$') )
+printf '%s\n' "${modules[@]}" | %{_sbindir}/weak-modules --add-modules --no-initramfs
+
+mkdir -p "%{kver_state_dir}"
+touch "%{kver_state_file}"
+
+exit 0
+
 %files
 %defattr(644,root,root,755)
 /lib/modules/%{kmod_kernel_version}.%{_arch}/
@@ -123,8 +132,12 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-3S
+* Fri May 26 2023 Patrick Coakley <patrick.coakley@cyara.com> - 07.719.03.00-4
 - Remove %post_* sections for ostree
+
+* Tue May 09 2023 Philip J Perry <phil@elrepo.org> - 07.719.03.00-3
+- Rebuilt for RHEL 9.2 
+- Source updated from RHEL 9.2 kernel
 
 * Tue Nov 15 2022 Philip J Perry <phil@elrepo.org> - 07.719.03.00-2
 - Rebuilt for RHEL 9.1
