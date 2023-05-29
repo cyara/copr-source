@@ -1,4 +1,4 @@
-i/*
+/*
  * Asterisk -- An open source telephony toolkit.
  *
  * Copyright (C) <2019>, Wazo Authors
