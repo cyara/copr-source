@@ -169,6 +169,8 @@ sed -i '1s/env python/python3/' contrib/scripts/refstats.py
 #aclocal -I autoconf --force
 #autoconf --force
 #autoheader --force
+cat menuselect.makeopts
+
 ./bootstrap.sh
 
 pushd menuselect
