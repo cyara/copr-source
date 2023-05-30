@@ -135,7 +135,7 @@ cp %{S:4} menuselect.makeopts
 
 # copy audio steaming packet to their location
 cp %{S:10} apps/
-#cp %{S:11} res/
+cp %{S:11} res/
 #ls -altr apps/ res/
 
 # Fixup makefile so sound archives aren't downloaded/installed
