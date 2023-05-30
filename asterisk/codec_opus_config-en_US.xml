@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE docs SYSTEM "appdocsxml.dtd">
+<docs xmlns:xi="http://www.w3.org/2001/XInclude">
+	<configInfo name="codec_opus" language="en_US">
+		<synopsis>Codec opus module for Asterisk</synopsis>
+		<configFile name="codecs.conf">
+		<configObject name="opus">
+			<synopsis>Codec opus module for Asterisk options</synopsis>
+			<configOption name="type">
+				<synopsis>Must be of type 'opus'.</synopsis>
+			</configOption>
+			<configOption name="packet_loss" default="0">
+				<synopsis>Encoder's packet loss percentage.</synopsis>
+				<description><para>
+					Can be any number between 0 and 100 (inclusive). Higher values result
+					in a loss resistant behavior, however this has a cost on the quality
+					(dependent upon a given bitrate).
+				</para></description>
+			</configOption>
+			<configOption name="complexity" default="10">
+				<synopsis>Encoder's computational complexity.</synopsis>
+				<description><para>
+					Can be any number between 0 and 10, inclusive. Note, 10 equals the highest complexity.
+				</para></description>
+			</configOption>
+			<configOption name="max_bandwidth" default="full">
+				<synopsis>Encoder's maximum bandwidth allowed.</synopsis>
+				<description>
+					<para>Sets an upper bandwidth bound on the encoder. Can be any of the following:</para>
+					<enumlist>
+						<enum name="narrow" />
+						<enum name="medium" />
+						<enum name="wide" />
+						<enum name="super_wide" />
+						<enum name="full" />
+					</enumlist>
+				</description>
+			</configOption>
+			<configOption name="signal" default="auto">
+				<synopsis>Encoder's signal type.</synopsis>
+				<description>
+					<para>Aids in mode selection on the encoder:</para>
+					<enumlist>
+						<enum name="auto" />
+						<enum name="voice" />
+						<enum name="music" />
+					</enumlist>
+				</description>
+			</configOption>
+			<configOption name="application" default="voip">
+				<synopsis>Encoder's application type.</synopsis>
+				<description>
+					<enumlist>
+						<enum name="voip" />
+						<enum name="audio" />
+						<enum name="low_delay" />
+					</enumlist>
+				</description>
+			</configOption>
+			<configOption name="max_playback_rate" default="48000">
+				<synopsis>Encoder's maximum playback rate.</synopsis>
+				<description><para>
+					Any value between 8000 and 48000, inclusive. Although typically it should match one of
+					the usual Opus bandwidths.
+				</para></description>
+			</configOption>
+			<configOption name="bitrate" default="auto">
+				<synopsis>Encoder's bit rate.</synopsis>
+				<description>
+					<para>Can be any number between 500 and 512000 as well as one of the following opus values:</para>
+					<enumlist>
+						<enum name="auto" />
+						<enum name="max" />
+					</enumlist>
+				</description>
+			</configOption>
+			<configOption name="cbr" default="no">
+				<synopsis>Encoder's constant bit rate value.</synopsis>
+				<description><para>
+					True/False value where 0/false/no represents a variable bit rate
+					and 1/true/yes is constant bit rate.
+				</para></description>
+			</configOption>
+			<configOption name="fec" default="yes">
+				<synopsis>Encoder's forward error correction value.</synopsis>
+				<description><para>
+					True/False value where 0/false/no represents disabled and 1/true/yes is enabled.
+				</para></description>
+			</configOption>
+			<configOption name="dtx" default="no">
+				<synopsis>Encoder's discontinuous transmission value.</synopsis>
+				<description><para>
+					True/False value where 0/false/no represents disabled and 1/true/yes is enabled.
+				</para></description>
+			</configOption>
+		</configObject>
+		</configFile>
+	</configInfo>
+</docs>

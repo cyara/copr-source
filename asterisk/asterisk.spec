@@ -49,7 +49,7 @@ Source9:          https://github.com/felipem1210/asterisk-res_json/archive/aster
 #adding res_ari_stream and app_audiofork
 Source10:          app_audiofork.c
 Source11:          res_ari_stream.c
-
+Source12:	   codec_opus.so
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
 
@@ -136,6 +136,7 @@ cp %{S:4} menuselect.makeopts
 # copy audio steaming packet to their location
 cp %{S:10} apps/
 cp %{S:11} res/
+cp %{S:12} codecs/
 #ls -altr apps/ res/
 
 # Fixup makefile so sound archives aren't downloaded/installed
