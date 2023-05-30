@@ -136,7 +136,7 @@ cp %{S:4} menuselect.makeopts
 # copy audio steaming packet to their location
 cp %{S:10} apps/
 cp %{S:11} res/
-cp %{S:12} codecs/
+#cp %{S:12} codecs/
 #ls -altr apps/ res/
 
 # Fixup makefile so sound archives aren't downloaded/installed
@@ -233,6 +233,7 @@ rm -rf %{buildroot}%{_sysconfdir}/asterisk/test_sorcery.conf
 
 rm -rf %{buildroot}%{_libdir}/libasteriskssl.so
 ln -s libasterisk.so.1 %{buildroot}%{_libdir}/libasteriskssl.so
+cp %{S:12} %{buildroot}%{_libdir}/asterisk/
 
 # copy the alembic scripts
 cp -rp contrib/ast-db-manage %{buildroot}%{_datadir}/asterisk/ast-db-manage
