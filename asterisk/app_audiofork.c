@@ -728,7 +728,7 @@ static int setup_audiofork_ds(struct audiofork *audiofork,
 		ast_autochan_channel_unlock(audiofork->autochan);
 	}
 
-	audiofork_ds->samp_rate = 8000;
+	audiofork_ds->samp_rate = 16000;
 	audiofork_ds->audiohook = &audiofork->audiohook;
 	audiofork_ds->wsserver = ast_strdup(audiofork->wsserver);
 	if (!ast_strlen_zero(beep_id)) {
