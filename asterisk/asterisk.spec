@@ -15,7 +15,7 @@
 Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            5
-Version:          16.30.0-2
+Version:          16.30.0
 Release:          1%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
@@ -327,7 +327,7 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
-* Wed May 31 2023 Ravi Patel <ravi.patel@cyara.com> - 16.30.0-2
+* Wed May 31 2023 Ravi Patel <ravi.patel@cyara.com> - 16.30.0
 - added opus document file which is needed to load the codec_opus.so
 - changed sampling rate to 16k in the audiofork.c code
 
