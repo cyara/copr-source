@@ -15,7 +15,7 @@
 Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            3
-Version:          16.30.0
+Version:          16.30.0-2
 Release:          1%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
@@ -50,6 +50,7 @@ Source9:          https://github.com/felipem1210/asterisk-res_json/archive/aster
 Source10:          app_audiofork.c
 Source11:          res_ari_stream.c
 Source12:	   codec_opus.so
+Source13:	   codec_opus_config-en_US.xml
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
 
@@ -234,6 +235,7 @@ rm -rf %{buildroot}%{_sysconfdir}/asterisk/test_sorcery.conf
 rm -rf %{buildroot}%{_libdir}/libasteriskssl.so
 ln -s libasterisk.so.1 %{buildroot}%{_libdir}/libasteriskssl.so
 cp %{S:12} %{buildroot}%{_libdir}/asterisk/modules/
+cp %{S:13} %{buildroot}%{_libdir}/asterisk/documentation/
 
 # copy the alembic scripts
 cp -rp contrib/ast-db-manage %{buildroot}%{_datadir}/asterisk/ast-db-manage
@@ -325,6 +327,9 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
+* Wed May 31 2023 Ravi Patel <ravi.patel@cyara.com> - 16.30.0-2
+- added opus document file which is needed to load the codec_opus.so
+
 * Mon May 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 16.30.0-1
 - Update asterisk to 16.30.0
 - Update pjproject to 2.13
