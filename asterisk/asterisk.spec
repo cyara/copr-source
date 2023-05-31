@@ -213,7 +213,6 @@ mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/festival
 mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/monitor
 mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/outgoing
 mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/uploads
-mkdir -p /var/lib/asterisk/documentation/
 
 # We're not going to package any of the sample AGI scripts
 rm -f %{buildroot}%{_datadir}/asterisk/agi-bin/*
