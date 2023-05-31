@@ -234,7 +234,7 @@ rm -rf %{buildroot}%{_sysconfdir}/asterisk/test_sorcery.conf
 
 rm -rf %{buildroot}%{_libdir}/libasteriskssl.so
 ln -s libasterisk.so.1 %{buildroot}%{_libdir}/libasteriskssl.so
-cp %{S:12} %{buildroot}%{_libdir}/asterisk/modules/
+cp %{S:12} %{buildroot}/usr/lib64/asterisk/modules/
 cp %{S:13} %{buildroot}/var/lib/asterisk/documentation/
 
 # copy the alembic scripts
