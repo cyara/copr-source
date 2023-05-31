@@ -213,7 +213,7 @@ mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/festival
 mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/monitor
 mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/outgoing
 mkdir -p %{buildroot}%{_localstatedir}/spool/asterisk/uploads
-mkdir -p %{buildroot}%{_libdir}/asterisk/documentation/
+mkdir -p /var/lib/asterisk/documentation/
 
 # We're not going to package any of the sample AGI scripts
 rm -f %{buildroot}%{_datadir}/asterisk/agi-bin/*
@@ -236,7 +236,7 @@ rm -rf %{buildroot}%{_sysconfdir}/asterisk/test_sorcery.conf
 rm -rf %{buildroot}%{_libdir}/libasteriskssl.so
 ln -s libasterisk.so.1 %{buildroot}%{_libdir}/libasteriskssl.so
 cp %{S:12} %{buildroot}%{_libdir}/asterisk/modules/
-cp %{S:13} %{buildroot}%{_libdir}/asterisk/documentation/
+cp %{S:13} /var/lib/asterisk/documentation/
 
 # copy the alembic scripts
 cp -rp contrib/ast-db-manage %{buildroot}%{_datadir}/asterisk/ast-db-manage
