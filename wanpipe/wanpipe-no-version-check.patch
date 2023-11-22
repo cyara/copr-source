@@ -1,0 +1,12 @@
+diff -urb wanpipe-7.0.36a/util/wanconfig/wanconfig.c wanpipe-7.0.36b/util/wanconfig/wanconfig.c
+--- wanpipe-7.0.36a/util/wanconfig/wanconfig.c	2008-08-01 04:30:00.000000000 +0100
++++ wanpipe-7.0.36b/util/wanconfig/wanconfig.c	2023-11-24 12:40:52.981580095 +0000
+@@ -1652,7 +1652,7 @@
+ 
+ 		}
+ 
+-		if (strstr(wanpipe_version, wan_version) == NULL){
++		if (1 == 0){
+ 			fprintf(stderr, "\n\n\t%s: WAN device %s driver load failed !!\n", 
+ 							prognamed, def->name);
+ 			fprintf(stderr, "\n\t%s: Wanpipe version mismatch between utilites\n",

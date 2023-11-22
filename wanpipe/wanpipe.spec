@@ -1,10 +1,11 @@
 Summary: Sangoma WANPIPE package for Linux. This contains configuration/startup/debugging utilities for Linux.
 Name: wanpipe
-Version: 7.0.34
-Release: 1%{?dist}
+Version: 7.0.36
+Release: 2%{?dist}
 License: GPL
 Url: www.sangoma.com
-Source0: ftp://ftp.sangoma.com/%{name}-%{version}.tgz
+Source0: https://ftp.sangoma.com/linux/current_wanpipe/%{name}-%{version}.tgz
+Patch0: wanpipe-no-version-check.patch
 
 Requires: coreutils
 BuildRequires: automake
@@ -58,7 +59,7 @@ This package contains the development libraries
 
 
 %prep
-%autosetup
+%autosetup -p1
 if [ "%{_libdir}" != "/usr/lib" ]; then
     sed -i 's@configure --prefix=$(LIBPREFIX)@configure --prefix=$(LIBPREFIX) --libdir=%{_libdir}@g' Makefile
     find ./ -iname Makefile -exec sed -i 's@/.lib/usr/lib@/.lib/usr/lib64@g' '{}' ';'
@@ -135,7 +136,13 @@ ldconfig
 
 
 %changelog
-* Tue Nov 16 2021 Jonathan Dieter <jonathan.dieter@spearline.com> - 7.0.34-1
+* Fri Nov 24 2023 Jonathan Dieter <jonathan.dieter@cyara.com> - 7.0.36-2
+- Disable utility and kernel version mismatch check
+
+* Thu Nov 23 2023 Patrick Coakley <patrick.coackley@cyara.com> - 7.0.36-1
+- Update to 7.0.36
+
+* Mon Jan 23 2023 Patrick Coakley <patrick.coackley@cyara.com> - 7.0.34-1
 - Update to 7.0.34
 
 * Tue Jun 08 2021 Jonathan Dieter <jonathan.dieter@spearline.com> - 7.0.32-1

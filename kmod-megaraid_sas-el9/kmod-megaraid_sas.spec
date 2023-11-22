@@ -2,13 +2,13 @@
 %define kmod_name	megaraid_sas
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-162.6.1.el9_1}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.8.1.el9_3}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
-Version:	07.719.03.00
-Release:	3%{?dist}
+Version:	07.725.01.00
+Release:	2%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -123,8 +123,16 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Tue Dec 20 2022 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-3S
-- Remove %post_* sections for ostree
+* Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 07.725.01.00-2
+- Rebuilt for CyaraOS 9.3
+
+* Tue Nov 07 2023 Philip J Perry <phil@elrepo.org> - 07.725.01.00-1
+- Rebuilt for RHEL 9.3
+- Source updated from RHEL 9.3 kernel
+
+* Tue May 09 2023 Philip J Perry <phil@elrepo.org> - 07.719.03.00-3
+- Rebuilt for RHEL 9.2 
+- Source updated from RHEL 9.2 kernel
 
 * Tue Nov 15 2022 Philip J Perry <phil@elrepo.org> - 07.719.03.00-2
 - Rebuilt for RHEL 9.1

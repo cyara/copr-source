@@ -2,13 +2,13 @@
 %define kmod_name		sata_sil
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-477.10.1.el8_8}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.5.1.el8_9}
 
 %{!?dist: %define dist .el8}
 
 Name:           kmod-%{kmod_name}
 Version:        2.4
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        %{kmod_name} kernel module(s)
 Group:          System Environment/Kernel
 License:        GPLv2
@@ -121,11 +121,16 @@ find %{buildroot} -type f -name \*.ko -exec %{__strip} --strip-debug \{\} \;
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 2.4-11
-- Updated for CyaraOS 8.8 
+* Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 2.4-12
+- Updated for CyaraOS 8.9
 
-* Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 2.4-10
-- Updated for SpearlineOS 8.7.8
+* Sun Nov 19 2023 Tuan Hoang <tqhoang@elrepo.org> - 2.4-10
+- Rebuilt against RHEL 8.9 GA kernel
+- Source code from kernel-4.18.0-513.5.1.el8_9
+
+* Mon Aug 07 2023 Akemi Yagi <toracat@elrepo.org> - 2.4-9
+- Rebuilt against RHEL 8.8 GA kernel
+- Source code from kernel-4.18.0-477.10.1
 
 * Sun Jan 15 2023 Akemi Yagi <toracat@elrepo.org> - 2.4-8
 - Rebuilt against kernel-4.18.0-425.10.1.el8_7 due to a bug in the RHEL kernel
