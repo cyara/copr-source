@@ -2,13 +2,13 @@
 %define kmod_name		megaraid_sas
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-477.10.1.el8_8}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.5.1.el8_9}
 
 %{!?dist: %define dist .el8}
 
 Name:		kmod-%{kmod_name}
-Version:	07.719.03.00
-Release:	6%{?dist}
+Version:	07.725.01.00
+Release:	2%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -115,11 +115,16 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 07.719.03.00-6
-- Updated for CyaraOS 8.8 
+* Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 07.725.01.00-2
+- Updated for CyaraOS 8.9
 
-* Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 07.719.03.00-5
-- Updated for SpearlineOS 8.7.8
+* Tue Nov 14 2023 Philip J Perry <phil@elrepo.org> 07.725.01.00-1
+- Rebuilt for RHEL 8.9
+- Source code updated from RHEL kernel-4.18.0-513.5.1.el8_9.x86_64
+
+* Wed Jul 05 2023 Philip J Perry <phil@elrepo.org> 07.719.03.00-3
+- Rebuilt for RHEL 8.8
+- Source code updated from RHEL kernel-4.18.0-477.10.1.el8_8.x86_64
 
 * Sat Feb 11 2023 Philip J Perry <phil@elrepo.org> 07.719.03.00-2
 - Rebuilt for RHEL 8.7
