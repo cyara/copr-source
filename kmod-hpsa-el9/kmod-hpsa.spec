@@ -2,13 +2,13 @@
 %define kmod_name	hpsa
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.8.1.el9_3}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.24.2.el9_3}
 
 %{!?dist: %define dist .el9}
 
 Name:		kmod-%{kmod_name}
 Version:	3.4.20
-Release:	11%{?dist}
+Release:	12%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -127,6 +127,9 @@ find %{buildroot} -name \*.ko -type f | xargs --no-run-if-empty %{__strip} --str
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
+* Mon Apr 08 2024 Patrick Coakley <patrick.coakley@cyara.com> - 3.4.20-12
+- Rebuilt for kernel 5.14.0-362.24.2.el9_3.x86_64
+
 * Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 3.4.20-11
 - Rebuilt for CyaraOS 9.3 
 
