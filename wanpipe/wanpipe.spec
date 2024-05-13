@@ -1,11 +1,11 @@
 Summary: Sangoma WANPIPE package for Linux. This contains configuration/startup/debugging utilities for Linux.
 Name: wanpipe
-Version: 7.0.36
-Release: 2%{?dist}
+Version: 7.0.38
+Release: 1%{?dist}
 License: GPL
 Url: www.sangoma.com
 Source0: https://ftp.sangoma.com/linux/current_wanpipe/%{name}-%{version}.tgz
-Patch0: wanpipe-no-version-check.patch
+
 
 Requires: coreutils
 BuildRequires: automake
@@ -136,6 +136,9 @@ ldconfig
 
 
 %changelog
+* Tue May 14 2024 Patrick Coakley <patrick.coakley@cyara.com> - 7.0.38-1
+- Upgraded wanpipe to 7.0.38
+
 * Fri Nov 24 2023 Jonathan Dieter <jonathan.dieter@cyara.com> - 7.0.36-2
 - Disable utility and kernel version mismatch check
 

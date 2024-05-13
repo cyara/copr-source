@@ -1,5 +1,5 @@
 Name:		dahdi-linux
-Version:	3.2.0
+Version:	3.3.0
 Release:	1%{?dist}
 Summary:	DAHDI telephony interface tools
 Group:		System Environment/Kernel
@@ -17,8 +17,8 @@ Requires:	udev
 Requires:	perl
 Obsoletes:	dahdi-tools <= 2.11.1
 Obsoletes:	dahdi-tools-libs <= 2.11.1
-Provides:	dahdi-tools == 3.2.0
-Provides:	dahdi-tools-libs == 3.2.0
+Provides:	dahdi-tools == 3.3.0
+Provides:	dahdi-tools-libs == 3.3.0
 
 %description
 DAHDI stands for Digium Asterisk Hardware Device Interface. This
@@ -29,7 +29,7 @@ included in the package kmod-dahdi-linux
 Summary:	DAHDI telephony interface tools development libraries
 Requires:	%{name} == %{version}-%{release}
 Obsoletes:	dahdi-tools-devel <= 2.11.1
-Provides:	dahdi-tools-devel == 3.2.0
+Provides:	dahdi-tools-devel == 3.3.0
 
 %description devel
 This package contains the libraries for dahdi-linux
@@ -82,6 +82,9 @@ mv %{buildroot}/usr/local/share/perl5/5.32 %{buildroot}%{_datadir}/perl5
 %{_libdir}/libtonezone.so
 
 %changelog
+* Mon May 13 2024 Patrick Coakley <patrick.coakley@spearline.com> - 3.3.0-1
+- Upgraded Dahdi to 3.3
+
 * Tue Oct 25 2022 Patrick Coakley <patrick.coakley@spearline.com> - 3.2.0-1
 - Upgraded Dahdi build for el9 and el8
 
