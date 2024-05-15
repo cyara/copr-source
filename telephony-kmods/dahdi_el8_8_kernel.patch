@@ -1,6 +1,6 @@
-diff -ru dahdi-linux-complete-3.2.0+3.2.0-a/linux/drivers/dahdi/wctc4xxp/base.c dahdi-linux-complete-3.2.0+3.2.0-b/linux/drivers/dahdi/wctc4xxp/base.c 
---- telephony-kmods-a/dahdi-linux-complete-3.2.0+3.2.0/linux/drivers/dahdi/wctc4xxp/base.c	2022-09-22 13:23:24.000000000 +0100
-+++ telephony-kmods-b/dahdi-linux-complete-3.2.0+3.2.0/linux/drivers/dahdi/wctc4xxp/base.c	2023-05-18 14:37:24.918334554 +0100
+diff -ru dahdi-linux-complete-3.3.0+3.3.0-a/linux/drivers/dahdi/wctc4xxp/base.c dahdi-linux-complete-3.3.0+3.3.0-b/linux/drivers/dahdi/wctc4xxp/base.c 
+--- telephony-kmods-a/dahdi-linux-complete-3.3.0+3.3.0/linux/drivers/dahdi/wctc4xxp/base.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.3.0+3.3.0/linux/drivers/dahdi/wctc4xxp/base.c	2023-05-18 14:37:24.918334554 +0100
 @@ -658,7 +658,7 @@
  	netdev->promiscuity = 0;
  	netdev->flags |= IFF_NOARP;

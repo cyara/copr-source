@@ -1,21 +1,21 @@
 # Define the kmod package name here.
 %define kmod_name		dahdi-linux
 
-%define dahdi_version           3.2.0
-%define wanpipe_version         7.0.36
+%define dahdi_version           3.3.0
+%define wanpipe_version         7.0.38
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.5.1.el8_9}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.24.1.el8_9}
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.24.2.el9_3} 
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-427.16.1.el9_4} 
 %endif
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	14%{?dist}
+Release:	16%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -23,8 +23,9 @@ URL:		http://www.kernel.org/
 # Sources
 Source0:	dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}.tar.gz
 Source1:	wanpipe-%{wanpipe_version}.tgz
-Patch1:         wanpipe-7.0.36-state.patch
-Patch2:         dahdi_el8_8_kernel.patch
+
+Patch1:         dahdi_el8_8_kernel.patch
+Patch2:         wanpipe-7.0.38-state.patch
 Patch3:         dahdi_5_14_kernel.patch
 ExclusiveArch:	x86_64
 
@@ -96,9 +97,10 @@ of the same variant of the Linux kernel and not on any one specific build.
 %prep
 %setup -c -a 1
 
+
 %patch1 -p1
-%patch2 -p1
 %if 0%{?el9}
+%patch2 -p1
 %patch3 -p1
 %endif
 
@@ -239,6 +241,10 @@ exit 0
 
 
 %changelog
+* Tue May 14 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-15
+- Upgrade Dahdi to 3.3.0 and Wanpipe to 7.0.38
+- Update for 9.4 kernel 
+
 * Mon Apr 08 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-14
 - Rebuilt for kernel 5.14.0-362.24.2.el9_3.x86_64
 
