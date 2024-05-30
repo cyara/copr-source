@@ -6,7 +6,7 @@
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.24.1.el8_9}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.el8_10}
 %endif
 
 %if 0%{?el9}
@@ -241,6 +241,9 @@ exit 0
 
 
 %changelog
+* Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-16
+- Rebuilt for CyaraOS 8.10
+
 * Tue May 14 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-15
 - Upgrade Dahdi to 3.3.0 and Wanpipe to 7.0.38
 - Update for 9.4 kernel 
