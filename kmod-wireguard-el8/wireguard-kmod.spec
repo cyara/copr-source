@@ -8,7 +8,7 @@
 
 Name:		kmod-%{kmod_name}
 Version:	1.0.20220627
-Release:	8%{?dist}
+Release:	10%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -116,7 +116,7 @@ done
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0.20220627-8
+* Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0.20220627-10
 - Rebuilt for CyaraOS 8.10
 
 * Thu May 23 2024 Akemi Yagi <toracat@elrepo.org> - 1.0.20220627-7
