@@ -2,13 +2,13 @@
 %define kmod_name		hpsa
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.5.1.el8_9}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.el8_10}
 
 %{!?dist: %define dist .el8}
 
 Name:		kmod-%{kmod_name}
 Version:	3.4.20
-Release:	13%{?dist}
+Release:	12%{?dist}
 Summary:	%{kmod_name} kernel module(s)
 Group:		System Environment/Kernel
 License:	GPLv2
@@ -119,11 +119,15 @@ done
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 3.4.20-13
-- Updated for CyaraOS 8.9 
+* Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 3.4.20-12
+- Rebuilt for CyaraOS 8.10
+
+* Thu May 23 2024 Akemi Yagi <toracat@elrepo.org> - 3.4.20-11
+- Rebuilt for RHEL 8.10
+- Source code from RHEL 8.10 GA kernel-4.18.0-553.el8_10
 
 * Sun Nov 19 2023 Philip J Perry <phil@elrepo.org> - 3.4.20-10
-- Rebuilt against RHEL 8.9 kernel
+- Reguilt against RHEL 8.9 kernel
 - Source code from RHEL 8.9 GA kernel-4.18.0-513.5.1.el8_9
 
 * Wed Aug 02 2023 Akemi Yagi <toracat@elrepo.org> - 3.4.20-9
