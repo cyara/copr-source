@@ -2,13 +2,13 @@
 %define kmod_name		sata_sil
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-513.5.1.el8_9}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.el8_10}
 
 %{!?dist: %define dist .el8}
 
 Name:           kmod-%{kmod_name}
 Version:        2.4
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        %{kmod_name} kernel module(s)
 Group:          System Environment/Kernel
 License:        GPLv2
@@ -121,8 +121,16 @@ find %{buildroot} -type f -name \*.ko -exec %{__strip} --strip-debug \{\} \;
 %doc /usr/share/doc/kmod-%{kmod_name}-%{version}/
 
 %changelog
-* Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 2.4-12
-- Updated for CyaraOS 8.9
+* Tue Jun 11 2024 Patrick Coakley <patrick.coakley@cyara.com> - 2.4-13
+- Rebuilt for CyaraOS 8.10
+
+* Fri May 24 2024 Tuan Hoang <tqhoang@elrepo.org> - 2.4-11
+- Rebuilt against RHEL 8.10 GA kernel 4.18.0-553.el8_10
+- ATA source code is unchanged in 8.10
+
+* Fri May 24 2024 Tuan Hoang <tqhoang@elrepo.org> - 2.4-11
+- Rebuilt against RHEL 8.10 GA kernel 4.18.0-553.el8_10
+- ATA source code is unchanged in 8.10
 
 * Sun Nov 19 2023 Tuan Hoang <tqhoang@elrepo.org> - 2.4-10
 - Rebuilt against RHEL 8.9 GA kernel
