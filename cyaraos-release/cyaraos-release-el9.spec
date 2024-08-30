@@ -7,14 +7,16 @@
 # Gortnaclohy
 # Tooreennasillane
 # Lahernathee
-%global release_name Mallavonea
+# Mallavonea
+%global release_name Abbeystrewry
 %global major   9
-%global minor   3
+%global minor   4
 %global dist .el%{major}
+%global eol_date 2032-06-01
 
 Name:           cyaraos-release
 Version:        %{major}.%{minor}
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        %{distro} release files
 License:        GPLv2
 BuildArch:      noarch
@@ -77,6 +79,7 @@ Summary: %{distro} public secureboot certificates
 Group: System Environment/Base
 Provides: system-sb-certs = %{version}-%{release}
 Provides: redhat-sb-certs = %{version}-%{release}
+Provides: centos-sb-certs = %{version}-%{release}
 
 %package -n almalinux-repos
 Summary:        %{distro} package repositories
@@ -314,10 +317,13 @@ install -p -m 0644 %{SOURCE600} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/
 
 
 %changelog
+* Mon May 13 2024 Patrick Coakley <patrick.coakley@cyara.com> - 9.4-3
+- CyaraOS 9.4
+
 * Fri Nov 24 2023 Patrick Coakley <patrick.coakley@cyara.com> - 9.3-1
 - CyaraOS 9.3
 
-* Mon June 12 2023 Patrick Coakley <patrick.coakley@cyara.com> - 9.2-2
+* Mon Jun 12 2023 Patrick Coakley <patrick.coakley@cyara.com> - 9.2-2
 - CyaraOS 9.2
 
 * Tue May 02 2023 Andrew Lukoshko <alukoshko@almalinux.org> - 9.2-1

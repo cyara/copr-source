@@ -10,17 +10,18 @@
 # Carrigfadda
 # Gortnaclohy
 # Tooreennasillane
-%define release_name Derreendangan
-
+#Derreendangan
+%define release_name Coolnagarrane
 %define contentdir almalinux
 %define infra_var stock
 %define base_release_version 8
-%define full_release_version 8.9
+%define full_release_version 8.10
 %define dist_release_version 8
-%define upstream_rel_long 8.9-0.1
-%define upstream_rel 8.9
+%define upstream_rel_long 8.10-0.2
+%define upstream_rel 8.10
 %define cyaraos_rel 1
 %define dist .el%{dist_release_version}
+%global eol_date 2029-06-01
 
 # The anaconda scripts in %%{_libexecdir} can create false requirements
 %global __requires_exclude_from %{_libexecdir}
@@ -215,9 +216,11 @@ rm -rf %{buildroot}
 %{_prefix}/lib/systemd/system-preset/*
 
 %changelog
+* Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 8.10-1
+- Update to 8.10
+
 * Fri Nov 24 2023 Patrick Coakley <patrick.coakley@cyara.com> - 8.9-1
 - Update to 8.9
-
 
 * Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 8.8-1
 - Update to 8.8
