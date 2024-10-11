@@ -15,7 +15,7 @@
 Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            2
-Version:          16.29.0
+Version:          20.9.3
 Release:          1%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
