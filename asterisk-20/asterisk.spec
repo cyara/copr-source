@@ -313,6 +313,9 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
+* Fri Oct 11 2024 Backend Team - 20.9.3
+- Update asterisk to 20.9.3
+
 * Tue Nov 1 2022 Patrick Coakley <patrick.coakley@spearline.com> - 16.29.0-2
 - Update asterisk to 16.29.0
 - Update pjproject to 2.12.1
