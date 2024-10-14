@@ -41,8 +41,7 @@ Source6:          asterisk-tmpfiles
 Source7:          asterisk-gpgkeys.gpg
 
 # Now building Asterisk with bundled pjproject, because they apply custom patches to it
-#Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjsip_version}/pjproject-%{pjsip_version}.tar.bz2
-Source8:          https://github.com/asterisk/third-party/tree/master/pjproject/%{pjsip_version}/pjproject-%{pjsip_version}.tar.bz2
+Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjsip_version}/pjproject-%{pjsip_version}.tar.bz2
 
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
@@ -87,7 +86,7 @@ BuildRequires:    sqlite-devel
 BuildRequires:    unixODBC-devel
 BuildRequires:    dahdi-tools-devel
 BuildRequires:    libpri-devel
-BuildRequires:    openr2-devel
+#BuildRequires:    openr2-devel
 BuildRequires:    speex-devel
 BuildRequires:    speexdsp-devel
 BuildRequires:    opus-devel
@@ -149,7 +148,7 @@ mv ./asterisk-res_json* ./asterisk-res_json
 
 %build
 
-export CFLAGS="%{optflags}"
+export CFLAGS="%{optflags} -I%{buildroot}/asterisk/includes"
 export CXXFLAGS="%{optflags}"
 export FFLAGS="%{optflags}"
 export LDFLAGS="%{ldflags}"
@@ -186,6 +185,7 @@ export ASTCFLAGS="%{optflags}"
 
 make install %{makeargs}
 make samples %{makeargs}
+make install-headers %{makeargs}
 
 install -D -p -m 0644 %{SOURCE5} %{buildroot}%{_unitdir}/asterisk.service
 rm -f %{buildroot}%{_sbindir}/safe_asterisk
@@ -261,7 +261,7 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 
 
 %files
-%doc *.txt ChangeLog BUGS CREDITS configs
+%doc *.txt ChangeLogs BUGS CREDITS configs
 %license LICENSE
 
 %doc doc/asterisk.sgml
@@ -303,18 +303,18 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %endif
 %attr(0755,asterisk,asterisk) %dir %{astvarrundir}
 
-
 %files devel
 %dir %{_includedir}/asterisk
 %dir %{_includedir}/asterisk/doxygen
 %{_includedir}/asterisk.h
-%{_includedir}/asterisk
+%{_includedir}/asterisk/*.h
+%{_includedir}/asterisk/doxygen/*.h
 
 %{_libdir}/libasteriskssl.so
 %{_libdir}/libasteriskpj.so
 
 %changelog
-* Fri Oct 11 2024 Backend Team - 20.9.3
+* Mon Oct 14 2024 Telephony - 20.9.3
 - Update asterisk to 20.9.3
 
 * Tue Nov 1 2022 Patrick Coakley <patrick.coakley@spearline.com> - 16.29.0-2
