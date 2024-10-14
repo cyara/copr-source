@@ -1,5 +1,5 @@
 %global           pjsip_version   2.12.1
-%global           pjproject_version   2.12.1
+%global           PJPROJECT_VERSION   2.12.1
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
