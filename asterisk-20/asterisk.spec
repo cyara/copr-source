@@ -1,5 +1,4 @@
-%global           pjsip_version   2.12.1
-%global           PJPROJECT_VERSION   2.12.1
+%global           pjsip_version   2.14.1
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
@@ -317,6 +316,7 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %changelog
 * Mon Oct 14 2024 Telephony - 20.9.3
 - Update asterisk to 20.9.3
+- Update pjproject to 2.14.1
 
 * Tue Nov 1 2022 Patrick Coakley <patrick.coakley@spearline.com> - 16.29.0-2
 - Update asterisk to 16.29.0
