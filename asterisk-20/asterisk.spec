@@ -13,7 +13,7 @@
 %global           makeargs        DEBUG= OPTIMIZE= DESTDIR=%{buildroot} ASTVARRUNDIR=%{astvarrundir} ASTDATADIR=/var/lib/asterisk ASTVARLIBDIR=/var/lib/asterisk ASTDBDIR=%{_localstatedir}/spool/asterisk NOISY_BUILD=1
 
 Summary:          The Open Source PBX
-Name:             asterisk
+Name:             asterisk-20
 Epoch:            2
 Version:          20.9.3
 Release:          1%{?dist}
