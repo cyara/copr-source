@@ -1,21 +1,21 @@
 # Define the kmod package name here.
 %define kmod_name		dahdi-linux
 
-%define dahdi_version           3.3.0
+%define dahdi_version           3.4.0
 %define wanpipe_version         7.0.38
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.el8_10}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.27.1.el8_10}
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-427.16.1.el9_4} 
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-503.15.1.el9_5}
 %endif
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	16%{?dist}
+Release:	19%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -24,9 +24,9 @@ URL:		http://www.kernel.org/
 Source0:	dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}.tar.gz
 Source1:	wanpipe-%{wanpipe_version}.tgz
 
-Patch1:         dahdi_el8_8_kernel.patch
-Patch2:         wanpipe-7.0.38-state.patch
-Patch3:         dahdi_5_14_kernel.patch
+Patch1:         wanpipe-7.0.38-state.patch
+Patch2:         dahdi_alamlinux_9.5.patch
+Patch3:         dahdi_el8_8_kernel.patch
 ExclusiveArch:	x86_64
 
 # Source code patches
@@ -97,11 +97,13 @@ of the same variant of the Linux kernel and not on any one specific build.
 %prep
 %setup -c -a 1
 
-
-%patch1 -p1
 %if 0%{?el9}
-%patch2 -p1
-%patch3 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
+%endif
+
+%if 0%{?el8}
+%patch -P 3 -p1
 %endif
 
 echo "override dahdi * weak-updates/dahdi" > dahdi-linux-complete-%{dahdi_version}+%{dahdi_version}/linux/kmod-dahdi.conf
@@ -241,21 +243,31 @@ exit 0
 
 
 %changelog
+* Tue Dec 28 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-19
+- Building for CyaraOS 9.5
+
+* Mon Nov 27 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-18
+- Debugging issues with 9.4 build
+
+* Mon Nov 18 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-17
+- Rebuilt for CyaraOS 9.5
+- Upgraded Dahdi to 3.4.0
+
 * Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-16
 - Rebuilt for CyaraOS 8.10
 
 * Tue May 14 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-15
 - Upgrade Dahdi to 3.3.0 and Wanpipe to 7.0.38
-- Update for 9.4 kernel 
+- Update for 9.4 kernel
 
 * Mon Apr 08 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-14
 - Rebuilt for kernel 5.14.0-362.24.2.el9_3.x86_64
 
 * Wed Nov 22 2023 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-13
-- Updated for CyaraOS 8.9 and 9.3 
+- Updated for CyaraOS 8.9 and 9.3
 
 * Thu May 18 2023 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-12
-- Updated for CyaraOS 8.8 
+- Updated for CyaraOS 8.8
 
 * Mon Mar 27 2023 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-11
 - Created custom patches for dahdi and wanpipe to work with Kernel 4.18.0-425.13.1.el8_7
@@ -268,7 +280,7 @@ exit 0
 
 * Tue Oct 25 2022 Patrick Coakley <patrick.coakley@spearline.com> - 1.0-8
 - Rebuild for AlmaLinux 9
-- Upgrade dahdi-linux to 3.2.0  
+- Upgrade dahdi-linux to 3.2.0
 
 * Fri May 13 2022 Jonathan Dieter <jonathan.dieter@spearline.com> - 1.0-7
 - Rebuild for AlmaLinux 8.6
@@ -288,6 +300,3 @@ exit 0
 
 * Fri Dec 11 2020 Jonathan Dieter <jonathan.dieter@spearline.com> - 1.0-2
 - Rebuild for CentOS 8.3
-
-* Fri Aug 28 2020 Jonathan Dieter <jonathan.dieter@spearline.com> - 1.0-1
-- Initial build

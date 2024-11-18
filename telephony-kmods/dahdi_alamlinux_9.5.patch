@@ -1,0 +1,126 @@
+diff -ru dahdi-linux-complete-3.4.0+3.4.0-a/linux/drivers/dahdi/wctdm24xxp/base.c dahdi-linux-complete-3.4.0+3.4.0-b/linux/drivers/dahdi/wctdm24xxp/base.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctdm24xxp/base.c	2024-11-19 16:05:28.388879891 +0000
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctdm24xxp/base.c	2024-11-19 16:09:04.405245967 +0000
+@@ -229,8 +229,14 @@
+ }
+
+ struct wctdm *ifaces[WC_MAX_IFACES];
++
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
++#if defined RHEL_RELEASE_VERSION && (RHEL_RELEASE_CODE) && LINUX_VERSION_CODE >= KERNEL_VERSION(5,14,0) && \
++	RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,4)
++	DEFINE_SEMAPHORE(ifacelock, 1);
++#else
+ DEFINE_SEMAPHORE(ifacelock);
++#endif
+ #else
+ DEFINE_SEMAPHORE(ifacelock, 1);
+ #endif
+
+diff -ru dahdi-linux-complete-3.4.0+3.4.0-a/linux/drivers/dahdi/voicebus/voicebus.c dahdi-linux-complete-3.4.0+3.4.0-b/linux/drivers/dahdi/voicebus/voicebus.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/voicebus/voicebus.c	2024-11-19 16:05:28.387879889 +0000
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/voicebus/voicebus.c	2024-11-19 16:22:44.119621109 +0000
+@@ -1135,10 +1135,16 @@
+  */
+ void voicebus_stop(struct voicebus *vb)
+ {
++
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
++#if defined RHEL_RELEASE_VERSION && (RHEL_RELEASE_CODE) && LINUX_VERSION_CODE >= KERNEL_VERSION(5,14,0) && \
++	RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,4)
++	static DEFINE_SEMAPHORE(stop, 1);
++#else
+ 	static DEFINE_SEMAPHORE(stop);
++#endif
+ #else
+-	static DEFINE_SEMAPHORE(stop, 1);
++static DEFINE_SEMAPHORE(stop, 1);
+ #endif
+
+ 	down(&stop);
+
+diff -ru dahdi-linux-complete-3.4.0+3.4.0-a/linux/drivers/dahdi/xpp/xbus-sysfs.c dahdi-linux-complete-3.4.0+3.4.0-b/linux/drivers/dahdi/xpp/xbus-sysfs.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-sysfs.c	2024-11-19 16:05:28.377879870 +0000
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-sysfs.c	2024-11-19 16:34:34.208785290 +0000
+@@ -418,12 +418,17 @@
+ 			return err;				\
+ 	} while (0)
+
+-
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
++#if defined RHEL_RELEASE_VERSION && (RHEL_RELEASE_CODE) && LINUX_VERSION_CODE >= KERNEL_VERSION(5,14,0) && \
++	RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,4)
++static int astribank_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++#else
+ static int astribank_uevent(struct device *dev, struct kobj_uevent_env *kenv)
++#endif
+ #else
+ static int astribank_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
+ #endif
++
+ {
+ 	xbus_t *xbus;
+ 	extern char *initdir;
+
+diff -ru dahdi-linux-complete-3.4.0+3.4.0-a/linux/drivers/dahdi/dahdi-sysfs.c dahdi-linux-complete-3.4.0+3.4.0-b/linux/drivers/dahdi/dahdi-sysfs.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs.c	2024-11-19 16:05:28.389879893 +0000
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs.c	2024-11-19 16:37:26.825058969 +0000
+@@ -69,10 +69,16 @@
+ 	} while (0)
+
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
+-static int span_uevent(struct device *dev, struct kobj_uevent_env *kenv)
++#if defined RHEL_RELEASE_VERSION && (RHEL_RELEASE_CODE) && LINUX_VERSION_CODE >= KERNEL_VERSION(5,14,0) && \
++	RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,4)
++ 	static int span_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
+ #else
+-static int span_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++	static int span_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+ #endif
++#else
++ static int span_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++#endif
++
+ {
+ 	struct dahdi_span *span;
+
+@@ -444,10 +450,16 @@
+
+
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
+-static int device_uevent(struct device *dev, struct kobj_uevent_env *kenv)
++#if defined RHEL_RELEASE_VERSION && (RHEL_RELEASE_CODE) && LINUX_VERSION_CODE >= KERNEL_VERSION(5,14,0) && \
++	RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,4)
++	static int device_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
+ #else
+-static int device_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++	static int device_uevent(struct device *dev, struct kobj_uevent_env *kenv)
+ #endif
++#else
++	static int device_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
++#endif
++
+ {
+ 	struct dahdi_device *ddev;
+
+diff -ru dahdi-linux-complete-3.4.0+3.4.0-a/linux/drivers/dahdi/dahdi-sysfs-chan.c dahdi-linux-complete-3.4.0+3.4.0-b/linux/drivers/dahdi/dahdi-sysfs-chan.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs-chan.c	2024-11-19 16:05:28.389879893 +0000
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs-chan.c	2024-11-19 16:43:41.937655276 +0000
+@@ -484,10 +484,16 @@
+ 	should_cleanup.channel_driver = 1;
+
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
++#if defined RHEL_RELEASE_VERSION && (RHEL_RELEASE_CODE) && LINUX_VERSION_CODE >= KERNEL_VERSION(5,14,0) && \
++	RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,4)
++	dahdi_class = class_create("dahdi");
++#else
+ 	dahdi_class = class_create(THIS_MODULE, "dahdi");
++#endif
+ #else
+ 	dahdi_class = class_create("dahdi");
+ #endif
++
+ 	if (IS_ERR(dahdi_class)) {
+ 		res = PTR_ERR(dahdi_class);
+ 		dahdi_err("%s: class_create(dahi_chan) failed. Error: %d\n",
+

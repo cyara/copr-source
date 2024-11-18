@@ -8,15 +8,16 @@
 # Tooreennasillane
 # Lahernathee
 # Mallavonea
-%global release_name Abbeystrewry
+# Abbeystrewry
+%global release_name Deelish
 %global major   9
-%global minor   4
+%global minor   5
 %global dist .el%{major}
 %global eol_date 2032-06-01
 
 Name:           cyaraos-release
 Version:        %{major}.%{minor}
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        %{distro} release files
 License:        GPLv2
 BuildArch:      noarch
@@ -216,7 +217,7 @@ install -m 644 %{SOURCE400} %{buildroot}%{_datadir}/pki/sb-certs/secureboot-ca-s
 install -m 644 %{SOURCE401} %{buildroot}%{_datadir}/pki/sb-certs/secureboot-kernel-s390x.cer
 install -m 644 %{SOURCE404} %{buildroot}%{_datadir}/pki/sb-certs/secureboot-uki-virt-s390x.cer
 
-	# Link x86_64 certs
+# Link x86_64 certs
 ln -sr %{buildroot}%{_datadir}/pki/sb-certs/secureboot-ca-x86_64.cer %{buildroot}%{_sysconfdir}/pki/sb-certs/secureboot-ca-x86_64.cer
 ln -sr %{buildroot}%{_datadir}/pki/sb-certs/secureboot-kernel-x86_64.cer %{buildroot}%{_sysconfdir}/pki/sb-certs/secureboot-kernel-x86_64.cer
 ln -sr %{buildroot}%{_datadir}/pki/sb-certs/secureboot-grub2-x86_64.cer %{buildroot}%{_sysconfdir}/pki/sb-certs/secureboot-grub2-x86_64.cer
@@ -317,6 +318,9 @@ install -p -m 0644 %{SOURCE600} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/
 
 
 %changelog
+* Tue Dec 03 2024 Patrick Coakley <patrick.coakley@cyara.com> - 9.5-1
+- CyaraOS 9.5
+
 * Mon May 13 2024 Patrick Coakley <patrick.coakley@cyara.com> - 9.4-3
 - CyaraOS 9.4
 
