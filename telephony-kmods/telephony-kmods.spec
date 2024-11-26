@@ -6,11 +6,11 @@
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.el8_10}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.30.1.el8_10}
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-427.40.1.el9_4}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-427.16.1.el9_4}
 %endif
 
 Name:		telephony-kmods
