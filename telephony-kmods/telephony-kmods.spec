@@ -1,21 +1,21 @@
 # Define the kmod package name here.
 %define kmod_name		dahdi-linux
 
-%define dahdi_version           3.3.0
+%define dahdi_version           3.4.0
 %define wanpipe_version         7.0.38
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
 %if 0%{?el8}
-%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.30.1.el8_10}
+%{!?kmod_kernel_version: %define kmod_kernel_version 4.18.0-553.27.1.el8_10}
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.24.1.el9_3}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-427.13.1.el9_4}
 %endif
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	16%{?dist}
+Release:	17%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -45,6 +45,8 @@ ExclusiveArch:	x86_64
 BuildRequires:	elfutils-libelf-devel
 BuildRequires:	kernel-devel = %{kmod_kernel_version}
 BuildRequires:  kernel-modules = %{kmod_kernel_version}
+BuildRequires:	kernel-headers = %{kmod_kernel_version}
+BuildRequires:	kernel-core = %{kmod_kernel_version}
 BuildRequires:	kernel-abi-stablelists
 BuildRequires:	kernel-rpm-macros
 BuildRequires:	redhat-rpm-config
@@ -96,7 +98,6 @@ of the same variant of the Linux kernel and not on any one specific build.
 
 %prep
 %setup -c -a 1
-
 
 %patch -P 1 -p1
 %if 0%{?el9}
@@ -241,6 +242,9 @@ exit 0
 
 
 %changelog
+* Mon Nov 18 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-17
+- Rebuilt for CyaraOS 9.4
+
 * Thu May 30 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-16
 - Rebuilt for CyaraOS 8.10
 
@@ -288,6 +292,3 @@ exit 0
 
 * Fri Dec 11 2020 Jonathan Dieter <jonathan.dieter@spearline.com> - 1.0-2
 - Rebuild for CentOS 8.3
-
-* Fri Aug 28 2020 Jonathan Dieter <jonathan.dieter@spearline.com> - 1.0-1
-- Initial build
