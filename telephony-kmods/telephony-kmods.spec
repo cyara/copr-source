@@ -15,7 +15,7 @@
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	17%{?dist}
+Release:	18%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -47,7 +47,7 @@ BuildRequires:	kernel-devel = %{kmod_kernel_version}
 BuildRequires:  kernel-modules = %{kmod_kernel_version}
 BuildRequires:	kernel-headers = %{kmod_kernel_version}
 BuildRequires:	kernel-core = %{kmod_kernel_version}
-BuildRequires:	kernel-abi-stablelists
+BuildRequires:	kernel-abi-stablelists = %{kmod_kernel_version}
 BuildRequires:	kernel-rpm-macros
 BuildRequires:	redhat-rpm-config
 Requires:	kmod-dahdi == %{dahdi_version}
@@ -242,6 +242,9 @@ exit 0
 
 
 %changelog
+* Mon Nov 27 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-18
+- Debugging issues with 9.4 build
+
 * Mon Nov 18 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-17
 - Rebuilt for CyaraOS 9.4
 
