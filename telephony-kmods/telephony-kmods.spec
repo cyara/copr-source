@@ -1,7 +1,7 @@
 # Define the kmod package name here.
 %define kmod_name		dahdi-linux
 
-%define dahdi_version           3.4.0
+%define dahdi_version           3.3.0
 %define wanpipe_version         7.0.38
 
 # If kmod_kernel_version isn't defined on the rpmbuild line, define it here.
