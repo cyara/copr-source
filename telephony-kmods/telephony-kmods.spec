@@ -10,7 +10,7 @@
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-503.15.1.el9_5}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.24.1.el9_3}
 %endif
 
 Name:		telephony-kmods
@@ -243,10 +243,10 @@ exit 0
 
 
 %changelog
-* Tue Dec 28 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-19
+* Sat Dec 28 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-19
 - Building for CyaraOS 9.5
 
-* Mon Nov 27 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-18
+* Wed Nov 27 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-18
 - Debugging issues with 9.4 build
 
 * Mon Nov 18 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-17
