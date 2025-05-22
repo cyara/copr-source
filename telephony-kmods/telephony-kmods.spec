@@ -246,10 +246,10 @@ exit 0
 * Thu May 22 2025 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-20
 - Building for CyaraOS 9.6
 
-* Tue Dec 28 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-19
+* Sat Dec 28 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-19
 - Building for CyaraOS 9.5
 
-* Mon Nov 27 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-18
+* Wed Nov 27 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-18
 - Debugging issues with 9.4 build
 
 * Mon Nov 18 2024 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-17
