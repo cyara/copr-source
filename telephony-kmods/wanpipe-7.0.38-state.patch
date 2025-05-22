@@ -28,22 +28,25 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c	2008-08-01 04:30:00.000000000 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c	2025-05-22 16:30:48.439101966 +0100
 
-@@ -568,15 +568,11 @@
- /*======================================================================
-  * wanpipe_accept
-  *
-- *	ACCEPT() System call.	X25API Specific function.
-- *	For each incoming call, create a new socket and
-- *      return it to the user.
-+ *	ACCEPT() System call.	X25API Specific function.
-+ *	For each incoming call, create a new socket and
-+ *      return it to the user.
-  *=====================================================================*/
--#if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
--static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags, bool kern)
--#else
- static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags)
--#endif
- {
- 	struct sock *sk;
- 	struct sock *newsk=NULL, *newsk_frmskb=NULL;
+@@ -2122,21 +2122,10 @@
+
+ #if defined(LINUX_2_6)
+-struct proto_ops wanpipe_ops = {
+-	.family 	=PF_WANPIPE,
+-	.owner		=THIS_MODULE,
+-	.release 	=wanpipe_release,
+-	.bind		=wanpipe_bind,
+-	.connect 	=wanpipe_connect,
+-	.socketpair 	=sock_no_socketpair,
+-	.accept 	=wanpipe_accept,
+-	.getname 	=wanpipe_getname,
+-	.poll 		=wanpipe_poll,
+-	.ioctl 		=wanpipe_ioctl,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl 	=wanpipe_ioctl,
+ #endif
+-	.listen 	=wanpipe_listen,
++	.listen 	=wanpipe_listen,
+ 	.shutdown 	=sock_no_shutdown,
+ 	.setsockopt 	=sock_no_setsockopt,
+ 	.getsockopt	=sock_no_getsockopt,
