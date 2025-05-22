@@ -9,9 +9,10 @@
 # Lahernathee
 # Mallavonea
 # Abbeystrewry
-%global release_name Deelish
+# Deelish
+%global release_name Bunlick
 %global major   9
-%global minor   5
+%global minor   6
 %global dist .el%{major}
 %global eol_date 2032-06-01
 
@@ -318,6 +319,9 @@ install -p -m 0644 %{SOURCE600} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/
 
 
 %changelog
+* Thu May 22 2025 Patrick Coakley <patrick.coakley@cyara.com> - 9.6-1
+- CyaraOS 9.6
+
 * Tue Dec 03 2024 Patrick Coakley <patrick.coakley@cyara.com> - 9.5-1
 - CyaraOS 9.5
 
