@@ -39,4 +39,3 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.
  #endif
  {
  	struct sock *sk;
-
