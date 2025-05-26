@@ -98,7 +98,7 @@ of the same variant of the Linux kernel and not on any one specific build.
 %setup -c -a 1
 
 %if 0%{?el9}
-%patch -P 1 --ignore-whitespace -p1
+%patch -P 1 -p1
 %patch -P 2 -p1
 %endif
 
