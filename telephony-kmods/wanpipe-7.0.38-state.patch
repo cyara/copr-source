@@ -1,7 +1,7 @@
 diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2024-05-14 11:36:31.284390203 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2024-05-14 11:33:16.444527674 +0100
-@@ -211,14 +211,14 @@
+@@ -211,7 +211,7 @@
  		return -EINVAL;
  	}
 
@@ -10,11 +10,33 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-
  	if (IS_ERR(wp_cdev_class)) {
  		DEBUG_ERROR("%s(): Error creating class!\n",__FUNCTION__);
  		cdev_del(&wp_cdev_dev);
- 		unregister_chrdev_region(wanpipe_dev, WP_CDEV_MAX_MINORS);
- 		return -EINVAL;
- 	}
--
-+
- 	err = bus_register(&wanpipe_device_bus);
-     if (err) {
- 		DEBUG_ERROR("%s(): Error registering bus!\n",__FUNCTION__);
+
+diff -ru wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2024-05-14 11:33:16.431527616 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2024-05-14 11:50:12.270029929 +0100
+@@ -139,7 +139,7 @@
+
+ 	DEBUG_EVENT("%s: Registering Wanpipe ECDEV Device!\n",__FUNCTION__);
+ #ifdef WP_ECDEV_UDEV
+-	wanec_dev_class = class_create(THIS_MODULE, "wp_ec");
++	wanec_dev_class = class_create("wp_ec");
+ #endif
+
+ #ifdef WP_CONFIG_DEVFS_FS
+
+diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanrouter/af_wanpipe.c 2025-05-26 09:56:14.643650871 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanrouter/af_wanpipe.c 2025-05-26 09:58:10.076218258 +0100
+@@ -573,9 +573,9 @@
+  *      return it to the user.
+  *=====================================================================*/
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags, bool kern)
++static unsigned int wanpipe_accept(struct socket *sock, struct socket *newsock, unsigned int flags, bool kern)
+ #else
+-static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags)
++static unsigned int wanpipe_accept(struct socket *sock, struct socket *newsock, unsigned int flags)
+ #endif
+ {
+ 	struct sock *sk;
+
