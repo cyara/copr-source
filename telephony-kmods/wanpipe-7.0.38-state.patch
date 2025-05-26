@@ -25,8 +25,8 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patc
  #ifdef WP_CONFIG_DEVFS_FS
 
 diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c
---- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanrouter/af_wanpipe.c 2025-05-26 09:56:14.643650871 +0100
-+++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanrouter/af_wanpipe.c 2025-05-26 09:58:10.076218258 +0100
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c 2025-05-26 09:56:14.643650871 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c 2025-05-26 09:58:10.076218258 +0100
 @@ -573,9 +573,9 @@
   *      return it to the user.
   *=====================================================================*/
