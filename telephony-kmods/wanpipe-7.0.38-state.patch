@@ -25,6 +25,7 @@ diff --no-dereference -ruw wanpipe-7.0.38/patches-a/kdrivers/src/wanrouter/af_wa
  #endif
  {
  	struct sock *sk;
+
 diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-26 09:30:15.538032722 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-26 12:27:44.844309215 +0100
