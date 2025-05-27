@@ -1,7 +1,7 @@
 diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c
---- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2025-05-26 09:30:15.507742440 +0100
-+++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2025-05-26 12:27:13.158158961 +0100
-@@ -211,14 +211,14 @@
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2024-05-14 11:36:31.284390203 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2024-05-14 11:33:16.444527674 +0100
+@@ -211,7 +211,7 @@
  		return -EINVAL;
  	}
 
@@ -10,196 +10,10 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-
  	if (IS_ERR(wp_cdev_class)) {
  		DEBUG_ERROR("%s(): Error creating class!\n",__FUNCTION__);
  		cdev_del(&wp_cdev_dev);
- 		unregister_chrdev_region(wanpipe_dev, WP_CDEV_MAX_MINORS);
- 		return -EINVAL;
- 	}
--
-+
- 	err = bus_register(&wanpipe_device_bus);
-     if (err) {
- 		DEBUG_ERROR("%s(): Error registering bus!\n",__FUNCTION__);
-@@ -232,7 +232,7 @@
-
- 	wan_set_bit(0,&wandev.init);
-
--	return 0;
-+	return 0;
-
- }
-
-@@ -256,11 +256,11 @@
- #else
- 	cdev_del(&wp_cdev_dev);
- 	unregister_chrdev_region(wanpipe_dev, WP_CDEV_MAX_MINORS);
--
-+
- 	bus_unregister(&wanpipe_device_bus);
- #endif
-
--	return 0;
-+	return 0;
- }
-
-
-@@ -276,7 +276,7 @@
-
- int wanpipe_cdev_tdm_create(wanpipe_cdev_t *cdev)
- {
--
-+
- 	int minor=-1;
-
- 	if (!wan_test_bit(0,&wandev.init)) {
-@@ -306,7 +306,7 @@
- 	}
-
- 	return  wanpipe_create_cdev(cdev, minor, NULL);
--
-+
- }
-
-
-@@ -316,7 +316,7 @@
-
- int wanpipe_cdev_tdm_ctrl_create(wanpipe_cdev_t *cdev)
- {
--
-+
- 	int minor=-1;
-
- 	if (!wan_test_bit(0,&wandev.init)) {
-@@ -335,7 +335,7 @@
- 	sprintf(cdev->name, "wanpipe_ctrl");
-
- 	return wanpipe_create_cdev(cdev, minor, NULL);
--
-+
- }
-
-
-@@ -345,7 +345,7 @@
-
- int wanpipe_cdev_cfg_ctrl_create(wanpipe_cdev_t *cdev)
- {
--
-+
- 	int minor=-1;
-
- 	if (!wan_test_bit(0,&wandev.init)) {
-@@ -364,7 +364,7 @@
- 	sprintf(cdev->name, "wanpipe");
-
- 	return wanpipe_create_cdev(cdev, minor, NULL);
--
-+
- }
-
- /*=========================================================
-@@ -399,7 +399,7 @@
-
- int wanpipe_cdev_timer_create(wanpipe_cdev_t *cdev)
- {
--
-+
- 	int minor=-1;
-
- 	if (!wan_test_bit(0,&wandev.init)) {
-@@ -424,7 +424,7 @@
- 	DEBUG_CDEV ("%s:%d TIMER DEV %s minor=%i\n",__FUNCTION__,__LINE__,cdev->name,minor);
-
- 	return wanpipe_create_cdev(cdev, minor, &wandev.timer_dev_cnt);
--
-+
- }
-
-
-@@ -440,7 +440,7 @@
- 	DEBUG_CDEV ("%s:%d\n",__FUNCTION__,__LINE__);
-
- 	if (!CPRIV(cdev)) {
--		DEBUG_ERROR("%s(): Error cdev priv not initialized!\n",__FUNCTION__);
-+		DEBUG_ERROR("%s(): Error cdev priv not initialized!\n",__FUNCTION__);
- 		return -ENODEV;
- 	}
-
-@@ -455,7 +455,7 @@
- 		DEBUG_ERROR("%s(): Error MINOR out of range %i!\n",__FUNCTION__,minor);
- 		return -EINVAL;
- 	}
--
-+
- 	if (!wan_test_bit(0,&cdev->init)) {
- 		DEBUG_ERROR("%s(): Error cdev device not initialized!\n",__FUNCTION__);
- 		return -ENODEV;
-@@ -574,9 +574,9 @@
-
- 	DEBUG_CDEV("%s(): CREATING CDEV DEVICE MINOR 0x%X!  cdev=%p idx=%p\n",
- 			__FUNCTION__,minor,cdev,wandev.idx[minor]);
--
-
--	return 0;
-+
-+	return 0;
- }
-
-
-@@ -619,7 +619,7 @@
-
- 	DEBUG_CDEV("%s(): FREEING CDEV DEVICE MINOR 0x%X!\n",__FUNCTION__,minor);
-
--	return 0;
-+	return 0;
- }
-
-
-@@ -643,7 +643,7 @@
-
- 	wan_spin_lock_irq(&wandev.lock,&flags);
- 	cdev=wandev.idx[minor];
--
-+
- 	if (cdev == NULL) {
- 		wan_spin_unlock_irq(&wandev.lock,&flags);
- 		/* No Dev */
-@@ -806,7 +806,7 @@
-
- 	WAN_ASSERT((file==NULL));
- 	WAN_ASSERT((usrbuf==NULL));
--
-+
-
- 	cdev = file->private_data;
- 	if (!cdev || !CPRIV(cdev)) {
-@@ -832,7 +832,7 @@
- 		return err;
- 	}
-
--
-+
- 	/* Update the count with length obtained from verify */
- 	count = err;
-
-@@ -896,7 +896,7 @@
- 	return err;
- }
-
--#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18)
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18)
- static long wp_cdev_compat_ioctl(struct file *file, unsigned int cmd, unsigned long data)
- {
- #ifdef HAVE_UNLOCKED_IOCTL
-@@ -953,7 +953,7 @@
- 		if (err < 0)
- 			return -EMSGSIZE;
- 	}
--
-+
- 	return err;
- }
 
 diff -ru wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
---- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-26 09:30:15.538032722 +0100
-+++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-26 12:27:44.844309215 +0100
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2024-05-14 11:33:16.431527616 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2024-05-14 11:50:12.270029929 +0100
 @@ -139,7 +139,7 @@
 
  	DEBUG_EVENT("%s: Registering Wanpipe ECDEV Device!\n",__FUNCTION__);
@@ -209,16 +23,3 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patc
  #endif
 
  #ifdef WP_CONFIG_DEVFS_FS
-@@ -247,10 +247,10 @@
- 		DEBUG_ERROR("%s(): Error: data pointer is NULL!\n",__FUNCTION__);
- 		return EINVAL;
- 	}
--
-+
- 	ec_api = (wan_ec_api_t*)data;
- #if 0
--	DbgPrint("%s(): card_devname: %s, ec_api->devname: %s",
-+	DbgPrint("%s(): card_devname: %s, ec_api->devname: %s",
- 		__FUNCTION__, card_devname, ec_api->devname);
- #endif
- 	/* keep the original name which was set in user mode */
