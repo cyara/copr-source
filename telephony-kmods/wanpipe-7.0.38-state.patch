@@ -1,7 +1,7 @@
-diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c
+diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2025-05-26 09:30:15.507742440 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2025-05-26 12:27:13.158158961 +0100
-@@ -211,7 +211,7 @@
+@@ -211,14 +211,14 @@
  		return -EINVAL;
  	}
 
@@ -10,11 +10,475 @@ diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cde
  	if (IS_ERR(wp_cdev_class)) {
  		DEBUG_ERROR("%s(): Error creating class!\n",__FUNCTION__);
  		cdev_del(&wp_cdev_dev);
-diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c
+ 		unregister_chrdev_region(wanpipe_dev, WP_CDEV_MAX_MINORS);
+ 		return -EINVAL;
+ 	}
+-
++
+ 	err = bus_register(&wanpipe_device_bus);
+     if (err) {
+ 		DEBUG_ERROR("%s(): Error registering bus!\n",__FUNCTION__);
+@@ -232,7 +232,7 @@
+
+ 	wan_set_bit(0,&wandev.init);
+
+-	return 0;
++	return 0;
+
+ }
+
+@@ -256,11 +256,11 @@
+ #else
+ 	cdev_del(&wp_cdev_dev);
+ 	unregister_chrdev_region(wanpipe_dev, WP_CDEV_MAX_MINORS);
+-
++
+ 	bus_unregister(&wanpipe_device_bus);
+ #endif
+
+-	return 0;
++	return 0;
+ }
+
+
+@@ -276,7 +276,7 @@
+
+ int wanpipe_cdev_tdm_create(wanpipe_cdev_t *cdev)
+ {
+-
++
+ 	int minor=-1;
+
+ 	if (!wan_test_bit(0,&wandev.init)) {
+@@ -306,7 +306,7 @@
+ 	}
+
+ 	return  wanpipe_create_cdev(cdev, minor, NULL);
+-
++
+ }
+
+
+@@ -316,7 +316,7 @@
+
+ int wanpipe_cdev_tdm_ctrl_create(wanpipe_cdev_t *cdev)
+ {
+-
++
+ 	int minor=-1;
+
+ 	if (!wan_test_bit(0,&wandev.init)) {
+@@ -335,7 +335,7 @@
+ 	sprintf(cdev->name, "wanpipe_ctrl");
+
+ 	return wanpipe_create_cdev(cdev, minor, NULL);
+-
++
+ }
+
+
+@@ -345,7 +345,7 @@
+
+ int wanpipe_cdev_cfg_ctrl_create(wanpipe_cdev_t *cdev)
+ {
+-
++
+ 	int minor=-1;
+
+ 	if (!wan_test_bit(0,&wandev.init)) {
+@@ -364,7 +364,7 @@
+ 	sprintf(cdev->name, "wanpipe");
+
+ 	return wanpipe_create_cdev(cdev, minor, NULL);
+-
++
+ }
+
+ /*=========================================================
+@@ -399,7 +399,7 @@
+
+ int wanpipe_cdev_timer_create(wanpipe_cdev_t *cdev)
+ {
+-
++
+ 	int minor=-1;
+
+ 	if (!wan_test_bit(0,&wandev.init)) {
+@@ -424,7 +424,7 @@
+ 	DEBUG_CDEV ("%s:%d TIMER DEV %s minor=%i\n",__FUNCTION__,__LINE__,cdev->name,minor);
+
+ 	return wanpipe_create_cdev(cdev, minor, &wandev.timer_dev_cnt);
+-
++
+ }
+
+
+@@ -440,7 +440,7 @@
+ 	DEBUG_CDEV ("%s:%d\n",__FUNCTION__,__LINE__);
+
+ 	if (!CPRIV(cdev)) {
+-		DEBUG_ERROR("%s(): Error cdev priv not initialized!\n",__FUNCTION__);
++		DEBUG_ERROR("%s(): Error cdev priv not initialized!\n",__FUNCTION__);
+ 		return -ENODEV;
+ 	}
+
+@@ -455,7 +455,7 @@
+ 		DEBUG_ERROR("%s(): Error MINOR out of range %i!\n",__FUNCTION__,minor);
+ 		return -EINVAL;
+ 	}
+-
++
+ 	if (!wan_test_bit(0,&cdev->init)) {
+ 		DEBUG_ERROR("%s(): Error cdev device not initialized!\n",__FUNCTION__);
+ 		return -ENODEV;
+@@ -574,9 +574,9 @@
+
+ 	DEBUG_CDEV("%s(): CREATING CDEV DEVICE MINOR 0x%X!  cdev=%p idx=%p\n",
+ 			__FUNCTION__,minor,cdev,wandev.idx[minor]);
+-
+
+-	return 0;
++
++	return 0;
+ }
+
+
+@@ -619,7 +619,7 @@
+
+ 	DEBUG_CDEV("%s(): FREEING CDEV DEVICE MINOR 0x%X!\n",__FUNCTION__,minor);
+
+-	return 0;
++	return 0;
+ }
+
+
+@@ -643,7 +643,7 @@
+
+ 	wan_spin_lock_irq(&wandev.lock,&flags);
+ 	cdev=wandev.idx[minor];
+-
++
+ 	if (cdev == NULL) {
+ 		wan_spin_unlock_irq(&wandev.lock,&flags);
+ 		/* No Dev */
+@@ -806,7 +806,7 @@
+
+ 	WAN_ASSERT((file==NULL));
+ 	WAN_ASSERT((usrbuf==NULL));
+-
++
+
+ 	cdev = file->private_data;
+ 	if (!cdev || !CPRIV(cdev)) {
+@@ -832,7 +832,7 @@
+ 		return err;
+ 	}
+
+-
++
+ 	/* Update the count with length obtained from verify */
+ 	count = err;
+
+@@ -896,7 +896,7 @@
+ 	return err;
+ }
+
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18)
+ static long wp_cdev_compat_ioctl(struct file *file, unsigned int cmd, unsigned long data)
+ {
+ #ifdef HAVE_UNLOCKED_IOCTL
+@@ -953,7 +953,7 @@
+ 		if (err < 0)
+ 			return -EMSGSIZE;
+ 	}
+-
++
+ 	return err;
+ }
+
+diff -ru wanpipe-7.0.38-A/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c	2025-05-26 09:30:15.513002788 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c	2025-05-26 12:13:58.936387265 +0100
-@@ -573,9 +573,9 @@
-  *      return it to the user.
+@@ -1,5 +1,5 @@
+ /*****************************************************************************
+-* af_wanpipe.c
++* af_wanpipe.c
+ *
+ * 		WANPIPE(tm) Annexg Secure Socket Layer.
+ *
+@@ -13,11 +13,11 @@
+ *		2 of the License, or (at your option) any later version.
+ * ============================================================================
+ * Due Credit:
+-*               Wanpipe socket layer is based on Packet and
+-*               the X25 socket layers. The above sockets were
+-*               used for the specific use of Sangoma Technoloiges
+-*               API programs.
+-*               Packet socket Authors: Ross Biro, Fred N. van Kempen and
++*               Wanpipe socket layer is based on Packet and
++*               the X25 socket layers. The above sockets were
++*               used for the specific use of Sangoma Technoloiges
++*               API programs.
++*               Packet socket Authors: Ross Biro, Fred N. van Kempen and
+ *                                      Alan Cox.
+ *               X25 socket Author: Jonathan Naylor.
+ * ============================================================================
+@@ -29,7 +29,7 @@
+ * Feb 29, 2000  Nenad Corbic     o Added support for PVC protocols, such as
+ *                                  CHDLC, Frame Relay and HDLC API.
+ * Jan 17, 2000 	Nenad Corbic	 o Initial version, based on AF_PACKET socket.
+-*			           X25API support only.
++*			           X25API support only.
+ *
+ ******************************************************************************/
+
+@@ -65,23 +65,23 @@
+
+
+  #define AF_MEM_DEC(x)  atomic_sub(x,&af_mem_alloc)
+- #define AF_MEM_INC(x)	 atomic_add(x,&af_mem_alloc)
+-
++ #define AF_MEM_INC(x)	 atomic_add(x,&af_mem_alloc)
++
+  #define KMALLOC(ptr,len,flag)	{ ptr=kmalloc(len, flag); \
+ 	  			  if (ptr != NULL) AF_MEM_INC(len); }
+  #define KFREE(ptr)		{AF_MEM_DEC(sizeof(*ptr)); kfree(ptr);}
+-
++
+ #else
+  #define KMALLOC(ptr,len,flag)	ptr=kmalloc(len, flag)
+- #define KFREE(ptr)		kfree(ptr)
+-
++ #define KFREE(ptr)		kfree(ptr)
++
+  #define ALLOC_SKB(new_skb,len, dsp) new_skb = dev_alloc_skb(len)
+  #define KFREE_SKB(skb)	             dev_kfree_skb_any(skb)
+
+- #define AF_SKB_DEC(x)
+- #define AF_SKB_INC(x)
+- #define AF_MEM_DEC(x)
+- #define AF_MEM_INC(x)
++ #define AF_SKB_DEC(x)
++ #define AF_SKB_INC(x)
++ #define AF_MEM_DEC(x)
++ #define AF_MEM_INC(x)
+ #endif
+
+ #if KERN_MEMCPY_FROM_MSG == 0
+@@ -107,9 +107,9 @@
+ extern int wanpipe_bind_sk_to_parent(struct sock *sk, netdevice_t *dev, struct wan_sockaddr_ll *sll);
+ extern int wanpipe_sk_parent_rx(struct sock *parent_sk, struct sk_buff *skb);
+ #endif
+-
+
+-
++
++
+ /* The code below is used to test memory leaks. It prints out
+  * a message every time kmalloc and kfree system calls get executed.
+  * If the calls match there is no leak :)
+@@ -195,7 +195,7 @@
+
+ /*============================================================
+  *  wanpipe_ioctl
+- *
++ *
+  * 	Execute a user commands, and set socket options.
+  *
+  * FIXME: More thought should go into this function.
+@@ -208,7 +208,7 @@
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+
+-	switch(cmd)
++	switch(cmd)
+ 	{
+ 		case SIOC_WANPIPE_CHECK_TX:
+ #if defined(KERN_REFCNT_UPDATE) && KERN_REFCNT_UPDATE > 0
+@@ -224,7 +224,7 @@
+
+ 			if (sk->sk_state == WANSOCK_CONNECTED){
+ 				return 0;
+-			}else if (sk->sk_state == WANSOCK_DISCONNECTED){
++			}else if (sk->sk_state == WANSOCK_DISCONNECTED){
+ 				return 1;
+ 			}else{
+ 				return 2;
+@@ -257,7 +257,7 @@
+ 			sock->file->f_flags |= O_NONBLOCK;
+ 			return 0;
+
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,15)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,15)
+ 		case SIOCGIFFLAGS:
+ #ifndef CONFIG_INET
+ 		case SIOCSIFFLAGS:
+@@ -282,7 +282,7 @@
+ 		case SIOCSIFHWBROADCAST:
+ 			return(dev_ioctl(cmd,(void *) arg));
+ #endif
+-
++
+ #ifdef CONFIG_INET
+ 		case SIOCADDRT:
+ 		case SIOCDELRT:
+@@ -317,18 +317,18 @@
+ 				if (!dev)
+ 					return -ENODEV;
+
+-				if (!WAN_NETDEV_TEST_IOCTL(dev))
++				if (!WAN_NETDEV_TEST_IOCTL(dev))
+ 					return -ENODEV;
+-
++
+ 				ifr.ifr_data = (void*)arg;
+-
++
+ 				return WAN_NETDEV_IOCTL(dev,&ifr,cmd);
+ 			}
+
+ 			DEBUG_EVENT("%s: Ioctl call not supported DevPriv %i Cmd %i \n",
+ 					__FUNCTION__,SIOCDEVPRIVATE,cmd);
+ 			return -EOPNOTSUPP;
+-
++
+ 	}
+ 	/*NOTREACHED*/
+ }
+@@ -386,20 +386,20 @@
+  *
+  *	Wanpipe LISTEN socket bottom half handler.  This function
+  *      is called by the WANPIPE device drivers to queue an
+- *      incomming call into the socket listening queue.
+- *      Once the packet is queued, the waiting accept() process
++ *      incomming call into the socket listening queue.
++ *      Once the packet is queued, the waiting accept() process
+  *      is woken up.
+  *
+  *      During socket bind, this function is bounded into
+- *      WANPIPE driver private.
+- *
++ *      WANPIPE driver private.
++ *
+  *      IMPORTANT NOTE:
+  *          The accept call() is waiting for an skb packet
+  *          which contains a pointer to a device structure.
+  *
+- *          When we do a bind to a device structre, we
+- *          bind a newly created socket into "chan->sk".  Thus,
+- *          when accept receives the skb packet, it will know
++ *          When we do a bind to a device structre, we
++ *          bind a newly created socket into "chan->sk".  Thus,
++ *          when accept receives the skb packet, it will know
+  *          from which dev it came form, and in turn it will know
+  *          the address of the new sock.
+  *
+@@ -411,7 +411,7 @@
+
+ 	struct wan_sockaddr_ll *sll;
+ 	struct sock *newsk;
+-	netdevice_t *dev;
++	netdevice_t *dev;
+ 	//x25api_hdr_t *x25_api_hdr;
+ 	struct ifreq ifr;
+ 	unsigned long flags;
+@@ -420,7 +420,7 @@
+ 		printk(KERN_INFO "Wanpipe listen recv error! No skid!\n");
+ 		return 0;
+ 	}
+-
++
+ 	/* If we receive a NULL skb pointer, it means that the
+ 	 * lower layer is dead. Change state and wakeup any waiting
+ 	 * processes. */
+@@ -438,23 +438,23 @@
+
+ 	/* Check if the receive buffer will hold the incoming
+ 	 * call request */
+-	if (atomic_read(&sk->sk_rmem_alloc) + skb->truesize >=
++	if (atomic_read(&sk->sk_rmem_alloc) + skb->truesize >=
+ 			(unsigned)sk->sk_rcvbuf){
+-
++
+ 		return -ENOMEM;
+-	}
++	}
++
+
+-
+ 	sll = (struct wan_sockaddr_ll*)skb->cb;
+-
+-	dev = skb->dev;
++
++	dev = skb->dev;
+ 	if (!dev){
+ 		printk(KERN_INFO "af_wanpipe: LISTEN ERROR, No Free Device\n");
+ 		return -ENODEV;
+ 	}
+
+ 	/* Allocate a new sock, which accept will bind
+-         * and pass up to the user
++         * and pass up to the user
+ 	 */
+ 	if ((newsk = wanpipe_make_new(sk)) == NULL){
+ 		return -ENOMEM;
+@@ -490,12 +490,12 @@
+
+ 	/* Register the lcn on which incoming call came
+          * from. Thus, if we have to clear it, we know
+-         * whic lcn to clear
+-	 */
++         * whic lcn to clear
++	 */
+
+ 	//FIXME Obtain the LCN from the SKB buffer
+ 	//x25_api_hdr = (x25api_hdr_t*)skb->data;
+-
++
+ 	SK_PRIV(newsk)->num = skb->protocol;
+ 	newsk->sk_state = WANSOCK_CONNECTING;
+
+@@ -520,15 +520,15 @@
+ 	skb->dev=NULL;
+
+ 	AF_SKB_INC(skb->truesize);
+-
++
+ 	/* We must do this manually, since the sock_queue_rcv_skb()
+ 	 * function sets the skb->dev to NULL.  However, we use
+-	 * the dev field in the accept function.*/
++	 * the dev field in the accept function.*/
+
+ 	skb_set_owner_r(skb, sk);
+ 	SK_DATA_READY(sk, skb->len);
+ 	skb_queue_tail(&sk->sk_receive_queue, skb);
+-
++
+ 	return 0;
+ }
+
+@@ -546,8 +546,8 @@
+
+  	/* This is x25 specific area if protocol doesn't
+          * match, return error */
+-	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
+-	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
++	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
++	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(DSP_PROT))
+ 		return -EINVAL;
+
+@@ -568,14 +568,14 @@
+ /*======================================================================
+  * wanpipe_accept
+  *
+- *	ACCEPT() System call.	X25API Specific function.
+- *	For each incoming call, create a new socket and
+- *      return it to the user.
++ *	ACCEPT() System call.	X25API Specific function.
++ *	For each incoming call, create a new socket and
++ *      return it to the user.
   *=====================================================================*/
  #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
 -static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags, bool kern)
@@ -25,11 +489,1259 @@ diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wa
  #endif
  {
  	struct sock *sk;
-diff -ruw wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe_src.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe_src.c
+@@ -590,7 +590,7 @@
+ 		wanpipe_kill_sock(newsock->sk);
+ 		newsock->sk=NULL;
+ 	}
+-
++
+ 	if ((sk = sock->sk) == NULL)
+ 		return -ENOTSOCK;
+
+@@ -615,12 +615,12 @@
+ 			err=0;
+ 			break;
+ 		}
+-
++
+ 		if (sk->sk_state != WANSOCK_LISTEN){
+ 			err = -ENETDOWN;
+ 			break;
+ 		}
+-
++
+ 		if (signal_pending(current)) {
+ 			err = -ERESTARTSYS;
+ 			break;
+@@ -641,20 +641,20 @@
+
+ 	newsk=(struct sock*)*(unsigned long *)&skb->data[0];
+ 	if (newsk){
+-
++
+ 		struct net_device *dev;
+-
++
+ 		/* Decrement the usage count of newsk, since
+ 		 * we go the pointer for skb */
+ 		__sock_put(newsk);
+-
+-		if (wansk_is_zapped(newsk) && SK_PRIV(newsk) &&
++
++		if (wansk_is_zapped(newsk) && SK_PRIV(newsk) &&
+ 		   (dev = (struct net_device *)SK_PRIV(newsk)->dev)){
+
+ 			if (dev && WAN_NETDEV_TEST_IOCTL(dev)){
+ 				struct sock* dev_sk;
+ 				WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_GET_SK);
+-
++
+ 				if ((dev_sk=(struct sock*)ifr.ifr_data)!=NULL){
+ 					__sock_put(dev_sk);
+
+@@ -672,7 +672,7 @@
+
+ 				ifr.ifr_data=(void*)newsk;
+ 				if (WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_UNBIND_SK)==0){
+-					WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_CLEAR_CALL);
++					WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_CLEAR_CALL);
+ 				}
+ 			}else{
+ 				printk(KERN_INFO "af_wanpipe: Accept killing newsk, lower layer down!\n");
+@@ -729,8 +729,8 @@
+  *
+  *	Wanpipe socket bottom half handler.  This function
+  *      is called by the WANPIPE device drivers to queue a
+- *      incomming packet into the socket receive queue.
+- *      Once the packet is queued, all processes waiting to
++ *      incomming packet into the socket receive queue.
++ *      Once the packet is queued, all processes waiting to
+  *      read are woken up.
+  *
+  *      During socket bind, this function is bounded into
+@@ -762,16 +762,16 @@
+ 	sll->sll_ifindex = dev->ifindex;
+ 	sll->sll_halen = 0;
+
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,4,23)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,4,23)
+ 	if (dev->hard_header_parse)
+ 		sll->sll_halen = dev->hard_header_parse(skb, sll->sll_addr);
+ #endif
+
+-	/*
++	/*
+ 	 * WAN_PACKET_DATA : Data which should be passed up the receive queue.
+          * WAN_PACKET_ASYC : Asynchronous data like place call, which should
+          *                   be passed up the listening sock.
+-         * WAN_PACKET_ERR  : Asynchronous data like clear call or restart
++         * WAN_PACKET_ERR  : Asynchronous data like clear call or restart
+          *                   which should go into an error queue.
+          */
+
+@@ -784,13 +784,13 @@
+ 			if (SK_PRIV(sk) && DATA_SC(sk) && DATA_SC(sk)->parent){
+ #ifdef LINUX_2_6
+ 				if (sock_flag(sk, SOCK_DEAD)){
+-#else
++#else
+ 				if (test_bit(0,&sk->dead)){
+ #endif
+ 					return -ENODEV;
+ 				}
+-
+-				return wanpipe_sk_parent_rx(sk,skb);
++
++				return wanpipe_sk_parent_rx(sk,skb);
+ 			}else{
+ 				if (sock_queue_rcv_skb(sk,skb)<0){
+ 					AF_SKB_DEC(skb->truesize);
+@@ -807,7 +807,7 @@
+ #endif
+ 			break;
+ 		case WAN_PACKET_CMD:
+-			/* Bug fix: update Mar6.
++			/* Bug fix: update Mar6.
+                          * Do not set the sock lcn number here, since
+          		 * cmd is not guaranteed to be executed on the
+                          * board, thus Lcn could be wrong */
+@@ -822,7 +822,7 @@
+ 			break;
+ 		default:
+ 			printk(KERN_INFO "af_wanpipe: BH Illegal Packet Type Dropping\n");
+-			KFREE_SKB(skb);
++			KFREE_SKB(skb);
+ 			break;
+ 	}
+
+@@ -833,10 +833,10 @@
+  * wanpipe_alloc_socket
+  *
+  *	Allocate memory for the a new sock, and sock
+- *      private data.
+- *
++ *      private data.
++ *
+  *	Increment the module use count.
+- *
++ *
+  *===========================================================*/
+
+ #ifdef sk_net_refcnt
+@@ -850,7 +850,7 @@
+
+ #ifdef LINUX_2_6
+
+-# if defined(LINUX_FEAT_2624)
++# if defined(LINUX_FEAT_2624)
+ 	if (!osk && !net) {
+ 		DEBUG_EVENT("%s:%d ASSERT osk net pointer = NULL! \n",
+ 			__FUNCTION__,__LINE__);
+@@ -889,7 +889,7 @@
+ 	memset(wan_opt, 0x00, sizeof(struct wanpipe_opt));
+
+ 	SK_PRIV_INIT(sk,wan_opt);
+-
++
+ 	AF_MEM_INC(sizeof(struct sock));
+ 	AF_MEM_INC(sizeof(struct wanpipe_opt));
+
+@@ -906,14 +906,14 @@
+  * wanpipe_sendmsg
+  *
+  *	This function implements a sendto() system call,
+- *      for AF_WANPIPE socket family.
++ *      for AF_WANPIPE socket family.
+  *      During socket bind() sk->sk_bound_dev_if is initialized
+  *      to a correct network device. This number is used
+  *      to find a network device to which the packet should
+  *      be passed to.
+  *
+- *      Each packet is queued into sk->write_queue and
+- *      delayed transmit bottom half handler is marked for
++ *      Each packet is queued into sk->write_queue and
++ *      delayed transmit bottom half handler is marked for
+  *      execution.
+  *
+  *      A socket must be in WANSOCK_CONNECTED state before
+@@ -942,14 +942,14 @@
+ 	int ifindex, err=-EINVAL, reserve = 0;
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
++
+ 	if (!wansk_is_zapped(sk))
+ 		return -ENETDOWN;
+
+ 	if (sk->sk_state != WANSOCK_CONNECTED)
+-		return -ENOTCONN;
++		return -ENOTCONN;
+
+-	if (msg->msg_flags&~MSG_DONTWAIT)
++	if (msg->msg_flags&~MSG_DONTWAIT)
+ 		return(-EINVAL);
+
+ 	if ((SK_PRIV(sk)->num == htons(ETH_P_X25) ||
+@@ -969,7 +969,7 @@
+ 		addr	= NULL;
+
+ 	}else{
+-		if (msg->msg_namelen < sizeof(struct wan_sockaddr_ll)){
++		if (msg->msg_namelen < sizeof(struct wan_sockaddr_ll)){
+ 			return -EINVAL;
+ 		}
+
+@@ -986,7 +986,7 @@
+
+ 	if (netif_queue_stopped(dev))
+ 		return -EBUSY;
+-
++
+ 	if (sock->type == SOCK_RAW)
+ 		reserve = dev->hard_header_len;
+
+@@ -997,12 +997,12 @@
+ #if defined(LINUX_2_1)
+ 	dev_lock_list();
+ #endif
+-
++
+ 	ALLOC_SKB(skb,len+dev->hard_header_len+15);
+ 	if (skb==NULL){
+ 		goto out_unlock;
+ 	}
+-
++
+ 	skb_reserve(skb, (dev->hard_header_len+15)&~15);
+ 	wan_skb_reset_network_header(skb);
+
+@@ -1042,7 +1042,7 @@
+ 		err = -EBUSY;
+ 	}
+ 	AF_SKB_INC(skb->truesize);
+-
++
+ out_free:
+ 	KFREE_SKB(skb);
+ out_unlock:
+@@ -1053,7 +1053,7 @@
+ }
+
+ /*============================================================
+- * wanpipe_kill_sock
++ * wanpipe_kill_sock
+  *
+  *	Used by wanpipe_release, to delay release of
+  *      the socket.
+@@ -1064,12 +1064,12 @@
+ 	struct sock **skp;
+ #endif
+ 	unsigned long flags;
+-
++
+ 	if (!sk)
+ 		return;
+
+ 	WAN_ASSERT_VOID(!SK_PRIV(sk));
+-
++
+ 	sk->sk_state = WANSOCK_DISCONNECTED;
+ 	wansk_reset_zapped(sk);
+ 	sk->sk_bound_dev_if=0;
+@@ -1077,13 +1077,13 @@
+ 		dev_put(SK_PRIV(sk)->dev);
+ 	}
+ 	SK_PRIV(sk)->dev=NULL;
+-
++
+ 	/* This functin can be called from interrupt. We must use
+ 	 * appropriate locks */
+-
++
+ 	write_lock_irqsave(&wanpipe_sklist_lock,flags);
+ #ifdef LINUX_2_6
+-	sk_del_node_init(sk);
++	sk_del_node_init(sk);
+ #else
+ 	for (skp = &wanpipe_sklist; *skp; skp = &(*skp)->next) {
+ 		if (*skp == sk) {
+@@ -1103,7 +1103,7 @@
+
+ 	KFREE(SK_PRIV(sk));
+ 	SK_PRIV_INIT(sk,NULL);
+-
++
+ #if defined(LINUX_2_4)||defined(LINUX_2_6)
+ #if defined(KERN_REFCNT_UPDATE) && KERN_REFCNT_UPDATE > 0
+ 	if (refcount_read(&sk->sk_refcnt) != 1){
+@@ -1137,7 +1137,7 @@
+ 	netdevice_t *dev;
+ 	struct sk_buff *skb;
+ 	struct sock *deadsk;
+-
++
+ 	while ((skb=skb_dequeue(&sk->sk_receive_queue))!=NULL){
+ 		deadsk=(struct sock *)*(unsigned long*)&skb->data[0];
+ 		if (!deadsk){
+@@ -1146,7 +1146,7 @@
+ 		}
+ #ifdef LINUX_2_6
+ 		sock_set_flag(deadsk, SOCK_DEAD);
+-#else
++#else
+ 		deadsk->dead=1;
+ #endif
+ 		printk (KERN_INFO "af_wanpipe: Release: found dead sock!\n");
+@@ -1159,7 +1159,7 @@
+ 				if (WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_UNBIND_SK)==0){
+ 					WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_CLEAR_CALL);
+ 				}
+-			}
++			}
+ 		}
+
+ 		/* Decrement the sock refcnt, since we took
+@@ -1174,8 +1174,8 @@
+ /*============================================================
+  * wanpipe_release
+  *
+- *	Close a PACKET socket. This is fairly simple. We
+- *      immediately go to 'closed' state and remove our
++ *	Close a PACKET socket. This is fairly simple. We
++ *      immediately go to 'closed' state and remove our
+  *      protocol entry in the device list.
+  *===========================================================*/
+
+@@ -1185,7 +1185,7 @@
+ static int wanpipe_release(struct socket *sock, struct socket *peersock)
+ #endif
+ {
+-
++
+ #if defined(LINUX_2_1)
+ 	struct sk_buff	*skb;
+ #endif
+@@ -1194,12 +1194,12 @@
+ 	struct sock **skp;
+ #endif
+ 	unsigned long flags;
+-
++
+ 	if (!sk)
+ 		return 0;
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
++
+ 	check_write_queue(sk);
+
+ #ifdef CONFIG_PRODUCT_WANPIPE_SOCK_DATASCOPE
+@@ -1211,7 +1211,7 @@
+
+
+ 	/* Kill the tx timer, if we don't kill it now, the timer
+-         * will run after we kill the sock.  Timer code will
++         * will run after we kill the sock.  Timer code will
+          * try to access the sock which has been killed and cause
+          * kernel panic */
+
+@@ -1226,9 +1226,9 @@
+ 			SK_PRIV(sk)->dev=NULL;
+ 		}
+ 		release_queued_pending_sockets(sk);
+-
++
+ 	}else if ((SK_PRIV(sk)->num == htons(ETH_P_X25) ||
+-		   SK_PRIV(sk)->num == htons(WP_X25_PROT) ||
++		   SK_PRIV(sk)->num == htons(WP_X25_PROT) ||
+ 		   SK_PRIV(sk)->num == htons(DSP_PROT)) && wansk_is_zapped(sk)){
+
+ 		netdevice_t *dev = (struct net_device *)SK_PRIV(sk)->dev;
+@@ -1264,11 +1264,11 @@
+ 	}
+
+ 	SK_PRIV(sk)->dev=NULL;
+-
++
+ 	//FIXME with spinlock_irqsave
+ 	write_lock_irqsave(&wanpipe_sklist_lock,flags);
+ #ifdef LINUX_2_6
+-	sk_del_node_init(sk);
++	sk_del_node_init(sk);
+ #else
+ 	for (skp = &wanpipe_sklist; *skp; skp = &(*skp)->next) {
+ 		if (*skp == sk) {
+@@ -1285,7 +1285,7 @@
+ 	 */
+
+ 	sk->sk_state_change(sk);	/* It is useless. Just for sanity. */
+-
++
+ 	sock->sk = NULL;
+ 	sk->sk_socket = NULL;
+
+@@ -1302,7 +1302,7 @@
+
+ 	KFREE(SK_PRIV(sk));
+ 	SK_PRIV_INIT(sk,NULL);
+-
++
+ #if defined(LINUX_2_4)||defined(LINUX_2_6)
+ #if defined(KERN_REFCNT_UPDATE) && KERN_REFCNT_UPDATE > 0
+ 	if (refcount_read(&sk->sk_refcnt) != 1){
+@@ -1318,7 +1318,7 @@
+ 	}
+ #endif
+ 	sock_put(sk);
+-#else
++#else
+ 	sk_free(sk);
+ #endif
+ 	AF_MEM_DEC(sizeof(struct sock));
+@@ -1327,16 +1327,16 @@
+ #ifndef LINUX_2_6
+ 	MOD_DEC_USE_COUNT;
+ #endif
+-
++
+ 	return 0;
+ }
+
+ /*============================================================
+  * check_write_queue
+  *
+- *  	During sock shutdown, if the sock state is
+- *      WANSOCK_CONNECTED and there is transmit data
+- *      pending. Wait until data is released
++ *  	During sock shutdown, if the sock state is
++ *      WANSOCK_CONNECTED and there is transmit data
++ *      pending. Wait until data is released
+  *      before proceeding.
+  *===========================================================*/
+
+@@ -1380,7 +1380,7 @@
+ 	/*
+ 	 *	Check legality
+ 	 */
+-
++
+ 	if (addr_len < sizeof(struct wan_sockaddr_ll)){
+ 		printk(KERN_INFO "af_wanpipe: Address length error\n");
+ 		return -EINVAL;
+@@ -1404,9 +1404,9 @@
+ 		if (SK_PRIV(sk)->num == htons(WP_X25_PROT)){
+ 			SK_PRIV(sk)->num = htons(ETH_P_X25);
+ 		}
+-
++
+ 		/* Obtain the master device, in case of Annexg this
+-		 * device would be a lapb network interface, note
++		 * device would be a lapb network interface, note
+ 		 * the usage count on dev will be incremented, once
+ 		 * we are finshed with the device we should run
+ 		 * dev_put() to release it */
+@@ -1425,7 +1425,7 @@
+ 				SK_PRIV(sk)->num = htons(WP_X25_PROT);
+ 				goto wanpipe_svc_connect_skip;
+ 			}
+-
++
+ 			printk(KERN_INFO "af_wanpipe: Failed to get Dev from name: %s,\n",
+ 					name);
+ 			return -ENODEV;
+@@ -1437,16 +1437,16 @@
+ 			dev_put(dev);
+ 			return -ENODEV;
+ 		}
+-
+-		sk->sk_bound_dev_if = bind_api_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,(void*)sk);
+-
++
++		sk->sk_bound_dev_if = bind_api_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,(void*)sk);
++
+ 		/* We are finished with the lapb master device, we
+ 		 * need it to find a free svc or dsp device but now
+ 		 * we can release it */
+ 		dev_put(dev);
+-
++
+ wanpipe_svc_connect_skip:
+-
++
+ 		if (sk->sk_bound_dev_if < 0){
+ 			sk->sk_bound_dev_if=0;
+ 			err=-EINVAL;
+@@ -1460,7 +1460,7 @@
+ 				err=-EINVAL;
+ 			}
+ 		}
+-
++
+ 	}else if (!strcmp(sll->sll_device,"svc_listen") ||
+ 		  !strcmp(sll->sll_device,"dsp_listen")){
+
+@@ -1472,7 +1472,7 @@
+ 		}
+
+ 		/* Obtain the master device, in case of Annexg this
+-		 * device would be a lapb network interface, note
++		 * device would be a lapb network interface, note
+ 		 * the usage count on dev will be incremented, once
+ 		 * we are finshed with the device we should run
+ 		 * dev_put() to release it */
+@@ -1491,7 +1491,7 @@
+ 				SK_PRIV(sk)->num = htons(WP_X25_PROT);
+ 				goto wanpipe_svc_listen_skip;
+ 			}
+-
++
+ 			printk(KERN_INFO "af_wanpipe: Failed to get Dev from name: %s,\n",
+ 					name);
+ 			return -ENODEV;
+@@ -1504,7 +1504,7 @@
+ 			return -ENODEV;
+ 		}
+
+-		err = bind_api_listen_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,sk);
++		err = bind_api_listen_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,sk);
+
+ 		SK_PRIV(sk)->dev=dev;
+ 		sk->sk_bound_dev_if=dev->ifindex;
+@@ -1515,12 +1515,12 @@
+ 			sk->sk_state = WANSOCK_BIND_LISTEN;
+ 		}
+
+-
++
+ 	}else{
+ 		struct ifreq ifr;
+ 		strncpy(name,sll->sll_device,14);
+ 		name[14]=0;
+-
++
+ #if defined(LINUX_2_4)||defined(LINUX_2_6)
+ 		dev = wan_dev_get_by_name(name);
+ #else
+@@ -1547,16 +1547,16 @@
+ 			return wanpipe_bind_sk_to_parent(sk,dev,sll);
+ 		}
+ #endif
+-
++
+ 		if (WAN_NETDEV_TEST_IOCTL(dev))
+ 			err=WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_BIND_SK);
+-
++
+ 		if (err == 0){
+-			sk->sk_bound_dev_if = dev->ifindex;
++			sk->sk_bound_dev_if = dev->ifindex;
+ 			SK_PRIV(sk)->dev = dev;
+
+
+-			if (SK_PRIV(sk)->num == htons(ETH_P_X25) ||
++			if (SK_PRIV(sk)->num == htons(ETH_P_X25) ||
+ 			    SK_PRIV(sk)->num == htons(WP_X25_PROT) ||
+ 			    SK_PRIV(sk)->num == htons(DSP_PROT)){
+ 				sk->sk_state = WANSOCK_DISCONNECTED;
+@@ -1577,24 +1577,24 @@
+ 	if (!err){
+ 		wansk_set_zapped(sk);
+ 	}
+-
++
+ //	printk(KERN_INFO "11-11 Bind Socket Prot %i, X25=%i Zapped %i, Bind Dev %i Sock %u!\n",
+ //			SK_PRIV(sk)->num,htons(ETH_P_X25),sk->sk_zapped,sk->sk_bound_dev_if,(u32)sk);
+-
++
+ 	return err;
+ }
+
+ /*============================================================
+  *  wanpipe_create
+- *
++ *
+  * 	SOCKET() System call.  It allocates a sock structure
+- *      and adds the socket to the wanpipe_sk_list.
++ *      and adds the socket to the wanpipe_sk_list.
+  *      Crates AF_WANPIPE socket.
+  *===========================================================*/
+
+-#if defined(DECLARE_SOCKADDR) || LINUX_VERSION_CODE > KERNEL_VERSION(2,6,31)
++#if defined(DECLARE_SOCKADDR) || LINUX_VERSION_CODE > KERNEL_VERSION(2,6,31)
+ int wanpipe_create(struct net *net, struct socket *sock, int protocol, int kern)
+-#elif defined(LINUX_FEAT_2624)
++#elif defined(LINUX_FEAT_2624)
+ int wanpipe_create(struct net *net, struct socket *sock, int protocol)
+ #else
+ int wanpipe_create(struct socket *sock, int protocol)
+@@ -1603,7 +1603,7 @@
+ 	struct sock *sk;
+ 	unsigned long flags;
+
+-#ifndef LINUX_FEAT_2624
++#ifndef LINUX_FEAT_2624
+ 	/* Used to fake the net structure for lower kernels */
+ 	void *net = NULL;
+ #endif
+@@ -1612,7 +1612,7 @@
+ 		return -ESOCKTNOSUPPORT;
+
+ 	sock->state = SS_UNCONNECTED;
+-
++
+ #ifdef sk_net_refcnt
+ 	if ((sk = wanpipe_alloc_socket(NULL, net, kern)) == NULL){
+ #else
+@@ -1634,10 +1634,10 @@
+ 	SK_PRIV(sk)->dev=NULL;
+
+ 	atomic_inc(&wanpipe_socks_nr);
+-
++
+ 	/* We must disable interrupts because the ISR
+ 	 * can also change the list */
+-
++
+ 	write_lock_irqsave(&wanpipe_sklist_lock,flags);
+ #ifdef LINUX_2_6
+ 	sk_add_node(sk, &wanpipe_sklist);
+@@ -1647,15 +1647,15 @@
+ 	sock_hold(sk);
+ #endif
+ 	write_unlock_irqrestore(&wanpipe_sklist_lock,flags);
+-
++
+ 	return(0);
+ }
+
+
+ /*============================================================
+  *  wanpipe_recvmsg
+- *
+- *	Pull a packet from our receive queue and hand it
++ *
++ *	Pull a packet from our receive queue and hand it
+  *      to the user. If necessary we block.
+  *===========================================================*/
+
+@@ -1697,7 +1697,7 @@
+ 	 *	but then it will block.
+ 	 */
+
+-	if (flags & MSG_OOB){
++	if (flags & MSG_OOB){
+ 		skb=skb_dequeue(&sk->sk_error_queue);
+ 	}else{
+ #if (KERN_RECV_DATAGRAM_CHG > 0)
+@@ -1707,7 +1707,7 @@
+ #endif
+ 	}
+ 	/*
+-	 *	An error occurred so return it. Because skb_recv_datagram()
++	 *	An error occurred so return it. Because skb_recv_datagram()
+ 	 *	handles the blocking we don't see and worry about blocking
+ 	 *	retries.
+ 	 */
+@@ -1722,7 +1722,7 @@
+ 			WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_KICK);
+ 		}
+ 	}
+-
++
+ 	/*
+ 	 *	You lose any data beyond the buffer you gave. If it worries a
+ 	 *	user program they can ask the device for its MTU anyway.
+@@ -1739,13 +1739,13 @@
+ 	err = memcpy_to_msg(msg, skb->data, copied);
+ 	if (err)
+ 		goto out_free;
+-
++
+ #ifdef LINUX_2_1
+ 	sk->stamp=skb->stamp;
+ #else
+ 	sock_recv_timestamp(msg, sk, skb);
+ #endif
+-
++
+ 	if (msg->msg_name)
+ 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
+
+@@ -1764,8 +1764,8 @@
+
+ /*============================================================
+  *  wanpipe_getname
+- *
+- * 	I don't know what to do with this yet.
++ *
++ * 	I don't know what to do with this yet.
+  *      User can use this function to get sock address
+  *      information. Not very useful for Sangoma's purposes.
+  *===========================================================*/
+@@ -1783,7 +1783,7 @@
+ 	struct wan_sockaddr_ll *sll = (struct wan_sockaddr_ll*)uaddr;
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
++
+ 	sll->sll_family = sk->sk_family;
+ 	sll->sll_ifindex = sk->sk_bound_dev_if;
+ 	sll->sll_protocol = SK_PRIV(sk)->num;
+@@ -1799,7 +1799,7 @@
+ #if defined (KERN_CLASS_PROTO_OPS_UPDATE) && KERN_CLASS_PROTO_OPS_UPDATE > 0
+ 	*uaddr_len = sizeof(*sll);
+ #endif
+-
++
+ 	return 0;
+ }
+
+@@ -1817,9 +1817,9 @@
+
+ /*============================================================
+  *  wanpipe_notifier
+- *
++ *
+  *	If driver turns off network interface, this function
+- *      will be envoked. Currently I treate it as a
++ *      will be envoked. Currently I treate it as a
+  *      call disconnect. More thought should go into this
+  *      function.
+  *
+@@ -1838,7 +1838,7 @@
+ 	if (dev==NULL){
+ 		DEBUG_EVENT("af_wanpiep:%s: Dev==NULL!\n",__FUNCTION__);
+ 		return NOTIFY_DONE;
+-	}
++	}
+
+ 	read_lock(&wanpipe_sklist_lock);
+ #if KERN_SK_FOR_NODE_FEATURE == 0
+@@ -1852,18 +1852,18 @@
+ 		case NETDEV_DOWN:
+ 		case NETDEV_UNREGISTER:
+ 			if (dev->ifindex == sk->sk_bound_dev_if) {
+-
++
+ 				printk(KERN_INFO "af_wanpipe: Device down %s\n",dev->name);
+
+-				if (sk->sk_state != WANSOCK_LISTEN &&
++				if (sk->sk_state != WANSOCK_LISTEN &&
+ 				    sk->sk_state != WANSOCK_BIND_LISTEN){
+ 					sk->sk_state = WANSOCK_DISCONNECTED;
+ 				}
+ 				sk->sk_bound_dev_if = 0;
+ 				wansk_reset_zapped(sk);
+-
++
+ 				if (SK_PRIV(sk) && SK_PRIV(sk)->dev){
+-					dev_put((struct net_device *)SK_PRIV(sk)->dev);
++					dev_put((struct net_device *)SK_PRIV(sk)->dev);
+ 					SK_PRIV(sk)->dev=NULL;
+ 				}
+ 				SK_DATA_READY(sk, 0);
+@@ -1909,9 +1909,9 @@
+ 	poll_wait(file, WAN_SK_SLEEP(sk), wait);
+
+ 	/* exceptional events? */
+-	if (!SK_PRIV(sk) ||
+-	    !wansk_is_zapped(sk)  ||
+-	    sk->sk_err      ||
++	if (!SK_PRIV(sk) ||
++	    !wansk_is_zapped(sk)  ||
++	    sk->sk_err      ||
+ 	    !skb_queue_empty(&sk->sk_error_queue)){
+ 		mask |= POLLPRI;
+ 		return mask;
+@@ -1924,7 +1924,7 @@
+ 	if (!skb_queue_empty(&sk->sk_receive_queue)){
+ 		mask |= POLLIN | POLLRDNORM;
+ 	}
+-
++
+ 	/* connection hasn't started yet */
+ 	if (sk->sk_state == WANSOCK_CONNECTING || sk->sk_state == WANSOCK_LISTEN){
+ 		DEBUG_TEST("%s: Sk state connecting\n",__FUNCTION__);
+@@ -1934,10 +1934,10 @@
+ 	if (sk->sk_state != WANSOCK_CONNECTED){
+ 		mask = POLLPRI;
+ 		DEBUG_TEST("%s: Sock not connected event on sock %p State=%i\n",
+-				__FUNCTION__,sk,sk->sk_state);
++				__FUNCTION__,sk,sk->sk_state);
+ 		return mask;
+ 	}
+-
++
+ 	if ((dev = (struct net_device *)SK_PRIV(sk)->dev) == NULL){
+ 		printk(KERN_INFO "af_wanpipe: No Device found in POLL!\n");
+ 		return mask;
+@@ -1945,7 +1945,7 @@
+
+ 	if (!(dev->flags & IFF_UP))
+ 		return mask;
+-
++
+ 	if (!netif_queue_stopped(dev)){
+ 		DEBUG_TEST("%s: Dev stopped\n",__FUNCTION__);
+ 		mask |= POLLOUT | POLLWRNORM | POLLWRBAND;
+@@ -1958,7 +1958,7 @@
+  		sk->sk_socket->flags |= SO_NOSPACE;
+ #endif
+ 	}
+-
++
+ 	return mask;
+ }
+
+@@ -1971,7 +1971,7 @@
+ 		return -EINVAL;
+
+ 	DEBUG_TEST("%s: API Connected!\n",__FUNCTION__);
+-
++
+ 	sk->sk_state = WANSOCK_CONNECTED;
+ 	SK_DATA_READY(sk, 0);
+ 	return 0;
+@@ -1986,7 +1986,7 @@
+ 		return -EINVAL;
+
+ 	DEBUG_TEST("%s: API Connecting!\n",__FUNCTION__);
+-
++
+ 	sk->sk_state = WANSOCK_CONNECTING;
+ 	SK_DATA_READY(sk, 0);
+ 	return 0;
+@@ -2001,19 +2001,19 @@
+
+ 	if (sk->sk_state == WANSOCK_BIND_LISTEN ||
+ 	    sk->sk_state == WANSOCK_LISTEN) {
+-
++
+ 		sk->sk_state = WANSOCK_DISCONNECTED;
+ 		SK_DATA_READY(sk, 0);
+ 		return 0;
+ 	}
+-
+-
++
++
+ 	if (!wansk_is_zapped(sk)){
+ 		return -EINVAL;
+ 	}
+-
++
+ 	DEBUG_TEST("%s: API Disconnected!\n",__FUNCTION__);
+-
++
+ 	sk->sk_state = WANSOCK_DISCONNECTED;
+
+ 	SK_DATA_READY(sk, 0);
+@@ -2026,7 +2026,7 @@
+  *
+  *  	CONNECT() System Call. X25API specific function
+  * 	Check the state of the sock, and execute PLACE_CALL command.
+- *      Connect can ether block or return without waiting for connection,
++ *      Connect can ether block or return without waiting for connection,
+  *      if specified by user.
+  *=====================================================================*/
+
+@@ -2040,11 +2040,11 @@
+ 	if (!wansk_is_zapped(sk)){		/* Must bind first - autobinding does not work */
+ 		return -EINVAL;
+ 	}
+-
++
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
+-	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
+-	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
++
++	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
++	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(DSP_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(LAPB_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(SS7_PROT)){
+@@ -2062,13 +2062,13 @@
+ 		sk->sk_state     = WANSOCK_CONNECTING;
+ 		return 0;
+ 	}
+-
++
+ 	if (sk->sk_state != WANSOCK_DISCONNECTED){
+ 		printk(KERN_INFO "af_wanpipe: Trying to connect on channel NON DISCONNECT\n");
+ 		return -ECONNREFUSED;
+ 	}
+
+-	sk->sk_state   = WANSOCK_DISCONNECTED;
++	sk->sk_state   = WANSOCK_DISCONNECTED;
+ 	sock->state = SS_UNCONNECTED;
+
+ 	if (addr_len != sizeof(struct wan_sockaddr_ll)){
+@@ -2092,9 +2092,9 @@
+
+ 	err=WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_PLACE_CALL);
+ 	if (err){
+-		sk->sk_state   = WANSOCK_DISCONNECTED;
++		sk->sk_state   = WANSOCK_DISCONNECTED;
+ 		sock->state = SS_UNCONNECTED;
+-		return err;
++		return err;
+ 	}
+
+ 	return 0;
+@@ -2104,7 +2104,7 @@
+ {
+ 	if (!wansk_is_zapped(sk))
+ 		return -EINVAL;
+-
++
+ 	if (atomic_read(&sk->sk_rmem_alloc) + len >= (unsigned)sk->sk_rcvbuf)
+ 		return -ENOMEM;
+
+@@ -2130,13 +2130,13 @@
+ 	.connect 	=wanpipe_connect,
+ 	.socketpair 	=sock_no_socketpair,
+ 	.accept 	=wanpipe_accept,
+-	.getname 	=wanpipe_getname,
++	.getname 	=wanpipe_getname,
+ 	.poll 		=wanpipe_poll,
+ 	.ioctl 		=wanpipe_ioctl,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl 	=wanpipe_ioctl,
+ #endif
+-	.listen 	=wanpipe_listen,
++	.listen 	=wanpipe_listen,
+ 	.shutdown 	=sock_no_shutdown,
+ 	.setsockopt 	=sock_no_setsockopt,
+ 	.getsockopt	=sock_no_getsockopt,
+@@ -2164,10 +2164,10 @@
+ 	connect :	wanpipe_connect,
+ 	socketpair :	sock_no_socketpair,
+ 	accept :	wanpipe_accept,
+-	getname: 	wanpipe_getname,
++	getname: 	wanpipe_getname,
+ 	poll :		wanpipe_poll,
+ 	ioctl :		wanpipe_ioctl,
+-	listen :	wanpipe_listen,
++	listen :	wanpipe_listen,
+ 	shutdown: 	sock_no_shutdown,
+ 	setsockopt: 	sock_no_setsockopt,
+ 	getsockopt:	sock_no_getsockopt,
+@@ -2211,27 +2211,27 @@
+
+ int __init af_wanpipe_init(void)
+ {
+-	struct wanpipe_api_register_struct wan_api_reg;
++	struct wanpipe_api_register_struct wan_api_reg;
+
+ 		DEBUG_EVENT("%s %s.%s %s %s\n",
+ 			fullname, WANPIPE_VERSION, WANPIPE_SUB_VERSION,
+ 			WANPIPE_COPYRIGHT_DATES, WANPIPE_COMPANY);
+-
++
+
+ 	wan_rwlock_init(&wanpipe_sklist_lock);
+ 	wan_rwlock_init(&wanpipe_parent_sklist_lock);
+
+ 	sock_register(&wanpipe_family_ops);
+ 	register_netdevice_notifier(&wanpipe_netdev_notifier);
+-
+-	wan_api_reg.wanpipe_api_sock_rcv = wanpipe_api_sock_rcv;
++
++	wan_api_reg.wanpipe_api_sock_rcv = wanpipe_api_sock_rcv;
+ 	wan_api_reg.wanpipe_api_connected = wanpipe_api_connected;
+ 	wan_api_reg.wanpipe_api_disconnected = wanpipe_api_disconnected;
+ 	wan_api_reg.wanpipe_api_connecting = wanpipe_api_connecting;
+ 	wan_api_reg.wanpipe_listen_rcv = wanpipe_listen_rcv;
+ 	wan_api_reg.sk_buf_check = sk_buf_check;
+ 	wan_api_reg.sk_poll_wake = sk_poll_wake;
+-
++
+ 	return register_wanpipe_api_socket(&wan_api_reg);
+ }
+
+diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe_src.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe_src.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2025-05-26 09:30:15.513002788 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2025-05-26 12:13:58.936387265 +0100
-@@ -573,9 +573,9 @@
-  *      return it to the user.
+@@ -1,5 +1,5 @@
+ /*****************************************************************************
+-* af_wanpipe.c
++* af_wanpipe.c
+ *
+ * 		WANPIPE(tm) Annexg Secure Socket Layer.
+ *
+@@ -13,11 +13,11 @@
+ *		2 of the License, or (at your option) any later version.
+ * ============================================================================
+ * Due Credit:
+-*               Wanpipe socket layer is based on Packet and
+-*               the X25 socket layers. The above sockets were
+-*               used for the specific use of Sangoma Technoloiges
+-*               API programs.
+-*               Packet socket Authors: Ross Biro, Fred N. van Kempen and
++*               Wanpipe socket layer is based on Packet and
++*               the X25 socket layers. The above sockets were
++*               used for the specific use of Sangoma Technoloiges
++*               API programs.
++*               Packet socket Authors: Ross Biro, Fred N. van Kempen and
+ *                                      Alan Cox.
+ *               X25 socket Author: Jonathan Naylor.
+ * ============================================================================
+@@ -29,7 +29,7 @@
+ * Feb 29, 2000  Nenad Corbic     o Added support for PVC protocols, such as
+ *                                  CHDLC, Frame Relay and HDLC API.
+ * Jan 17, 2000 	Nenad Corbic	 o Initial version, based on AF_PACKET socket.
+-*			           X25API support only.
++*			           X25API support only.
+ *
+ ******************************************************************************/
+
+@@ -65,23 +65,23 @@
+
+
+  #define AF_MEM_DEC(x)  atomic_sub(x,&af_mem_alloc)
+- #define AF_MEM_INC(x)	 atomic_add(x,&af_mem_alloc)
+-
++ #define AF_MEM_INC(x)	 atomic_add(x,&af_mem_alloc)
++
+  #define KMALLOC(ptr,len,flag)	{ ptr=kmalloc(len, flag); \
+ 	  			  if (ptr != NULL) AF_MEM_INC(len); }
+  #define KFREE(ptr)		{AF_MEM_DEC(sizeof(*ptr)); kfree(ptr);}
+-
++
+ #else
+  #define KMALLOC(ptr,len,flag)	ptr=kmalloc(len, flag)
+- #define KFREE(ptr)		kfree(ptr)
+-
++ #define KFREE(ptr)		kfree(ptr)
++
+  #define ALLOC_SKB(new_skb,len, dsp) new_skb = dev_alloc_skb(len)
+  #define KFREE_SKB(skb)	             dev_kfree_skb_any(skb)
+
+- #define AF_SKB_DEC(x)
+- #define AF_SKB_INC(x)
+- #define AF_MEM_DEC(x)
+- #define AF_MEM_INC(x)
++ #define AF_SKB_DEC(x)
++ #define AF_SKB_INC(x)
++ #define AF_MEM_DEC(x)
++ #define AF_MEM_INC(x)
+ #endif
+
+ #if KERN_MEMCPY_FROM_MSG == 0
+@@ -107,9 +107,9 @@
+ extern int wanpipe_bind_sk_to_parent(struct sock *sk, netdevice_t *dev, struct wan_sockaddr_ll *sll);
+ extern int wanpipe_sk_parent_rx(struct sock *parent_sk, struct sk_buff *skb);
+ #endif
+-
+
+-
++
++
+ /* The code below is used to test memory leaks. It prints out
+  * a message every time kmalloc and kfree system calls get executed.
+  * If the calls match there is no leak :)
+@@ -195,7 +195,7 @@
+
+ /*============================================================
+  *  wanpipe_ioctl
+- *
++ *
+  * 	Execute a user commands, and set socket options.
+  *
+  * FIXME: More thought should go into this function.
+@@ -208,7 +208,7 @@
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+
+-	switch(cmd)
++	switch(cmd)
+ 	{
+ 		case SIOC_WANPIPE_CHECK_TX:
+ #if defined(KERN_REFCNT_UPDATE) && KERN_REFCNT_UPDATE > 0
+@@ -224,7 +224,7 @@
+
+ 			if (sk->sk_state == WANSOCK_CONNECTED){
+ 				return 0;
+-			}else if (sk->sk_state == WANSOCK_DISCONNECTED){
++			}else if (sk->sk_state == WANSOCK_DISCONNECTED){
+ 				return 1;
+ 			}else{
+ 				return 2;
+@@ -257,7 +257,7 @@
+ 			sock->file->f_flags |= O_NONBLOCK;
+ 			return 0;
+
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,15)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,15)
+ 		case SIOCGIFFLAGS:
+ #ifndef CONFIG_INET
+ 		case SIOCSIFFLAGS:
+@@ -282,7 +282,7 @@
+ 		case SIOCSIFHWBROADCAST:
+ 			return(dev_ioctl(cmd,(void *) arg));
+ #endif
+-
++
+ #ifdef CONFIG_INET
+ 		case SIOCADDRT:
+ 		case SIOCDELRT:
+@@ -317,18 +317,18 @@
+ 				if (!dev)
+ 					return -ENODEV;
+
+-				if (!WAN_NETDEV_TEST_IOCTL(dev))
++				if (!WAN_NETDEV_TEST_IOCTL(dev))
+ 					return -ENODEV;
+-
++
+ 				ifr.ifr_data = (void*)arg;
+-
++
+ 				return WAN_NETDEV_IOCTL(dev,&ifr,cmd);
+ 			}
+
+ 			DEBUG_EVENT("%s: Ioctl call not supported DevPriv %i Cmd %i \n",
+ 					__FUNCTION__,SIOCDEVPRIVATE,cmd);
+ 			return -EOPNOTSUPP;
+-
++
+ 	}
+ 	/*NOTREACHED*/
+ }
+@@ -386,20 +386,20 @@
+  *
+  *	Wanpipe LISTEN socket bottom half handler.  This function
+  *      is called by the WANPIPE device drivers to queue an
+- *      incomming call into the socket listening queue.
+- *      Once the packet is queued, the waiting accept() process
++ *      incomming call into the socket listening queue.
++ *      Once the packet is queued, the waiting accept() process
+  *      is woken up.
+  *
+  *      During socket bind, this function is bounded into
+- *      WANPIPE driver private.
+- *
++ *      WANPIPE driver private.
++ *
+  *      IMPORTANT NOTE:
+  *          The accept call() is waiting for an skb packet
+  *          which contains a pointer to a device structure.
+  *
+- *          When we do a bind to a device structre, we
+- *          bind a newly created socket into "chan->sk".  Thus,
+- *          when accept receives the skb packet, it will know
++ *          When we do a bind to a device structre, we
++ *          bind a newly created socket into "chan->sk".  Thus,
++ *          when accept receives the skb packet, it will know
+  *          from which dev it came form, and in turn it will know
+  *          the address of the new sock.
+  *
+@@ -411,7 +411,7 @@
+
+ 	struct wan_sockaddr_ll *sll;
+ 	struct sock *newsk;
+-	netdevice_t *dev;
++	netdevice_t *dev;
+ 	//x25api_hdr_t *x25_api_hdr;
+ 	struct ifreq ifr;
+ 	unsigned long flags;
+@@ -420,7 +420,7 @@
+ 		printk(KERN_INFO "Wanpipe listen recv error! No skid!\n");
+ 		return 0;
+ 	}
+-
++
+ 	/* If we receive a NULL skb pointer, it means that the
+ 	 * lower layer is dead. Change state and wakeup any waiting
+ 	 * processes. */
+@@ -438,23 +438,23 @@
+
+ 	/* Check if the receive buffer will hold the incoming
+ 	 * call request */
+-	if (atomic_read(&sk->sk_rmem_alloc) + skb->truesize >=
++	if (atomic_read(&sk->sk_rmem_alloc) + skb->truesize >=
+ 			(unsigned)sk->sk_rcvbuf){
+-
++
+ 		return -ENOMEM;
+-	}
++	}
++
+
+-
+ 	sll = (struct wan_sockaddr_ll*)skb->cb;
+-
+-	dev = skb->dev;
++
++	dev = skb->dev;
+ 	if (!dev){
+ 		printk(KERN_INFO "af_wanpipe: LISTEN ERROR, No Free Device\n");
+ 		return -ENODEV;
+ 	}
+
+ 	/* Allocate a new sock, which accept will bind
+-         * and pass up to the user
++         * and pass up to the user
+ 	 */
+ 	if ((newsk = wanpipe_make_new(sk)) == NULL){
+ 		return -ENOMEM;
+@@ -490,12 +490,12 @@
+
+ 	/* Register the lcn on which incoming call came
+          * from. Thus, if we have to clear it, we know
+-         * whic lcn to clear
+-	 */
++         * whic lcn to clear
++	 */
+
+ 	//FIXME Obtain the LCN from the SKB buffer
+ 	//x25_api_hdr = (x25api_hdr_t*)skb->data;
+-
++
+ 	SK_PRIV(newsk)->num = skb->protocol;
+ 	newsk->sk_state = WANSOCK_CONNECTING;
+
+@@ -520,15 +520,15 @@
+ 	skb->dev=NULL;
+
+ 	AF_SKB_INC(skb->truesize);
+-
++
+ 	/* We must do this manually, since the sock_queue_rcv_skb()
+ 	 * function sets the skb->dev to NULL.  However, we use
+-	 * the dev field in the accept function.*/
++	 * the dev field in the accept function.*/
+
+ 	skb_set_owner_r(skb, sk);
+ 	SK_DATA_READY(sk, skb->len);
+ 	skb_queue_tail(&sk->sk_receive_queue, skb);
+-
++
+ 	return 0;
+ }
+
+@@ -546,8 +546,8 @@
+
+  	/* This is x25 specific area if protocol doesn't
+          * match, return error */
+-	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
+-	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
++	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
++	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(DSP_PROT))
+ 		return -EINVAL;
+
+@@ -568,14 +568,14 @@
+ /*======================================================================
+  * wanpipe_accept
+  *
+- *	ACCEPT() System call.	X25API Specific function.
+- *	For each incoming call, create a new socket and
+- *      return it to the user.
++ *	ACCEPT() System call.	X25API Specific function.
++ *	For each incoming call, create a new socket and
++ *      return it to the user.
   *=====================================================================*/
  #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
 -static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags, bool kern)
@@ -40,7 +1752,978 @@ diff -ruw wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe_src.c wanpi
  #endif
  {
  	struct sock *sk;
-diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
+@@ -590,7 +590,7 @@
+ 		wanpipe_kill_sock(newsock->sk);
+ 		newsock->sk=NULL;
+ 	}
+-
++
+ 	if ((sk = sock->sk) == NULL)
+ 		return -ENOTSOCK;
+
+@@ -615,12 +615,12 @@
+ 			err=0;
+ 			break;
+ 		}
+-
++
+ 		if (sk->sk_state != WANSOCK_LISTEN){
+ 			err = -ENETDOWN;
+ 			break;
+ 		}
+-
++
+ 		if (signal_pending(current)) {
+ 			err = -ERESTARTSYS;
+ 			break;
+@@ -641,20 +641,20 @@
+
+ 	newsk=(struct sock*)*(unsigned long *)&skb->data[0];
+ 	if (newsk){
+-
++
+ 		struct net_device *dev;
+-
++
+ 		/* Decrement the usage count of newsk, since
+ 		 * we go the pointer for skb */
+ 		__sock_put(newsk);
+-
+-		if (wansk_is_zapped(newsk) && SK_PRIV(newsk) &&
++
++		if (wansk_is_zapped(newsk) && SK_PRIV(newsk) &&
+ 		   (dev = (struct net_device *)SK_PRIV(newsk)->dev)){
+
+ 			if (dev && WAN_NETDEV_TEST_IOCTL(dev)){
+ 				struct sock* dev_sk;
+ 				WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_GET_SK);
+-
++
+ 				if ((dev_sk=(struct sock*)ifr.ifr_data)!=NULL){
+ 					__sock_put(dev_sk);
+
+@@ -672,7 +672,7 @@
+
+ 				ifr.ifr_data=(void*)newsk;
+ 				if (WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_UNBIND_SK)==0){
+-					WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_CLEAR_CALL);
++					WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_CLEAR_CALL);
+ 				}
+ 			}else{
+ 				printk(KERN_INFO "af_wanpipe: Accept killing newsk, lower layer down!\n");
+@@ -729,8 +729,8 @@
+  *
+  *	Wanpipe socket bottom half handler.  This function
+  *      is called by the WANPIPE device drivers to queue a
+- *      incomming packet into the socket receive queue.
+- *      Once the packet is queued, all processes waiting to
++ *      incomming packet into the socket receive queue.
++ *      Once the packet is queued, all processes waiting to
+  *      read are woken up.
+  *
+  *      During socket bind, this function is bounded into
+@@ -762,16 +762,16 @@
+ 	sll->sll_ifindex = dev->ifindex;
+ 	sll->sll_halen = 0;
+
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,4,23)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,4,23)
+ 	if (dev->hard_header_parse)
+ 		sll->sll_halen = dev->hard_header_parse(skb, sll->sll_addr);
+ #endif
+
+-	/*
++	/*
+ 	 * WAN_PACKET_DATA : Data which should be passed up the receive queue.
+          * WAN_PACKET_ASYC : Asynchronous data like place call, which should
+          *                   be passed up the listening sock.
+-         * WAN_PACKET_ERR  : Asynchronous data like clear call or restart
++         * WAN_PACKET_ERR  : Asynchronous data like clear call or restart
+          *                   which should go into an error queue.
+          */
+
+@@ -784,13 +784,13 @@
+ 			if (SK_PRIV(sk) && DATA_SC(sk) && DATA_SC(sk)->parent){
+ #ifdef LINUX_2_6
+ 				if (sock_flag(sk, SOCK_DEAD)){
+-#else
++#else
+ 				if (test_bit(0,&sk->dead)){
+ #endif
+ 					return -ENODEV;
+ 				}
+-
+-				return wanpipe_sk_parent_rx(sk,skb);
++
++				return wanpipe_sk_parent_rx(sk,skb);
+ 			}else{
+ 				if (sock_queue_rcv_skb(sk,skb)<0){
+ 					AF_SKB_DEC(skb->truesize);
+@@ -807,7 +807,7 @@
+ #endif
+ 			break;
+ 		case WAN_PACKET_CMD:
+-			/* Bug fix: update Mar6.
++			/* Bug fix: update Mar6.
+                          * Do not set the sock lcn number here, since
+          		 * cmd is not guaranteed to be executed on the
+                          * board, thus Lcn could be wrong */
+@@ -822,7 +822,7 @@
+ 			break;
+ 		default:
+ 			printk(KERN_INFO "af_wanpipe: BH Illegal Packet Type Dropping\n");
+-			KFREE_SKB(skb);
++			KFREE_SKB(skb);
+ 			break;
+ 	}
+
+@@ -833,10 +833,10 @@
+  * wanpipe_alloc_socket
+  *
+  *	Allocate memory for the a new sock, and sock
+- *      private data.
+- *
++ *      private data.
++ *
+  *	Increment the module use count.
+- *
++ *
+  *===========================================================*/
+
+ #ifdef sk_net_refcnt
+@@ -850,7 +850,7 @@
+
+ #ifdef LINUX_2_6
+
+-# if defined(LINUX_FEAT_2624)
++# if defined(LINUX_FEAT_2624)
+ 	if (!osk && !net) {
+ 		DEBUG_EVENT("%s:%d ASSERT osk net pointer = NULL! \n",
+ 			__FUNCTION__,__LINE__);
+@@ -889,7 +889,7 @@
+ 	memset(wan_opt, 0x00, sizeof(struct wanpipe_opt));
+
+ 	SK_PRIV_INIT(sk,wan_opt);
+-
++
+ 	AF_MEM_INC(sizeof(struct sock));
+ 	AF_MEM_INC(sizeof(struct wanpipe_opt));
+
+@@ -906,14 +906,14 @@
+  * wanpipe_sendmsg
+  *
+  *	This function implements a sendto() system call,
+- *      for AF_WANPIPE socket family.
++ *      for AF_WANPIPE socket family.
+  *      During socket bind() sk->sk_bound_dev_if is initialized
+  *      to a correct network device. This number is used
+  *      to find a network device to which the packet should
+  *      be passed to.
+  *
+- *      Each packet is queued into sk->write_queue and
+- *      delayed transmit bottom half handler is marked for
++ *      Each packet is queued into sk->write_queue and
++ *      delayed transmit bottom half handler is marked for
+  *      execution.
+  *
+  *      A socket must be in WANSOCK_CONNECTED state before
+@@ -942,14 +942,14 @@
+ 	int ifindex, err=-EINVAL, reserve = 0;
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
++
+ 	if (!wansk_is_zapped(sk))
+ 		return -ENETDOWN;
+
+ 	if (sk->sk_state != WANSOCK_CONNECTED)
+-		return -ENOTCONN;
++		return -ENOTCONN;
+
+-	if (msg->msg_flags&~MSG_DONTWAIT)
++	if (msg->msg_flags&~MSG_DONTWAIT)
+ 		return(-EINVAL);
+
+ 	if ((SK_PRIV(sk)->num == htons(ETH_P_X25) ||
+@@ -969,7 +969,7 @@
+ 		addr	= NULL;
+
+ 	}else{
+-		if (msg->msg_namelen < sizeof(struct wan_sockaddr_ll)){
++		if (msg->msg_namelen < sizeof(struct wan_sockaddr_ll)){
+ 			return -EINVAL;
+ 		}
+
+@@ -986,7 +986,7 @@
+
+ 	if (netif_queue_stopped(dev))
+ 		return -EBUSY;
+-
++
+ 	if (sock->type == SOCK_RAW)
+ 		reserve = dev->hard_header_len;
+
+@@ -997,12 +997,12 @@
+ #if defined(LINUX_2_1)
+ 	dev_lock_list();
+ #endif
+-
++
+ 	ALLOC_SKB(skb,len+dev->hard_header_len+15);
+ 	if (skb==NULL){
+ 		goto out_unlock;
+ 	}
+-
++
+ 	skb_reserve(skb, (dev->hard_header_len+15)&~15);
+ 	wan_skb_reset_network_header(skb);
+
+@@ -1042,7 +1042,7 @@
+ 		err = -EBUSY;
+ 	}
+ 	AF_SKB_INC(skb->truesize);
+-
++
+ out_free:
+ 	KFREE_SKB(skb);
+ out_unlock:
+@@ -1053,7 +1053,7 @@
+ }
+
+ /*============================================================
+- * wanpipe_kill_sock
++ * wanpipe_kill_sock
+  *
+  *	Used by wanpipe_release, to delay release of
+  *      the socket.
+@@ -1064,12 +1064,12 @@
+ 	struct sock **skp;
+ #endif
+ 	unsigned long flags;
+-
++
+ 	if (!sk)
+ 		return;
+
+ 	WAN_ASSERT_VOID(!SK_PRIV(sk));
+-
++
+ 	sk->sk_state = WANSOCK_DISCONNECTED;
+ 	wansk_reset_zapped(sk);
+ 	sk->sk_bound_dev_if=0;
+@@ -1077,13 +1077,13 @@
+ 		dev_put(SK_PRIV(sk)->dev);
+ 	}
+ 	SK_PRIV(sk)->dev=NULL;
+-
++
+ 	/* This functin can be called from interrupt. We must use
+ 	 * appropriate locks */
+-
++
+ 	write_lock_irqsave(&wanpipe_sklist_lock,flags);
+ #ifdef LINUX_2_6
+-	sk_del_node_init(sk);
++	sk_del_node_init(sk);
+ #else
+ 	for (skp = &wanpipe_sklist; *skp; skp = &(*skp)->next) {
+ 		if (*skp == sk) {
+@@ -1103,7 +1103,7 @@
+
+ 	KFREE(SK_PRIV(sk));
+ 	SK_PRIV_INIT(sk,NULL);
+-
++
+ #if defined(LINUX_2_4)||defined(LINUX_2_6)
+ #if defined(KERN_REFCNT_UPDATE) && KERN_REFCNT_UPDATE > 0
+ 	if (refcount_read(&sk->sk_refcnt) != 1){
+@@ -1137,7 +1137,7 @@
+ 	netdevice_t *dev;
+ 	struct sk_buff *skb;
+ 	struct sock *deadsk;
+-
++
+ 	while ((skb=skb_dequeue(&sk->sk_receive_queue))!=NULL){
+ 		deadsk=(struct sock *)*(unsigned long*)&skb->data[0];
+ 		if (!deadsk){
+@@ -1146,7 +1146,7 @@
+ 		}
+ #ifdef LINUX_2_6
+ 		sock_set_flag(deadsk, SOCK_DEAD);
+-#else
++#else
+ 		deadsk->dead=1;
+ #endif
+ 		printk (KERN_INFO "af_wanpipe: Release: found dead sock!\n");
+@@ -1159,7 +1159,7 @@
+ 				if (WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_UNBIND_SK)==0){
+ 					WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_CLEAR_CALL);
+ 				}
+-			}
++			}
+ 		}
+
+ 		/* Decrement the sock refcnt, since we took
+@@ -1174,8 +1174,8 @@
+ /*============================================================
+  * wanpipe_release
+  *
+- *	Close a PACKET socket. This is fairly simple. We
+- *      immediately go to 'closed' state and remove our
++ *	Close a PACKET socket. This is fairly simple. We
++ *      immediately go to 'closed' state and remove our
+  *      protocol entry in the device list.
+  *===========================================================*/
+
+@@ -1185,7 +1185,7 @@
+ static int wanpipe_release(struct socket *sock, struct socket *peersock)
+ #endif
+ {
+-
++
+ #if defined(LINUX_2_1)
+ 	struct sk_buff	*skb;
+ #endif
+@@ -1194,12 +1194,12 @@
+ 	struct sock **skp;
+ #endif
+ 	unsigned long flags;
+-
++
+ 	if (!sk)
+ 		return 0;
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
++
+ 	check_write_queue(sk);
+
+ #ifdef CONFIG_PRODUCT_WANPIPE_SOCK_DATASCOPE
+@@ -1211,7 +1211,7 @@
+
+
+ 	/* Kill the tx timer, if we don't kill it now, the timer
+-         * will run after we kill the sock.  Timer code will
++         * will run after we kill the sock.  Timer code will
+          * try to access the sock which has been killed and cause
+          * kernel panic */
+
+@@ -1226,9 +1226,9 @@
+ 			SK_PRIV(sk)->dev=NULL;
+ 		}
+ 		release_queued_pending_sockets(sk);
+-
++
+ 	}else if ((SK_PRIV(sk)->num == htons(ETH_P_X25) ||
+-		   SK_PRIV(sk)->num == htons(WP_X25_PROT) ||
++		   SK_PRIV(sk)->num == htons(WP_X25_PROT) ||
+ 		   SK_PRIV(sk)->num == htons(DSP_PROT)) && wansk_is_zapped(sk)){
+
+ 		netdevice_t *dev = (struct net_device *)SK_PRIV(sk)->dev;
+@@ -1264,11 +1264,11 @@
+ 	}
+
+ 	SK_PRIV(sk)->dev=NULL;
+-
++
+ 	//FIXME with spinlock_irqsave
+ 	write_lock_irqsave(&wanpipe_sklist_lock,flags);
+ #ifdef LINUX_2_6
+-	sk_del_node_init(sk);
++	sk_del_node_init(sk);
+ #else
+ 	for (skp = &wanpipe_sklist; *skp; skp = &(*skp)->next) {
+ 		if (*skp == sk) {
+@@ -1285,7 +1285,7 @@
+ 	 */
+
+ 	sk->sk_state_change(sk);	/* It is useless. Just for sanity. */
+-
++
+ 	sock->sk = NULL;
+ 	sk->sk_socket = NULL;
+
+@@ -1302,7 +1302,7 @@
+
+ 	KFREE(SK_PRIV(sk));
+ 	SK_PRIV_INIT(sk,NULL);
+-
++
+ #if defined(LINUX_2_4)||defined(LINUX_2_6)
+ #if defined(KERN_REFCNT_UPDATE) && KERN_REFCNT_UPDATE > 0
+ 	if (refcount_read(&sk->sk_refcnt) != 1){
+@@ -1318,7 +1318,7 @@
+ 	}
+ #endif
+ 	sock_put(sk);
+-#else
++#else
+ 	sk_free(sk);
+ #endif
+ 	AF_MEM_DEC(sizeof(struct sock));
+@@ -1327,16 +1327,16 @@
+ #ifndef LINUX_2_6
+ 	MOD_DEC_USE_COUNT;
+ #endif
+-
++
+ 	return 0;
+ }
+
+ /*============================================================
+  * check_write_queue
+  *
+- *  	During sock shutdown, if the sock state is
+- *      WANSOCK_CONNECTED and there is transmit data
+- *      pending. Wait until data is released
++ *  	During sock shutdown, if the sock state is
++ *      WANSOCK_CONNECTED and there is transmit data
++ *      pending. Wait until data is released
+  *      before proceeding.
+  *===========================================================*/
+
+@@ -1380,7 +1380,7 @@
+ 	/*
+ 	 *	Check legality
+ 	 */
+-
++
+ 	if (addr_len < sizeof(struct wan_sockaddr_ll)){
+ 		printk(KERN_INFO "af_wanpipe: Address length error\n");
+ 		return -EINVAL;
+@@ -1404,9 +1404,9 @@
+ 		if (SK_PRIV(sk)->num == htons(WP_X25_PROT)){
+ 			SK_PRIV(sk)->num = htons(ETH_P_X25);
+ 		}
+-
++
+ 		/* Obtain the master device, in case of Annexg this
+-		 * device would be a lapb network interface, note
++		 * device would be a lapb network interface, note
+ 		 * the usage count on dev will be incremented, once
+ 		 * we are finshed with the device we should run
+ 		 * dev_put() to release it */
+@@ -1425,7 +1425,7 @@
+ 				SK_PRIV(sk)->num = htons(WP_X25_PROT);
+ 				goto wanpipe_svc_connect_skip;
+ 			}
+-
++
+ 			printk(KERN_INFO "af_wanpipe: Failed to get Dev from name: %s,\n",
+ 					name);
+ 			return -ENODEV;
+@@ -1437,16 +1437,16 @@
+ 			dev_put(dev);
+ 			return -ENODEV;
+ 		}
+-
+-		sk->sk_bound_dev_if = bind_api_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,(void*)sk);
+-
++
++		sk->sk_bound_dev_if = bind_api_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,(void*)sk);
++
+ 		/* We are finished with the lapb master device, we
+ 		 * need it to find a free svc or dsp device but now
+ 		 * we can release it */
+ 		dev_put(dev);
+-
++
+ wanpipe_svc_connect_skip:
+-
++
+ 		if (sk->sk_bound_dev_if < 0){
+ 			sk->sk_bound_dev_if=0;
+ 			err=-EINVAL;
+@@ -1460,7 +1460,7 @@
+ 				err=-EINVAL;
+ 			}
+ 		}
+-
++
+ 	}else if (!strcmp(sll->sll_device,"svc_listen") ||
+ 		  !strcmp(sll->sll_device,"dsp_listen")){
+
+@@ -1472,7 +1472,7 @@
+ 		}
+
+ 		/* Obtain the master device, in case of Annexg this
+-		 * device would be a lapb network interface, note
++		 * device would be a lapb network interface, note
+ 		 * the usage count on dev will be incremented, once
+ 		 * we are finshed with the device we should run
+ 		 * dev_put() to release it */
+@@ -1491,7 +1491,7 @@
+ 				SK_PRIV(sk)->num = htons(WP_X25_PROT);
+ 				goto wanpipe_svc_listen_skip;
+ 			}
+-
++
+ 			printk(KERN_INFO "af_wanpipe: Failed to get Dev from name: %s,\n",
+ 					name);
+ 			return -ENODEV;
+@@ -1504,7 +1504,7 @@
+ 			return -ENODEV;
+ 		}
+
+-		err = bind_api_listen_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,sk);
++		err = bind_api_listen_to_protocol(dev,sll->sll_card,SK_PRIV(sk)->num,sk);
+
+ 		SK_PRIV(sk)->dev=dev;
+ 		sk->sk_bound_dev_if=dev->ifindex;
+@@ -1515,12 +1515,12 @@
+ 			sk->sk_state = WANSOCK_BIND_LISTEN;
+ 		}
+
+-
++
+ 	}else{
+ 		struct ifreq ifr;
+ 		strncpy(name,sll->sll_device,14);
+ 		name[14]=0;
+-
++
+ #if defined(LINUX_2_4)||defined(LINUX_2_6)
+ 		dev = wan_dev_get_by_name(name);
+ #else
+@@ -1547,16 +1547,16 @@
+ 			return wanpipe_bind_sk_to_parent(sk,dev,sll);
+ 		}
+ #endif
+-
++
+ 		if (WAN_NETDEV_TEST_IOCTL(dev))
+ 			err=WAN_NETDEV_IOCTL(dev,&ifr,SIOC_ANNEXG_BIND_SK);
+-
++
+ 		if (err == 0){
+-			sk->sk_bound_dev_if = dev->ifindex;
++			sk->sk_bound_dev_if = dev->ifindex;
+ 			SK_PRIV(sk)->dev = dev;
+
+
+-			if (SK_PRIV(sk)->num == htons(ETH_P_X25) ||
++			if (SK_PRIV(sk)->num == htons(ETH_P_X25) ||
+ 			    SK_PRIV(sk)->num == htons(WP_X25_PROT) ||
+ 			    SK_PRIV(sk)->num == htons(DSP_PROT)){
+ 				sk->sk_state = WANSOCK_DISCONNECTED;
+@@ -1577,24 +1577,24 @@
+ 	if (!err){
+ 		wansk_set_zapped(sk);
+ 	}
+-
++
+ //	printk(KERN_INFO "11-11 Bind Socket Prot %i, X25=%i Zapped %i, Bind Dev %i Sock %u!\n",
+ //			SK_PRIV(sk)->num,htons(ETH_P_X25),sk->sk_zapped,sk->sk_bound_dev_if,(u32)sk);
+-
++
+ 	return err;
+ }
+
+ /*============================================================
+  *  wanpipe_create
+- *
++ *
+  * 	SOCKET() System call.  It allocates a sock structure
+- *      and adds the socket to the wanpipe_sk_list.
++ *      and adds the socket to the wanpipe_sk_list.
+  *      Crates AF_WANPIPE socket.
+  *===========================================================*/
+
+-#if defined(DECLARE_SOCKADDR) || LINUX_VERSION_CODE > KERNEL_VERSION(2,6,31)
++#if defined(DECLARE_SOCKADDR) || LINUX_VERSION_CODE > KERNEL_VERSION(2,6,31)
+ int wanpipe_create(struct net *net, struct socket *sock, int protocol, int kern)
+-#elif defined(LINUX_FEAT_2624)
++#elif defined(LINUX_FEAT_2624)
+ int wanpipe_create(struct net *net, struct socket *sock, int protocol)
+ #else
+ int wanpipe_create(struct socket *sock, int protocol)
+@@ -1603,7 +1603,7 @@
+ 	struct sock *sk;
+ 	unsigned long flags;
+
+-#ifndef LINUX_FEAT_2624
++#ifndef LINUX_FEAT_2624
+ 	/* Used to fake the net structure for lower kernels */
+ 	void *net = NULL;
+ #endif
+@@ -1612,7 +1612,7 @@
+ 		return -ESOCKTNOSUPPORT;
+
+ 	sock->state = SS_UNCONNECTED;
+-
++
+ #ifdef sk_net_refcnt
+ 	if ((sk = wanpipe_alloc_socket(NULL, net, kern)) == NULL){
+ #else
+@@ -1634,10 +1634,10 @@
+ 	SK_PRIV(sk)->dev=NULL;
+
+ 	atomic_inc(&wanpipe_socks_nr);
+-
++
+ 	/* We must disable interrupts because the ISR
+ 	 * can also change the list */
+-
++
+ 	write_lock_irqsave(&wanpipe_sklist_lock,flags);
+ #ifdef LINUX_2_6
+ 	sk_add_node(sk, &wanpipe_sklist);
+@@ -1647,15 +1647,15 @@
+ 	sock_hold(sk);
+ #endif
+ 	write_unlock_irqrestore(&wanpipe_sklist_lock,flags);
+-
++
+ 	return(0);
+ }
+
+
+ /*============================================================
+  *  wanpipe_recvmsg
+- *
+- *	Pull a packet from our receive queue and hand it
++ *
++ *	Pull a packet from our receive queue and hand it
+  *      to the user. If necessary we block.
+  *===========================================================*/
+
+@@ -1697,7 +1697,7 @@
+ 	 *	but then it will block.
+ 	 */
+
+-	if (flags & MSG_OOB){
++	if (flags & MSG_OOB){
+ 		skb=skb_dequeue(&sk->sk_error_queue);
+ 	}else{
+ #if (KERN_RECV_DATAGRAM_CHG > 0)
+@@ -1707,7 +1707,7 @@
+ #endif
+ 	}
+ 	/*
+-	 *	An error occurred so return it. Because skb_recv_datagram()
++	 *	An error occurred so return it. Because skb_recv_datagram()
+ 	 *	handles the blocking we don't see and worry about blocking
+ 	 *	retries.
+ 	 */
+@@ -1722,7 +1722,7 @@
+ 			WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_KICK);
+ 		}
+ 	}
+-
++
+ 	/*
+ 	 *	You lose any data beyond the buffer you gave. If it worries a
+ 	 *	user program they can ask the device for its MTU anyway.
+@@ -1739,13 +1739,13 @@
+ 	err = memcpy_to_msg(msg, skb->data, copied);
+ 	if (err)
+ 		goto out_free;
+-
++
+ #ifdef LINUX_2_1
+ 	sk->stamp=skb->stamp;
+ #else
+ 	sock_recv_timestamp(msg, sk, skb);
+ #endif
+-
++
+ 	if (msg->msg_name)
+ 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
+
+@@ -1764,8 +1764,8 @@
+
+ /*============================================================
+  *  wanpipe_getname
+- *
+- * 	I don't know what to do with this yet.
++ *
++ * 	I don't know what to do with this yet.
+  *      User can use this function to get sock address
+  *      information. Not very useful for Sangoma's purposes.
+  *===========================================================*/
+@@ -1783,7 +1783,7 @@
+ 	struct wan_sockaddr_ll *sll = (struct wan_sockaddr_ll*)uaddr;
+
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
++
+ 	sll->sll_family = sk->sk_family;
+ 	sll->sll_ifindex = sk->sk_bound_dev_if;
+ 	sll->sll_protocol = SK_PRIV(sk)->num;
+@@ -1799,7 +1799,7 @@
+ #if defined (KERN_CLASS_PROTO_OPS_UPDATE) && KERN_CLASS_PROTO_OPS_UPDATE > 0
+ 	*uaddr_len = sizeof(*sll);
+ #endif
+-
++
+ 	return 0;
+ }
+
+@@ -1817,9 +1817,9 @@
+
+ /*============================================================
+  *  wanpipe_notifier
+- *
++ *
+  *	If driver turns off network interface, this function
+- *      will be envoked. Currently I treate it as a
++ *      will be envoked. Currently I treate it as a
+  *      call disconnect. More thought should go into this
+  *      function.
+  *
+@@ -1838,7 +1838,7 @@
+ 	if (dev==NULL){
+ 		DEBUG_EVENT("af_wanpiep:%s: Dev==NULL!\n",__FUNCTION__);
+ 		return NOTIFY_DONE;
+-	}
++	}
+
+ 	read_lock(&wanpipe_sklist_lock);
+ #if KERN_SK_FOR_NODE_FEATURE == 0
+@@ -1852,18 +1852,18 @@
+ 		case NETDEV_DOWN:
+ 		case NETDEV_UNREGISTER:
+ 			if (dev->ifindex == sk->sk_bound_dev_if) {
+-
++
+ 				printk(KERN_INFO "af_wanpipe: Device down %s\n",dev->name);
+
+-				if (sk->sk_state != WANSOCK_LISTEN &&
++				if (sk->sk_state != WANSOCK_LISTEN &&
+ 				    sk->sk_state != WANSOCK_BIND_LISTEN){
+ 					sk->sk_state = WANSOCK_DISCONNECTED;
+ 				}
+ 				sk->sk_bound_dev_if = 0;
+ 				wansk_reset_zapped(sk);
+-
++
+ 				if (SK_PRIV(sk) && SK_PRIV(sk)->dev){
+-					dev_put((struct net_device *)SK_PRIV(sk)->dev);
++					dev_put((struct net_device *)SK_PRIV(sk)->dev);
+ 					SK_PRIV(sk)->dev=NULL;
+ 				}
+ 				SK_DATA_READY(sk, 0);
+@@ -1909,9 +1909,9 @@
+ 	poll_wait(file, WAN_SK_SLEEP(sk), wait);
+
+ 	/* exceptional events? */
+-	if (!SK_PRIV(sk) ||
+-	    !wansk_is_zapped(sk)  ||
+-	    sk->sk_err      ||
++	if (!SK_PRIV(sk) ||
++	    !wansk_is_zapped(sk)  ||
++	    sk->sk_err      ||
+ 	    !skb_queue_empty(&sk->sk_error_queue)){
+ 		mask |= POLLPRI;
+ 		return mask;
+@@ -1924,7 +1924,7 @@
+ 	if (!skb_queue_empty(&sk->sk_receive_queue)){
+ 		mask |= POLLIN | POLLRDNORM;
+ 	}
+-
++
+ 	/* connection hasn't started yet */
+ 	if (sk->sk_state == WANSOCK_CONNECTING || sk->sk_state == WANSOCK_LISTEN){
+ 		DEBUG_TEST("%s: Sk state connecting\n",__FUNCTION__);
+@@ -1934,10 +1934,10 @@
+ 	if (sk->sk_state != WANSOCK_CONNECTED){
+ 		mask = POLLPRI;
+ 		DEBUG_TEST("%s: Sock not connected event on sock %p State=%i\n",
+-				__FUNCTION__,sk,sk->sk_state);
++				__FUNCTION__,sk,sk->sk_state);
+ 		return mask;
+ 	}
+-
++
+ 	if ((dev = (struct net_device *)SK_PRIV(sk)->dev) == NULL){
+ 		printk(KERN_INFO "af_wanpipe: No Device found in POLL!\n");
+ 		return mask;
+@@ -1945,7 +1945,7 @@
+
+ 	if (!(dev->flags & IFF_UP))
+ 		return mask;
+-
++
+ 	if (!netif_queue_stopped(dev)){
+ 		DEBUG_TEST("%s: Dev stopped\n",__FUNCTION__);
+ 		mask |= POLLOUT | POLLWRNORM | POLLWRBAND;
+@@ -1958,7 +1958,7 @@
+  		sk->sk_socket->flags |= SO_NOSPACE;
+ #endif
+ 	}
+-
++
+ 	return mask;
+ }
+
+@@ -1971,7 +1971,7 @@
+ 		return -EINVAL;
+
+ 	DEBUG_TEST("%s: API Connected!\n",__FUNCTION__);
+-
++
+ 	sk->sk_state = WANSOCK_CONNECTED;
+ 	SK_DATA_READY(sk, 0);
+ 	return 0;
+@@ -1986,7 +1986,7 @@
+ 		return -EINVAL;
+
+ 	DEBUG_TEST("%s: API Connecting!\n",__FUNCTION__);
+-
++
+ 	sk->sk_state = WANSOCK_CONNECTING;
+ 	SK_DATA_READY(sk, 0);
+ 	return 0;
+@@ -2001,19 +2001,19 @@
+
+ 	if (sk->sk_state == WANSOCK_BIND_LISTEN ||
+ 	    sk->sk_state == WANSOCK_LISTEN) {
+-
++
+ 		sk->sk_state = WANSOCK_DISCONNECTED;
+ 		SK_DATA_READY(sk, 0);
+ 		return 0;
+ 	}
+-
+-
++
++
+ 	if (!wansk_is_zapped(sk)){
+ 		return -EINVAL;
+ 	}
+-
++
+ 	DEBUG_TEST("%s: API Disconnected!\n",__FUNCTION__);
+-
++
+ 	sk->sk_state = WANSOCK_DISCONNECTED;
+
+ 	SK_DATA_READY(sk, 0);
+@@ -2026,7 +2026,7 @@
+  *
+  *  	CONNECT() System Call. X25API specific function
+  * 	Check the state of the sock, and execute PLACE_CALL command.
+- *      Connect can ether block or return without waiting for connection,
++ *      Connect can ether block or return without waiting for connection,
+  *      if specified by user.
+  *=====================================================================*/
+
+@@ -2040,11 +2040,11 @@
+ 	if (!wansk_is_zapped(sk)){		/* Must bind first - autobinding does not work */
+ 		return -EINVAL;
+ 	}
+-
++
+ 	WAN_ASSERT_EINVAL(!SK_PRIV(sk));
+-
+-	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
+-	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
++
++	if (SK_PRIV(sk)->num != htons(ETH_P_X25) &&
++	    SK_PRIV(sk)->num != htons(WP_X25_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(DSP_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(LAPB_PROT) &&
+ 	    SK_PRIV(sk)->num != htons(SS7_PROT)){
+@@ -2062,13 +2062,13 @@
+ 		sk->sk_state     = WANSOCK_CONNECTING;
+ 		return 0;
+ 	}
+-
++
+ 	if (sk->sk_state != WANSOCK_DISCONNECTED){
+ 		printk(KERN_INFO "af_wanpipe: Trying to connect on channel NON DISCONNECT\n");
+ 		return -ECONNREFUSED;
+ 	}
+
+-	sk->sk_state   = WANSOCK_DISCONNECTED;
++	sk->sk_state   = WANSOCK_DISCONNECTED;
+ 	sock->state = SS_UNCONNECTED;
+
+ 	if (addr_len != sizeof(struct wan_sockaddr_ll)){
+@@ -2092,9 +2092,9 @@
+
+ 	err=WAN_NETDEV_IOCTL(dev,NULL,SIOC_ANNEXG_PLACE_CALL);
+ 	if (err){
+-		sk->sk_state   = WANSOCK_DISCONNECTED;
++		sk->sk_state   = WANSOCK_DISCONNECTED;
+ 		sock->state = SS_UNCONNECTED;
+-		return err;
++		return err;
+ 	}
+
+ 	return 0;
+@@ -2104,7 +2104,7 @@
+ {
+ 	if (!wansk_is_zapped(sk))
+ 		return -EINVAL;
+-
++
+ 	if (atomic_read(&sk->sk_rmem_alloc) + len >= (unsigned)sk->sk_rcvbuf)
+ 		return -ENOMEM;
+
+@@ -2130,13 +2130,13 @@
+ 	.connect 	=wanpipe_connect,
+ 	.socketpair 	=sock_no_socketpair,
+ 	.accept 	=wanpipe_accept,
+-	.getname 	=wanpipe_getname,
++	.getname 	=wanpipe_getname,
+ 	.poll 		=wanpipe_poll,
+ 	.ioctl 		=wanpipe_ioctl,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl 	=wanpipe_ioctl,
+ #endif
+-	.listen 	=wanpipe_listen,
++	.listen 	=wanpipe_listen,
+ 	.shutdown 	=sock_no_shutdown,
+ 	.setsockopt 	=sock_no_setsockopt,
+ 	.getsockopt	=sock_no_getsockopt,
+@@ -2164,10 +2164,10 @@
+ 	connect :	wanpipe_connect,
+ 	socketpair :	sock_no_socketpair,
+ 	accept :	wanpipe_accept,
+-	getname: 	wanpipe_getname,
++	getname: 	wanpipe_getname,
+ 	poll :		wanpipe_poll,
+ 	ioctl :		wanpipe_ioctl,
+-	listen :	wanpipe_listen,
++	listen :	wanpipe_listen,
+ 	shutdown: 	sock_no_shutdown,
+ 	setsockopt: 	sock_no_setsockopt,
+ 	getsockopt:	sock_no_getsockopt,
+@@ -2211,27 +2211,27 @@
+
+ int __init af_wanpipe_init(void)
+ {
+-	struct wanpipe_api_register_struct wan_api_reg;
++	struct wanpipe_api_register_struct wan_api_reg;
+
+ 		DEBUG_EVENT("%s %s.%s %s %s\n",
+ 			fullname, WANPIPE_VERSION, WANPIPE_SUB_VERSION,
+ 			WANPIPE_COPYRIGHT_DATES, WANPIPE_COMPANY);
+-
++
+
+ 	wan_rwlock_init(&wanpipe_sklist_lock);
+ 	wan_rwlock_init(&wanpipe_parent_sklist_lock);
+
+ 	sock_register(&wanpipe_family_ops);
+ 	register_netdevice_notifier(&wanpipe_netdev_notifier);
+-
+-	wan_api_reg.wanpipe_api_sock_rcv = wanpipe_api_sock_rcv;
++
++	wan_api_reg.wanpipe_api_sock_rcv = wanpipe_api_sock_rcv;
+ 	wan_api_reg.wanpipe_api_connected = wanpipe_api_connected;
+ 	wan_api_reg.wanpipe_api_disconnected = wanpipe_api_disconnected;
+ 	wan_api_reg.wanpipe_api_connecting = wanpipe_api_connecting;
+ 	wan_api_reg.wanpipe_listen_rcv = wanpipe_listen_rcv;
+ 	wan_api_reg.sk_buf_check = sk_buf_check;
+ 	wan_api_reg.sk_poll_wake = sk_poll_wake;
+-
++
+ 	return register_wanpipe_api_socket(&wan_api_reg);
+ }
+
+diff -ru wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-26 09:30:15.538032722 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-26 12:27:44.844309215 +0100
 @@ -139,7 +139,7 @@
@@ -52,3 +2735,16 @@ diff --no-dereference -ruw wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c w
  #endif
 
  #ifdef WP_CONFIG_DEVFS_FS
+@@ -247,10 +247,10 @@
+ 		DEBUG_ERROR("%s(): Error: data pointer is NULL!\n",__FUNCTION__);
+ 		return EINVAL;
+ 	}
+-
++
+ 	ec_api = (wan_ec_api_t*)data;
+ #if 0
+-	DbgPrint("%s(): card_devname: %s, ec_api->devname: %s",
++	DbgPrint("%s(): card_devname: %s, ec_api->devname: %s",
+ 		__FUNCTION__, card_devname, ec_api->devname);
+ #endif
+ 	/* keep the original name which was set in user mode */
