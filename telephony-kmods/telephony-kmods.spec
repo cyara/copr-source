@@ -10,7 +10,7 @@
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-503.11.1.el9_5}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-362.13.1.el9_3}
 %endif
 
 Name:		telephony-kmods
