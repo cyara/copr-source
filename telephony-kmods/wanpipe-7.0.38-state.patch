@@ -1,6 +1,6 @@
-diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c
---- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2024-05-14 11:36:31.284390203 +0100
-+++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2024-05-14 11:33:16.444527674 +0100
+diff -ruw wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2008-08-01 04:30:00.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_cdev_linux.c	2025-05-28 09:15:00.855128750 +0100
 @@ -211,7 +211,7 @@
  		return -EINVAL;
  	}
@@ -10,10 +10,9 @@ diff -ru wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe-
  	if (IS_ERR(wp_cdev_class)) {
  		DEBUG_ERROR("%s(): Error creating class!\n",__FUNCTION__);
  		cdev_del(&wp_cdev_dev);
-
-diff -ru wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
---- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2024-05-14 11:33:16.431527616 +0100
-+++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2024-05-14 11:50:12.270029929 +0100
+diff -ruw wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2008-08-01 04:30:00.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-28 09:17:02.983590896 +0100
 @@ -139,7 +139,7 @@
 
  	DEBUG_EVENT("%s: Registering Wanpipe ECDEV Device!\n",__FUNCTION__);
