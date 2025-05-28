@@ -10,6 +10,38 @@ diff -ruw wanpipe-7.0.38-a/patches/kdrivers/src/net/wanpipe_cdev_linux.c wanpipe
  	if (IS_ERR(wp_cdev_class)) {
  		DEBUG_ERROR("%s(): Error creating class!\n",__FUNCTION__);
  		cdev_del(&wp_cdev_dev);
+diff -ruw wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c
+--- telephony-kmods-a/wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe.c	2008-08-01 04:30:00.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe.c	2025-05-28 10:32:16.349791542 +0100
+@@ -572,11 +572,7 @@
+  *	For each incoming call, create a new socket and
+  *      return it to the user.
+  *=====================================================================*/
+-#if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags, bool kern)
+-#else
+-static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags)
+-#endif
++static int wanpipe_accept(struct socket *sock, struct socket *newsock, struct proto_accept_arg *)
+ {
+ 	struct sock *sk;
+ 	struct sock *newsk=NULL, *newsk_frmskb=NULL;
+diff -ruw wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe_src.c wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe_src.c
+--- telephony-kmods-a/wanpipe-7.0.38-a/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2008-08-01 04:30:00.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/wanrouter/af_wanpipe_src.c	2025-05-28 10:32:16.349791542 +0100
+@@ -572,11 +572,7 @@
+  *	For each incoming call, create a new socket and
+  *      return it to the user.
+  *=====================================================================*/
+-#if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags, bool kern)
+-#else
+-static int wanpipe_accept(struct socket *sock, struct socket *newsock, int flags)
+-#endif
++static int wanpipe_accept(struct socket *sock, struct socket *newsock, struct proto_accept_arg *)
+ {
+ 	struct sock *sk;
+ 	struct sock *newsk=NULL, *newsk_frmskb=NULL;
 diff -ruw wanpipe-7.0.38-a/patches/kdrivers/wanec/wanec_dev.c wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c
 --- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2008-08-01 04:30:00.000000000 +0100
 +++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_dev.c	2025-05-28 09:17:02.983590896 +0100
