@@ -10,12 +10,12 @@
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-570.18.1.el9_6}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-611.5.1.el9_7}
 %endif
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	20%{?dist}
+Release:	21%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -243,6 +243,9 @@ exit 0
 
 
 %changelog
+* Mon Nov 24 2025 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-21
+- Building for CyaraOS 9.7
+
 * Thu May 22 2025 Patrick Coakley <patrick.coakley@cyara.com> - 1.0-20
 - Building for CyaraOS 9.6
 

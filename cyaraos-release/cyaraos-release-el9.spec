@@ -10,9 +10,10 @@
 # Mallavonea
 # Abbeystrewry
 # Deelish
-%global release_name Bunlick
+# Bunlick
+%global release_name Smorane
 %global major   9
-%global minor   6
+%global minor   7
 %global dist .el%{major}
 %global eol_date 2032-06-01
 
@@ -37,6 +38,8 @@ Provides:       redhat-release = %{version}-%{release}
 # https://github.com/rpm-software-management/dnf/blob/4.2.23/dnf/const.py.in#L26
 Provides:       system-release = %{version}-%{release}
 Provides:       system-release(releasever) = %{major}
+Provides:       system-release(releasever_major) = %{major}
+Provides:       system-release(releasever_minor) = %{minor}
 
 # required by libdnf
 # https://github.com/rpm-software-management/libdnf/blob/0.48.0/libdnf/module/ModulePackage.cpp#L472
@@ -51,15 +54,15 @@ Source302:      90-default-user.preset
 Source303:      99-default-disable.preset
 Source304:      50-redhat.conf
 
-Source400:      alsecureboot001.cer
+Source400:      alsecurebootca1.cer
 # kernel signing certificate
-Source401:      alsecureboot001.cer
+Source401:      alsecureboot1.cer
 # grub2 signing certificate
-Source402:      alsecureboot001.cer
+Source402:      alsecureboot1.cer
 # Fwupd signing certificate
-Source403:      alsecureboot001.cer
+Source403:      alsecureboot1.cer
 # UKI signing certificate
-Source404:      alsecureboot001.cer
+Source404:      alsecureboot1.cer
 
 Source500:      almalinux-appstream.repo
 Source501:      almalinux-baseos.repo
@@ -319,6 +322,9 @@ install -p -m 0644 %{SOURCE600} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/
 
 
 %changelog
+* Mon Nov 24 2025 Patrick Coakley <patrick.coakley@cyara.com> - 9.7-1
+- CyaraOS 9.7
+
 * Thu May 22 2025 Patrick Coakley <patrick.coakley@cyara.com> - 9.6-1
 - CyaraOS 9.6
 
