@@ -1,19 +1,20 @@
 Summary:            SIP Messages flow viewer
 Name:               sngrep
-Version:            1.6.0
-Release:            1%{?dist}
+Version:            1.8.2
+Release:            2%{?dist}
 License:            GPLv3
 Group:              Applications/Engineering
-BuildRoot: 	    %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: 	        %{_tmppath}/%{name}-%{version}-%{release}-root
 Source:             %{name}-%{version}.tar.gz
 URL:                http://github.com/irontec/sngrep
-BuildRequires: ncurses-devel 
-BuildRequires: make 
-BuildRequires: libpcap-devel 
+BuildRequires: ncurses-devel
+BuildRequires: make
+BuildRequires: libpcap-devel
 BuildRequires: pcre-devel
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: gcc
+BuildRequires: openssl-devel
 Requires: ncurses
 Requires: libpcap
 Requires: pcre
@@ -33,7 +34,7 @@ You can also create new PCAP files from captures or displayed dialogs.
 
 %build
 ./bootstrap.sh
-./configure --without-openssl --with-pcre --enable-unicode --enable-ipv6 --enable-eep --prefix=/usr --sysconfdir=/etc/ --mandir=/usr/share/man
+./configure --with-openssl --with-pcre --enable-unicode --enable-ipv6 --enable-eep --prefix=/usr --sysconfdir=/etc/ --mandir=/usr/share/man
 make %{?_smp_mflags}
 
 %install
@@ -49,6 +50,9 @@ make %{?_smp_mflags}
 %{__rm} -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Jul 23 2025 Patrick Coakley <patrick.coakley@cyara.com> - 1.8.2-2
+- Bump to 1.8.2 and add openssl support
+
 * Tue Sep 06 2022 Jonathan Dieter <jonathan.dieter@spearline.com> - 1.6.0-1
 - Bump to 1.6.0
 
@@ -58,9 +62,6 @@ make %{?_smp_mflags}
 
 * Tue Aug 23 2016 Ivan Alonso <kaian@irontec.com> - 1.4.0
 - Version 1.4.0
-
-* Thu Mar 28 2016 Ivan Alonso <kaian@irontec.com> - 1.3.1
-- Version 1.3.1
 
 * Tue Mar 15 2016 Ivan Alonso <kaian@irontec.com> - 1.3.0
 - Version 1.3.0
