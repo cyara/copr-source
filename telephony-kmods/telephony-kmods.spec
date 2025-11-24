@@ -47,7 +47,7 @@ BuildRequires:	kernel-devel = %{kmod_kernel_version}
 BuildRequires:	kernel-core = %{kmod_kernel_version}
 BuildRequires:  kernel-modules = %{kmod_kernel_version}
 BuildRequires:	kernel-abi-stablelists = %{kmod_kernel_version}
-BuildRequires:	kernel-rpm-macro= %{kmod_kernel_version}
+BuildRequires:	kernel-rpm-macros
 BuildRequires:	redhat-rpm-config
 Requires:	kmod-dahdi == %{dahdi_version}
 Requires:	kmod-wanpipe == %{wanpipe_version}
