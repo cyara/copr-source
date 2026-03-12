@@ -5,7 +5,8 @@ Release:            1%{?dist}
 License:            MIT
 URL:                https://github.com/rclone/rclone
 Source0:            %{url}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
-BuildRequires:      golang
+BuildRequires:      golang >= 1.22
+BuildRequires:      git-core
 
 %description
 rclone is a command line program to sync files and directories to and from
