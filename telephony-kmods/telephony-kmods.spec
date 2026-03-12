@@ -10,7 +10,7 @@
 %endif
 
 %if 0%{?el9}
-%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-611.9.1.el9_7}
+%{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-611.5.1.el9_7}
 %endif
 
 Name:		telephony-kmods
@@ -44,8 +44,9 @@ ExclusiveArch:	x86_64
 
 BuildRequires:	elfutils-libelf-devel
 BuildRequires:	kernel-devel = %{kmod_kernel_version}
+BuildRequires:	kernel-core = %{kmod_kernel_version}
 BuildRequires:  kernel-modules = %{kmod_kernel_version}
-BuildRequires:	kernel-abi-stablelists
+BuildRequires:	kernel-abi-stablelists = %{kmod_kernel_version}
 BuildRequires:	kernel-rpm-macros
 BuildRequires:	redhat-rpm-config
 Requires:	kmod-dahdi == %{dahdi_version}
