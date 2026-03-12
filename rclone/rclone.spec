@@ -29,16 +29,25 @@ go build \
     ${build_target}
 
 %install
-install -Dpm0755 %{name} %{buildroot}%{_bindir}/%{name}
+# 1. Install the main binary
+install -Dpm 0755 %{name} %{buildroot}%{_bindir}/%{name}
 
-mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
-%{buildroot}%{_bindir}/%{name} genautocomplete bash > %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+# 2. Define our target paths for completions
+%define bash_comp %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+%define zsh_comp  %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
+%define fish_comp %{buildroot}%{_datadir}/fish/vendor_completions.d/%{name}.fish
 
-mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
-%{buildroot}%{_bindir}/%{name} genautocomplete zsh > %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
+# 3. Create directories
+mkdir -p $(dirname %{bash_comp}) $(dirname %{zsh_comp}) $(dirname %{fish_comp})
 
-mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d
-%{buildroot}%{_bindir}/%{name} genautocomplete fish > %{buildroot}%{_datadir}/fish/vendor_completions.d/%{name}.fish
+# 4. Generate completions (Note: Passing the path as an argument prevents the /etc/ error)
+%{buildroot}%{_bindir}/%{name} genautocomplete bash %{bash_comp}
+%{buildroot}%{_bindir}/%{name} genautocomplete zsh %{zsh_comp}
+%{buildroot}%{_bindir}/%{name} genautocomplete fish %{fish_comp}
+
+# 5. Install the Man page (included in rclone source)
+mkdir -p %{buildroot}%{_mandir}/man1
+install -p -m 0644 %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 
 %files
 %license COPYING
