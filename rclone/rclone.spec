@@ -18,7 +18,7 @@ many cloud storage providers.
 export CGO_ENABLED=0
 go build \
     -trimpath \
-    -mod=vendor \
+    -mod=mod \
     -ldflags "-s -w -X github.com/rclone/rclone/fs.Version=%{version}" \
     -o %{name} \
     ./cmd/rclone
