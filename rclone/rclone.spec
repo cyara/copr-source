@@ -12,7 +12,7 @@ rclone is a command line program to sync files and directories to and from
 many cloud storage providers.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -n %{name}-v%{version}
 
 %build
 export CGO_ENABLED=0
