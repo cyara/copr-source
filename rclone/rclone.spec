@@ -4,7 +4,7 @@ Version:            1.73.2
 Release:            1%{?dist}
 License:            MIT
 URL:                https://github.com/rclone/rclone
-Source:             %{name}-v%{version}.tar.gz
+Source0:            %{url}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 BuildRequires:      golang
 
 %description
@@ -12,16 +12,20 @@ rclone is a command line program to sync files and directories to and from
 many cloud storage providers.
 
 %prep
-%autosetup -n %{name}-v%{version}
+%autosetup -n %{name}-%{version}
 
 %build
 export CGO_ENABLED=0
+build_target=.
+if [ -d cmd/rclone ]; then
+    build_target=./cmd/rclone
+fi
 go build \
     -trimpath \
     -mod=mod \
     -ldflags "-s -w -X github.com/rclone/rclone/fs.Version=%{version}" \
     -o %{name} \
-    ./cmd/rclone
+    ${build_target}
 
 %install
 install -Dpm0755 %{name} %{buildroot}%{_bindir}/%{name}
@@ -43,6 +47,5 @@ mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d
 %{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
-%changelog
-* Thu Mar 12 2026 Patrick Coakley <patrick.coakley@cyara.com> - 1.73.2-1
+%changelog* Thu Mar 12 2026 Patrick Coakley <patrick.coakley@cyara.com> - 1.73.2-1
 - Initial COPR package for AlmaLinux 8+
