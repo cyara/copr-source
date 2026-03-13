@@ -57,5 +57,6 @@ install -p -m 0644 %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
-%changelog* Thu Mar 12 2026 Patrick Coakley <patrick.coakley@cyara.com> - 1.73.2-1
+%changelog
+* Thu Mar 12 2026 Patrick Coakley <patrick.coakley@cyara.com> - 1.73.2-1
 - Initial COPR package for AlmaLinux 8+
