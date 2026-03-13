@@ -1,3 +1,5 @@
+%define debug_package %{nil}
+
 Summary:            Cloud storage sync tool
 Name:               rclone
 Version:            1.73.2
