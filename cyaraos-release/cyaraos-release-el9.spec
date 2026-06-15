@@ -11,9 +11,10 @@
 # Abbeystrewry
 # Deelish
 # Bunlick
-%global release_name Smorane
+# Smorane
+%global release_name Shanbally
 %global major   9
-%global minor   7
+%global minor   8
 %global dist .el%{major}
 %global eol_date 2032-06-01
 
@@ -130,7 +131,7 @@ ID_LIKE="rhel centos fedora"
 VERSION_ID="%{major}.%{minor}"
 PLATFORM_ID="platform:el%{major}"
 PRETTY_NAME="%{distro} %{major}.%{minor}%{?beta: %{beta}} (%{release_name})"
-ANSI_COLOR="0;31"
+ANSI_COLOR="0;34"
 CPE_NAME="cpe:/o:cyaraos:cyaraos:%{major}.%{minor}%{?tuned_profile}"
 HOME_URL="https://www.cyara.com/"
 BUG_REPORT_URL=""
