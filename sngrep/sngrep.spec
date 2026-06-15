@@ -50,7 +50,7 @@ make %{?_smp_mflags}
 %{__rm} -rf $RPM_BUILD_ROOT
 
 %changelog
-* Thu Mar 19 2026 Patrick Coakley <patrick.coakley@cyara.com> - 1.8.3-2
+* Thu Jun 15 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.8.3-2
 - Bump to 1.8.3
 
 * Wed Jul 23 2025 Patrick Coakley <patrick.coakley@cyara.com> - 1.8.2-2
