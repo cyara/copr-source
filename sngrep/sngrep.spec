@@ -1,6 +1,6 @@
 Summary:            SIP Messages flow viewer
 Name:               sngrep
-Version:            1.8.2
+Version:            1.8.3
 Release:            2%{?dist}
 License:            GPLv3
 Group:              Applications/Engineering
@@ -50,6 +50,9 @@ make %{?_smp_mflags}
 %{__rm} -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Jun 15 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.8.3-2
+- Bump to 1.8.3
+
 * Wed Jul 23 2025 Patrick Coakley <patrick.coakley@cyara.com> - 1.8.2-2
 - Bump to 1.8.2 and add openssl support
 
