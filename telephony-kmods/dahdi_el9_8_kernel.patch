@@ -1,0 +1,12 @@
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c	2026-06-17 00:00:00.000000000 +0000
+@@ -3654,6 +3654,6 @@
+ static void
+-wctc4xxp_watchdog(TIMER_DATA_TYPE timer)
++wctc4xxp_watchdog(struct timer_list *timer)
+ {
+-	struct wcdte *wc = from_timer(wc, timer, watchdog);
++	struct wcdte *wc = container_of(timer, struct wcdte, watchdog);
+ 	struct tcb *cmd, *temp;
+ 	LIST_HEAD(cmds_to_retry);
