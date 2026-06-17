@@ -15,7 +15,7 @@
 
 Name:		telephony-kmods
 Version:	1.0
-Release:	22%{?dist}
+Release:	23%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -27,6 +27,7 @@ Source1:	wanpipe-%{wanpipe_version}.tgz
 Patch1:         wanpipe-7.0.38-state.patch
 Patch2:         dahdi_alamlinux_9.5.patch
 Patch3:         dahdi_el8_8_kernel.patch
+Patch4:         dahdi_el9_8_kernel.patch
 ExclusiveArch:	x86_64
 
 # Source code patches
@@ -100,6 +101,7 @@ of the same variant of the Linux kernel and not on any one specific build.
 %if 0%{?el9}
 %patch -P 1 -p1
 %patch -P 2 -p1
+%patch -P 4 -p1
 %endif
 
 %if 0%{?el8}
@@ -243,6 +245,9 @@ exit 0
 
 
 %changelog
+* Wed Jun 17 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-23
+- Fix from_timer/TIMER_DATA_TYPE compat for wctc4xxp on el9 kernel 687.15.1
+
 * Thu Jun 11 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-22
 - Building for CyaraOS 9.8
 
