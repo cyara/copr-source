@@ -50,3 +50,18 @@ diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/
  {
  	struct xpd_driver *xpd_driver;
  	xpd_t *xpd;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-pcm.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-pcm.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-pcm.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-pcm.c	2026-06-17 00:00:00.000000000 +0000
+@@ -350,9 +350,9 @@
+ 			 (syncer) ? syncer->busname : "NO-SYNC");
+ }
+ 
+-static void xbus_command_timer(TIMER_DATA_TYPE timer)
++static void xbus_command_timer(struct timer_list *timer)
+ {
+-	xbus_t *xbus = from_timer(xbus, timer, command_timer);
++	xbus_t *xbus = container_of(timer, xbus_t, command_timer);
+ 
+ 	BUG_ON(!xbus);
+ 	xbus_command_queue_tick(xbus);
