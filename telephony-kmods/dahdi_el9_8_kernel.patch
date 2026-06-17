@@ -1,12 +1,13 @@
 diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c
 --- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c	2022-09-22 13:23:24.000000000 +0100
-+++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c	2026-06-16 12:00:00.000000000 +0000
-@@ -40,1 +40,8 @@
- #include <linux/timer.h>
-+#ifndef from_timer
-+#define from_timer(var, callback_timer, timer_fieldname) \
-+	container_of(callback_timer, typeof(*var), timer_fieldname)
-+#endif
-+#ifndef TIMER_DATA_TYPE
-+#define TIMER_DATA_TYPE struct timer_list *
-+#endif
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wctc4xxp/base.c	2026-06-17 00:00:00.000000000 +0000
+@@ -3652,7 +3652,7 @@
+ }
+
+ static void
+-wctc4xxp_watchdog(TIMER_DATA_TYPE timer)
++wctc4xxp_watchdog(struct timer_list *timer)
+ {
+-	struct wcdte *wc = from_timer(wc, timer, watchdog);
++	struct wcdte *wc = container_of(timer, struct wcdte, watchdog);
+ 	struct tcb *cmd, *temp;

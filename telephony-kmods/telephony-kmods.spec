@@ -245,7 +245,7 @@ exit 0
 
 
 %changelog
-* Mon Jun 16 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-23
+* Wed Jun 17 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-23
 - Fix from_timer/TIMER_DATA_TYPE compat for wctc4xxp on el9 kernel 687.15.1
 
 * Thu Jun 11 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-22
