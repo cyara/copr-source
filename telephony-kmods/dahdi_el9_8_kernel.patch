@@ -29,3 +29,24 @@ diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/
  
  	if (unlikely(!test_bit(INITIALIZED, &wc->bit_flags)))
  		return;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-sysfs.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-sysfs.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-sysfs.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/xbus-sysfs.c	2026-06-17 00:00:00.000000000 +0000
+@@ -397,7 +397,7 @@
+ ATTRIBUTE_GROUPS(xbus_dev);
+ #endif
+ 
+-static int astribank_match(struct device *dev, struct device_driver *driver)
++static int astribank_match(struct device *dev, const struct device_driver *driver)
+ {
+ 	DBG(DEVICES, "SYSFS MATCH: dev->bus_id = %s, driver->name = %s\n",
+ 	    dev_name(dev), driver->name);
+@@ -771,7 +771,7 @@
+ 	return len;
+ }
+ 
+-static int xpd_match(struct device *dev, struct device_driver *driver)
++static int xpd_match(struct device *dev, const struct device_driver *driver)
+ {
+ 	struct xpd_driver *xpd_driver;
+ 	xpd_t *xpd;
