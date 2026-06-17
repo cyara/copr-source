@@ -65,3 +65,154 @@ diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/
  
  	BUG_ON(!xbus);
  	xbus_command_queue_tick(xbus);
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-base.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-base.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-base.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-base.c	2026-06-17 00:00:00.000000000 +0000
+@@ -10033,7 +10033,7 @@
+ 	return atomic_read(&ct->count) * DAHDI_MSECS_PER_CHUNK;
+ }
+ 
+-static void coretimer_func(TIMER_DATA_TYPE unused)
++static void coretimer_func(struct timer_list *unused)
+ {
+ 	unsigned long flags;
+ 	long ms_since_start;
+@@ -10371,7 +10371,7 @@
+ #ifdef CONFIG_DAHDI_WATCHDOG
+ static struct timer_list watchdogtimer;
+ 
+-static void watchdog_check(TIMER_DATA_TYPE ignored)
++static void watchdog_check(struct timer_list *ignored)
+ {
+ 	unsigned long flags;
+ 	static int wdcheck=0;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic_ethmf.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic_ethmf.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic_ethmf.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic_ethmf.c	2026-06-17 00:00:00.000000000 +0000
+@@ -666,7 +666,7 @@
+  * Timer callback function to allow all spans to be added, prior to any of
+  * them being used.
+  */
+-static void timer_callback(TIMER_DATA_TYPE unused)
++static void timer_callback(struct timer_list *unused)
+ {
+ 	if (ethmf_delay_dec()) {
+ 		if (!atomic_read(&timer_deleted))
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dummy.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dummy.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dummy.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dummy.c	2026-06-17 00:00:00.000000000 +0000
+@@ -138,7 +138,7 @@
+ }
+ #else
+ 
+-static void dahdi_dummy_timer(TIMER_DATA_TYPE unused)
++static void dahdi_dummy_timer(struct timer_list *unused)
+ {
+ 	long ms_since_start;
+ 	ktime_t now;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte43x-base.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte43x-base.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte43x-base.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte43x-base.c	2026-06-17 00:00:00.000000000 +0000
+@@ -3176,9 +3176,9 @@
+ 		wc->intr_span = 0;
+ }
+ 
+-static void t43x_timer(TIMER_DATA_TYPE timer)
++static void t43x_timer(struct timer_list *timer)
+ {
+-	struct t43x *wc = from_timer(wc, timer, timer);
++	struct t43x *wc = container_of(timer, struct t43x, timer);
+ 
+ 	if (!is_initialized(wc))
+ 		return;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi_dynamic.c	2026-06-17 00:00:00.000000000 +0000
+@@ -831,7 +831,7 @@
+ 
+ static struct timer_list alarmcheck;
+ 
+-static void check_for_red_alarm(TIMER_DATA_TYPE unused)
++static void check_for_red_alarm(struct timer_list *unused)
+ {
+ 	int newalarm;
+ 	int alarmchanged = 0;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/datamods/syncppp.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/datamods/syncppp.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/datamods/syncppp.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/datamods/syncppp.c	2026-06-17 00:00:00.000000000 +0000
+@@ -148,7 +148,7 @@
+ static void sppp_ipcp_open (struct sppp *sp);
+ static int sppp_lcp_conf_parse_options (struct sppp *sp, struct lcp_header *h,
+ 	int len, u32 *magic);
+-static void sppp_cp_timeout (TIMER_DATA_TYPE timer);
++static void sppp_cp_timeout (struct timer_list *timer);
+ static char *sppp_lcp_type_name (u8 type);
+ static char *sppp_ipcp_type_name (u8 type);
+ static void sppp_print_bytes (u8 *p, u16 len);
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/voicebus/voicebus.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/voicebus/voicebus.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/voicebus/voicebus.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/voicebus/voicebus.c	2026-06-17 00:00:00.000000000 +0000
+@@ -1736,10 +1736,10 @@
+  * the timer.
+  */
+ static void
+-vb_timer(TIMER_DATA_TYPE timer)
++vb_timer(struct timer_list *timer)
+ {
+ 	unsigned long start = jiffies;
+-	struct voicebus *vb = from_timer(vb, timer, timer);
++	struct voicebus *vb = container_of(timer, struct voicebus, timer);
+ 	vb_isr(0, vb);
+ 	if (!test_bit(VOICEBUS_STOPPED, &vb->flags)) {
+ 		mod_timer(&vb->timer, start + HZ/1000);
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte13xp-base.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte13xp-base.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte13xp-base.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/wcte13xp-base.c	2026-06-17 00:00:00.000000000 +0000
+@@ -2387,9 +2387,9 @@
+ 	}
+ }
+ 
+-static void te13xp_timer(TIMER_DATA_TYPE timer)
++static void te13xp_timer(struct timer_list *timer)
+ {
+-	struct t13x *wc = from_timer(wc, timer, timer);
++	struct t13x *wc = container_of(timer, struct t13x, timer);
+ 
+ 	if (unlikely(!test_bit(INITIALIZED, &wc->bit_flags)))
+ 		return;
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs.c	2026-06-17 00:00:00.000000000 +0000
+@@ -42,7 +42,7 @@
+ MODULE_PARM_DESC(tools_rootdir,
+ 		"root directory of all tools paths (default /)");
+ 
+-static int span_match(struct device *dev, struct device_driver *driver)
++static int span_match(struct device *dev, const struct device_driver *driver)
+ {
+ 	return 1;
+ }
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs-chan.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs-chan.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs-chan.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/dahdi-sysfs-chan.c	2026-06-17 00:00:00.000000000 +0000
+@@ -220,7 +220,7 @@
+ 	chan_dbg(DEVICES, chan, "SYSFS\n");
+ }
+ 
+-static int chan_match(struct device *dev, struct device_driver *driver)
++static int chan_match(struct device *dev, const struct device_driver *driver)
+ {
+ 	struct dahdi_chan *chan;
+ 
+diff -ru telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/mmapbus.c telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/mmapbus.c
+--- telephony-kmods-a/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/mmapbus.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/dahdi-linux-complete-3.4.0+3.4.0/linux/drivers/dahdi/xpp/mmapbus.c	2026-06-17 00:00:00.000000000 +0000
+@@ -3,7 +3,7 @@
+ #include <linux/device.h>
+ #include "mmapbus.h"
+ 
+-static int mmap_match(struct device *dev, struct device_driver *driver)
++static int mmap_match(struct device *dev, const struct device_driver *driver)
+ {
+ 	return !strncmp(dev_name(dev), driver->name, strlen(driver->name));
+ }
