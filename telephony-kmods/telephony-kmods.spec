@@ -247,7 +247,7 @@ exit 0
 
 
 %changelog
-* Thu Jun 19 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-24
+* Fri Jun 19 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-24
 - Fix from_timer compat in wanpipe for el9 kernel 687.15.1
 
 * Wed Jun 17 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-23
