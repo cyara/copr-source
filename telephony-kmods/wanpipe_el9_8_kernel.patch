@@ -1,0 +1,199 @@
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_iface.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_iface.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_iface.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/wanec/wanec_iface.c	2026-06-17 00:00:00.000000000 +0000
+@@ -472,7 +472,7 @@
+ {
+ 	sdla_t		*card = NULL;
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	wan_ec_dev_t	*ec_dev = from_timer(ec_dev, t, timer.timer_info);
++	wan_ec_dev_t	*ec_dev = container_of(t, typeof(*ec_dev), timer.timer_info);
+ #else
+ 	wan_ec_dev_t	*ec_dev = (wan_ec_dev_t*)p_ec_dev;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_fr.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_fr.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_fr.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_fr.c	2026-06-17 00:00:00.000000000 +0000
+@@ -5416,7 +5416,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	fr_channel_t *chan = from_timer(chan, t, fr_arp_timer);
++	fr_channel_t *chan = container_of(t, typeof(*chan), fr_arp_timer);
+ #else
+ 	netdevice_t *dev = (netdevice_t *)data;
+ 	fr_channel_t *chan = wan_netif_priv(dev);
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_atm.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_atm.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_atm.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_atm.c	2026-06-17 00:00:00.000000000 +0000
+@@ -592,7 +592,7 @@
+ 	struct wan_dev_le	*devle;
+ 
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_t *card = from_timer(card, t, u.atm.atm_timer.timer_info);
++	sdla_t *card = container_of(t, typeof(*card), u.atm.atm_timer.timer_info);
+ #else
+ 	sdla_t *card = (sdla_t *)data;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te1.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te1.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te1.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te1.c	2026-06-17 00:00:00.000000000 +0000
+@@ -6331,8 +6331,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_fe_t   *fe = from_timer(fe, t, timer.timer_info
+-);
++	sdla_fe_t   *fe = container_of(t, typeof(*fe), timer.timer_info);
+ #else
+ 	sdla_fe_t	*fe = (sdla_fe_t*)pfe;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_bri.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_bri.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_bri.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_bri.c	2026-06-17 00:00:00.000000000 +0000
+@@ -2304,7 +2304,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	bri_xhfc_port_t	*port_ptr = from_timer(port_ptr, t, t3_timer.timer_info);
++	bri_xhfc_port_t	*port_ptr = container_of(t, typeof(*port_ptr), t3_timer.timer_info);
+ #else
+ 	bri_xhfc_port_t	*port_ptr = (bri_xhfc_port_t*)pport;
+ #endif
+@@ -2426,7 +2426,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	bri_xhfc_port_t	*port_ptr = from_timer(port_ptr, t, t4_timer.timer_info);
++	bri_xhfc_port_t	*port_ptr = container_of(t, typeof(*port_ptr), t4_timer.timer_info);
+ #else
+ 	bri_xhfc_port_t	*port_ptr = (bri_xhfc_port_t*)pport;
+ #endif
+@@ -2466,7 +2466,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-    bri_xhfc_port_t *port_ptr = from_timer(port_ptr, t, t1_timer.timer_info);
++    bri_xhfc_port_t *port_ptr = container_of(t, typeof(*port_ptr), t1_timer.timer_info);
+ #else
+ 	bri_xhfc_port_t	*port_ptr = (bri_xhfc_port_t*)pport;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_ppp.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_ppp.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_ppp.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_ppp.c	2026-06-17 00:00:00.000000000 +0000
+@@ -4108,7 +4108,7 @@
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+ static void ppp_poll_delay (struct timer_list *t)
+ {
+-	ppp_private_area_t *ppp_priv_area = from_timer(ppp_priv_area, t, poll_delay_timer);
++	ppp_private_area_t *ppp_priv_area = container_of(t, typeof(*ppp_priv_area), poll_delay_timer);
+ 	trigger_ppp_poll_priv_area(ppp_priv_area);
+ }
+ #else
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_chdlc.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_chdlc.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_chdlc.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_chdlc.c	2026-06-17 00:00:00.000000000 +0000
+@@ -4596,7 +4596,7 @@
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+ static void chdlc_poll_delay (struct timer_list *t)
+ {
+-    chdlc_private_area_t *chdlc_priv_area = from_timer(chdlc_priv_area, t, poll_delay_timer);
++    chdlc_private_area_t *chdlc_priv_area = container_of(t, typeof(*chdlc_priv_area), poll_delay_timer);
+ 	trigger_chdlc_poll_priv_area(chdlc_priv_area);
+ }
+ #else
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_utils.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_utils.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_utils.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_utils.c	2026-06-17 00:00:00.000000000 +0000
+@@ -507,7 +507,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_t*		card = from_timer(card, t, debug_timer.timer_info);
++	sdla_t*		card = container_of(t, typeof(*card), debug_timer.timer_info);
+ #else
+ 	sdla_t*		card = (sdla_t*)arg;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_remora.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_remora.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_remora.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_remora.c	2026-06-17 00:00:00.000000000 +0000
+@@ -2009,7 +2009,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_fe_t	*fe = from_timer(fe, t, timer.timer_info);
++	sdla_fe_t	*fe = container_of(t, typeof(*fe), timer.timer_info);
+ #else
+ 	sdla_fe_t	*fe = (sdla_fe_t*)pfe;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_x25.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_x25.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_x25.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_x25.c	2026-06-17 00:00:00.000000000 +0000
+@@ -6671,7 +6671,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_t *card = from_timer(card, t, u.x.x25_timer);
++	sdla_t *card = container_of(t, typeof(*card), u.x.x25_timer);
+ #else
+ 	sdla_t *card = (sdla_t*)data;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_8te1.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_8te1.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_8te1.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_8te1.c	2026-06-17 00:00:00.000000000 +0000
+@@ -4434,7 +4434,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_fe_t	*fe = from_timer(fe, t, timer.timer_info);
++	sdla_fe_t	*fe = container_of(t, typeof(*fe), timer.timer_info);
+ #else
+ 	sdla_fe_t	*fe = (sdla_fe_t*)pfe;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_syncppp.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_syncppp.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_syncppp.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/wanpipe_syncppp.c	2026-06-17 00:00:00.000000000 +0000
+@@ -3030,7 +3030,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	struct sppp *sp = from_timer(sp, t, pp_timer);
++	struct sppp *sp = container_of(t, typeof(*sp), pp_timer);
+ #else
+ 	struct sppp *sp = (struct sppp*) arg;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te3.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te3.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te3.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_te3.c	2026-06-17 00:00:00.000000000 +0000
+@@ -1394,7 +1394,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_fe_t	*fe = from_timer(fe, t, timer.timer_info);
++	sdla_fe_t	*fe = container_of(t, typeof(*fe), timer.timer_info);
+ #else
+ 	sdla_fe_t	*fe = (sdla_fe_t*)pfe;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_usb_remora.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_usb_remora.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_usb_remora.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/net/sdla_usb_remora.c	2026-06-17 00:00:00.000000000 +0000
+@@ -1820,7 +1820,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	sdla_fe_t	*fe = from_timer(fe, t, timer.timer_info);
++	sdla_fe_t	*fe = container_of(t, typeof(*fe), timer.timer_info);
+ #else
+ 	sdla_fe_t	*fe = (sdla_fe_t*)pfe;
+ #endif
+diff -ru telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/lip/wanpipe_lip_prot.c telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/lip/wanpipe_lip_prot.c
+--- telephony-kmods-a/wanpipe-7.0.38/patches/kdrivers/src/lip/wanpipe_lip_prot.c	2022-09-22 13:23:24.000000000 +0100
++++ telephony-kmods-b/wanpipe-7.0.38/patches/kdrivers/src/lip/wanpipe_lip_prot.c	2026-06-17 00:00:00.000000000 +0000
+@@ -596,7 +596,7 @@
+ #endif
+ {
+ #if defined(KERN_TIMER_SETUP) && KERN_TIMER_SETUP > 0
+-	wplip_link_t	*lip_link=from_timer(lip_link, t, prot_timer.timer_info);
++	wplip_link_t	*lip_link=container_of(t, typeof(*lip_link), prot_timer.timer_info);
+ #else
+ 	wplip_link_t	*lip_link=(wplip_link_t *)arg;
+ #endif
