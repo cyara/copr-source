@@ -13,9 +13,13 @@
 %{!?kmod_kernel_version: %define kmod_kernel_version 5.14.0-687.15.1.el9_8}
 %endif
 
+%if 0%{?el10}
+%{!?kmod_kernel_version: %define kmod_kernel_version 6.12.0-211.7.4.el10_2}
+%endif
+
 Name:		telephony-kmods
 Version:	1.0
-Release:	24%{?dist}
+Release:	25%{?dist}
 Summary:	Telephony kernel modules
 License:	GPLv2
 URL:		http://www.kernel.org/
@@ -100,6 +104,13 @@ of the same variant of the Linux kernel and not on any one specific build.
 %setup -c -a 1
 
 %if 0%{?el9}
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
+%endif
+
+%if 0%{?el10}
 %patch -P 1 -p1
 %patch -P 2 -p1
 %patch -P 4 -p1
@@ -247,6 +258,9 @@ exit 0
 
 
 %changelog
+* Sun Jun 22 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-25
+- Add EL10 support for AlmaLinux 10.2 kernel 6.12.0-211.7.4.el10_2
+
 * Fri Jun 19 2026 Srikanth Mittapally <srikanth.mittapally@cyara.com> - 1.0-24
 - Fix from_timer compat in wanpipe for el9 kernel 687.15.1
 
