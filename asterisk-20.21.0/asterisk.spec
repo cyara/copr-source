@@ -1,4 +1,4 @@
-%global           pjsip_version   2.14.1
+%global           pjsip_version   2.16.1
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
@@ -15,7 +15,7 @@
 Summary:          The Open Source PBX
 Name:             asterisk-20
 Epoch:            2
-Version:          20.9.3
+Version:          20.21.0
 Release:          1%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
