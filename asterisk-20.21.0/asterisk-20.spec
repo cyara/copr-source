@@ -1,4 +1,4 @@
-%global           pjsip_version   2.16
+%global           pjsip_version   2.17
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
@@ -154,6 +154,15 @@ export FFLAGS="%{optflags}"
 export LDFLAGS="%{ldflags}"
 export ASTCFLAGS=" "
 
+# Asterisk >= 20.20 appends CFLAGS="$(PJPROJECT_CFLAGS)" to the bundled
+# pjproject aconfigure command line (third-party/pjproject/Makefile.rules).
+# A CFLAGS= assignment on the configure command line *replaces* the exported
+# CFLAGS, while LDFLAGS is still inherited from the environment -- so
+# pjproject ends up compiling without the RPM %%{optflags} but linking with
+# %%{ldflags}.  Feed the RPM flags in through PJPROJECT_CFLAGS (Makefile.rules
+# uses += on it) so the compile and link flags match again.
+export PJPROJECT_CFLAGS="%{optflags}"
+
 sed -i '1s/env python/python3/' contrib/scripts/refcounter.py
 sed -i '1s/env python/python3/' contrib/scripts/reflocks.py
 sed -i '1s/env python/python3/' contrib/scripts/refstats.py
@@ -167,7 +176,10 @@ pushd menuselect
 %configure --datadir=/var/lib
 popd
 
-%configure --with-libedit=yes --with-srtp --with-pjproject-bundled --with-externals-cache=%{_builddir}/asterisk-%{version}/cache LDFLAGS="%{ldflags}" --datadir=/var/lib
+%configure --with-libedit=yes --with-srtp --with-pjproject-bundled --with-externals-cache=%{_builddir}/asterisk-%{version}/cache LDFLAGS="%{ldflags}" --datadir=/var/lib || \
+  { echo "=== third-party/pjproject/source/config.log (tail) ==="; \
+    tail -n 300 third-party/pjproject/source/config.log 2>/dev/null; \
+    exit 1; }
 
 %make_build menuselect-tree NOISY_BUILD=1
 
