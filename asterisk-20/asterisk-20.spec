@@ -16,7 +16,7 @@ Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            2
 Version:          20.9.3
-Release:          1%{?dist}
+Release:          2%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
 
@@ -314,6 +314,10 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
+* Thu Sep 17 2026 Chandrakant Solanki <chandrakant.solanki@cyara.com> - 20.9.3-2
+- Enable MALLOC_DEBUG in menuselect.makeopts
+- Release bump so the rebuilt package is distinguishable from 20.9.3-1
+
 * Mon Oct 14 2024 Telephony - 20.9.3
 - Update asterisk to 20.9.3
 - Update pjproject to 2.14.1
