@@ -1,0 +1,9 @@
+/var/log/asterisk/messages /var/log/asterisk/event_log /var/log/asterisk/queue_log {
+    missingok
+    notifempty
+    create 0640 asterisk asterisk
+    sharedscripts
+    postrotate
+	/sbin/runuser --login --shell=/bin/bash --command="/usr/sbin/asterisk -rx 'logger reload'" asterisk >/dev/null 2>/dev/null || true
+    endscript
+}
