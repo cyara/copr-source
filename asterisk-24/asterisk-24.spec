@@ -15,12 +15,12 @@
 Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            2
-Version:          24-current
+Version:          24.0.0
 Release:          1%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
 
-Source0:          http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-%{version}.tar.gz
+Source0:          http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-24-current.tar.gz
 Source1:          http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-%{version}.tar.gz.asc
 Source2:          asterisk-logrotate
 Source3:          menuselect.makedeps
