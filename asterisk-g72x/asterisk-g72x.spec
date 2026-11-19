@@ -23,7 +23,7 @@ rm ipp -rf
 
 %build
 ./autogen.sh
-%{configure} --with-asterisk160 --with-bcg729 --enable-core2
+%{configure} --with-asterisk --with-bcg729
 %{__make}
 
 
