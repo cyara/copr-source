@@ -1,0 +1,22 @@
+--- a/codecs/codec_dahdi.c
++++ b/codecs/codec_dahdi.c
+@@ -810,10 +810,17 @@ static int find_transcoders(void)
+ 	struct dahdi_transcoder_info info = { 0, };
+ 	int fd;
+ 
++	/* In container environments or systems without DAHDI hardware,
++	   /dev/dahdi/transcode may not exist. This is not an error condition
++	   if no transcoders are found. */
+ 	if ((fd = open("/dev/dahdi/transcode", O_RDWR)) < 0) {
+-		ast_log(LOG_ERROR, "Failed to open /dev/dahdi/transcode: %s\n", strerror(errno));
+-		return 0;
++		/* Only log at debug level if DAHDI is not available, as this
++		   is expected in container or non-DAHDI environments */
++		ast_debug(2, "DAHDI transcoder not available: %s\n", strerror(errno));
++		ast_verb(3, "DAHDI transcoding module loaded, but no hardware transcoders found.\n");
++		return AST_MODULE_LOAD_SUCCESS;
+ 	}
+ 
+ 	for (info.tcnum = 0; !ioctl(fd, DAHDI_TC_GETINFO, &info); info.tcnum++) {
+ 		ast_verb(2, "Found transcoder '%s'.\n", info.name);
+ 
