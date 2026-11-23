@@ -124,7 +124,7 @@ Development files for Asterisk.
 %prep
 gpgv2 --keyring %{SOURCE7} %{SOURCE1} %{SOURCE0}
 %setup -q -n asterisk-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 # copy the pjproject tarball to the cache/ directory
 mkdir cache
