@@ -46,6 +46,9 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
+# Patches
+Patch0:           codec_dahdi-graceful-failure.patch
+
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
 Provides:         bundled(pjproject) = %{pjsip_version}
@@ -121,6 +124,7 @@ Development files for Asterisk.
 %prep
 gpgv2 --keyring %{SOURCE7} %{SOURCE1} %{SOURCE0}
 %setup -q -n asterisk-%{version}
+%patch0 -p1
 
 # copy the pjproject tarball to the cache/ directory
 mkdir cache

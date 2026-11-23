@@ -1,0 +1,14 @@
+--- a/codecs/codec_dahdi.c
++++ b/codecs/codec_dahdi.c
+@@ -810,8 +810,10 @@ static int find_transcoders(void)
+ 	struct dahdi_transcoder_info info = { 0, };
+ 	int fd;
+
+ 	if ((fd = open("/dev/dahdi/transcode", O_RDWR)) < 0) {
+-		ast_log(LOG_ERROR, "Failed to open /dev/dahdi/transcode: %s\n", strerror(errno));
++		/* DAHDI hardware not available - this is expected in containers
++		   and non-DAHDI systems. Log at debug level only. */
++		ast_debug(1, "DAHDI transcoding not available: %s\n", strerror(errno));
+ 		return 0;
+ 	}
+
