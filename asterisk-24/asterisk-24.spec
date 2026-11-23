@@ -47,7 +47,7 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
 # Patches
-Patch0:           codec_dahdi-graceful-failure.patch
+Patch0:           codec_dahdi-container-fix.patch
 
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
@@ -318,9 +318,10 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
-* Tue Nov 18 2026 Telephony - 24.0.0-1
+* Sun Nov 23 2026 Telephony - 24.0.0-1
 - Update asterisk to 24.0.0
 - Update pjproject to 2.17
+- Fix DAHDI graceful failure handling in container environments
 
 * Mon Oct 14 2024 Telephony - 20.9.3
 - Update asterisk to 20.9.3
