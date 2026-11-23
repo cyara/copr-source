@@ -47,7 +47,7 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
 # Patches
-Patch0:           codec_dahdi-container-fix.patch
+#Patch0:           codec_dahdi-container-fix.patch
 
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
@@ -124,7 +124,9 @@ Development files for Asterisk.
 %prep
 gpgv2 --keyring %{SOURCE7} %{SOURCE1} %{SOURCE0}
 %setup -q -n asterisk-%{version}
-%patch -P 0 -p1
+
+# Fix DAHDI graceful failure handling - change ERROR log to DEBUG for containers
+%{__perl} -pi -e 's/ast_log\(LOG_ERROR, "Failed to open \/dev\/dahdi\/transcode: %s/ast_debug(2, "DAHDI transcoder not available: %s/' codecs/codec_dahdi.c
 
 # copy the pjproject tarball to the cache/ directory
 mkdir cache
@@ -318,7 +320,7 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
-* Sun Nov 23 2026 Telephony - 24.0.0-1
+* Sun Nov 23 2026 Telephony <telephony@spearline.com> - 24.0.0-1
 - Update asterisk to 24.0.0
 - Update pjproject to 2.17
 - Fix DAHDI graceful failure handling in container environments
