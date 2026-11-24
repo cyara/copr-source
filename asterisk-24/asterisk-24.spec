@@ -13,8 +13,8 @@
 %global           makeargs        DEBUG= OPTIMIZE= DESTDIR=%{buildroot} ASTVARRUNDIR=%{astvarrundir} ASTDATADIR=/var/lib/asterisk ASTVARLIBDIR=/var/lib/asterisk ASTDBDIR=%{_localstatedir}/spool/asterisk NOISY_BUILD=1
 
 Summary:          The Open Source PBX
-Name:             asterisk-24
-Epoch:            2
+Name:             asterisk
+Epoch:            3
 Version:          24.0.0
 Release:          1%{?dist}
 License:          GPLv2
