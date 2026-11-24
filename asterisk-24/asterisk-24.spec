@@ -1,4 +1,4 @@
-%global           pjsip_version   2.14.1
+%global           pjsip_version   2.17
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
@@ -41,11 +41,7 @@ Source6:          asterisk-tmpfiles
 Source7:          asterisk-gpgkeys.gpg
 
 # Now building Asterisk with bundled pjproject, because they apply custom patches to it
-Source8:          pjproject-%{pjsip_version}.tar.bz2
-Source10:         pjproject-%{pjsip_version}.tar.bz2.md5
-# Asterisk 24 bundles pjproject patches written for 2.17; these are the 2.14.1 equivalents from Asterisk 20
-Source11:         pjproject-%{pjsip_version}-0000-configure-ssl-library-path.patch
-Source12:         pjproject-%{pjsip_version}-0000-remove-third-party.patch
+Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjsip_version}/pjproject-%{pjsip_version}.tar.bz2
 
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
@@ -128,15 +124,6 @@ Development files for Asterisk.
 %prep
 gpgv2 --keyring %{SOURCE7} %{SOURCE1} %{SOURCE0}
 %setup -q -n asterisk-%{version}
-
-# Build against pjproject %{pjsip_version} instead of the bundled default (2.17)
-sed -i 's/^PJPROJECT_VERSION=.*/PJPROJECT_VERSION=%{pjsip_version}/' third-party/versions.mak
-# The build verifies the tarball against third-party/pjproject/<tarball>.md5
-cp %{SOURCE10} third-party/pjproject/
-# Replace 2.17-only patches (they do not apply to 2.14.1)
-rm -f third-party/pjproject/patches/*.patch
-cp %{SOURCE11} third-party/pjproject/patches/0000-configure-ssl-library-path.patch
-cp %{SOURCE12} third-party/pjproject/patches/0000-remove-third-party.patch
 
 # Fix DAHDI graceful failure handling - change ERROR log to DEBUG for containers
 %{__perl} -pi -e 's/ast_log\(LOG_ERROR, "Failed to open \/dev\/dahdi\/transcode: %s/ast_debug(2, "DAHDI transcoder not available: %s/' codecs/codec_dahdi.c
@@ -335,7 +322,7 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %changelog
 * Mon Nov 23 2026 Telephony <telephony@spearline.com> - 24.0.0-1
 - Update asterisk to 24.0.0
-- Downgrade pjproject to 2.14.1 for stability (2.17 caused segfaults)
+- Update pjproject to 2.17 (version bundled with Asterisk 24)
 - Fix DAHDI graceful failure handling in container environments
 
 * Mon Oct 14 2024 Telephony - 20.9.3
