@@ -41,7 +41,8 @@ Source6:          asterisk-tmpfiles
 Source7:          asterisk-gpgkeys.gpg
 
 # Now building Asterisk with bundled pjproject, because they apply custom patches to it
-Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjsip_version}/pjproject-%{pjsip_version}.tar.bz2
+Source8:          pjproject-2.14.1.tar.bz2
+Source10:         pjproject-2.14.1.tar.bz2.md5
 
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
@@ -133,9 +134,8 @@ sed -i 's/PJPROJECT_VERSION=2.17/PJPROJECT_VERSION=2.14.1/' third-party/versions
 
 # copy the pjproject tarball to the cache/ directory
 mkdir cache
-cp %{SOURCE8} cache/ 2>/dev/null || cp pjproject-%{pjsip_version}.tar.bz2 cache/ 2>/dev/null || true
-# Generate MD5 checksum for pjproject in cache (needed by build system)
-cd cache && md5sum pjproject-%{pjsip_version}.tar.bz2 > pjproject-%{pjsip_version}.tar.bz2.md5 2>/dev/null || true; cd ..
+cp %{SOURCE8} cache/pjproject-2.14.1.tar.bz2
+cp %{SOURCE10} cache/pjproject-2.14.1.tar.bz2.md5
 ls -altr cache/
 
 cp %{S:3} menuselect.makedeps
