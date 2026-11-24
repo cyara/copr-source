@@ -125,6 +125,9 @@ Development files for Asterisk.
 gpgv2 --keyring %{SOURCE7} %{SOURCE1} %{SOURCE0}
 %setup -q -n asterisk-%{version}
 
+# Fix pjproject version in build system (hardcoded as 2.17, we need 2.14.1)
+sed -i 's/PJPROJECT_VERSION=2.17/PJPROJECT_VERSION=2.14.1/' third-party/versions.mak
+
 # Fix DAHDI graceful failure handling - change ERROR log to DEBUG for containers
 %{__perl} -pi -e 's/ast_log\(LOG_ERROR, "Failed to open \/dev\/dahdi\/transcode: %s/ast_debug(2, "DAHDI transcoder not available: %s/' codecs/codec_dahdi.c
 
