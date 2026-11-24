@@ -133,7 +133,9 @@ sed -i 's/PJPROJECT_VERSION=2.17/PJPROJECT_VERSION=2.14.1/' third-party/versions
 
 # copy the pjproject tarball to the cache/ directory
 mkdir cache
-cp %{SOURCE8} cache/
+cp %{SOURCE8} cache/ 2>/dev/null || cp pjproject-%{pjsip_version}.tar.bz2 cache/ 2>/dev/null || true
+# Generate MD5 checksum for pjproject in cache (needed by build system)
+cd cache && md5sum pjproject-%{pjsip_version}.tar.bz2 > pjproject-%{pjsip_version}.tar.bz2.md5 2>/dev/null || true; cd ..
 ls -altr cache/
 
 cp %{S:3} menuselect.makedeps
