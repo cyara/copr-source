@@ -1,6 +1,6 @@
 Name:          bcg729
-Version:       1.1.1
-Release:       5%{?dist}
+Version:       1.0.2
+Release:       1%{?dist}
 Summary:       Opensource implementation of the G.729 codec
 
 License:       GPLv3+
@@ -65,9 +65,12 @@ Development files for %{name}.
 %{_libdir}/cmake/Bcg729/
 
 
-%changelog	
+%changelog
+* Tue Nov 25 2026 Telephony <telephony@spearline.com> - 1.0.2-1
+- Update bcg729 to version 1.0.2 from BelledonneCommunications/bcg729
+
 * Thu Nov 03 2022 Patrick Coakley <patrick.coakley@spearline.com> - 1.1.1-5
-- Upgraded to 1.1.1 	
+- Upgraded to 1.1.1
 - Built for el8 and el9
 
 * Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-4

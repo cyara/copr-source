@@ -1,14 +1,12 @@
 %undefine _hardened_build
-%define git_commit 9f92804a4e16642ab2f4ed74d9ff4839f5494701
-%define git_short 9f92804a
 
 Summary:	G.729 codec for Asterisk open source PBX
 Name:		asterisk-g72x
-Version:	0.1
-Release:	0.2.git%{git_short}%{?dist}
+Version:	1.4.5
+Release:	1%{?dist}
 License:	GPLv3
 URL:		https://github.com/arkadijs/asterisk-g72x
-Source0:	https://github.com/arkadijs/asterisk-g72x/archive/%{git_commit}/asterisk-g72x-%{git_short}.tar.gz
+Source0:	asterisk-g72x-1.4.5.tar.bz2
 BuildRequires:	autoconf automake libtool
 BuildRequires:	asterisk-devel bcg729-devel
 
@@ -17,7 +15,7 @@ G.729 codec for Asterisk, using open source bcg729
 
 
 %prep
-%setup -q -n asterisk-g72x-%{git_commit}
+%setup -q -n asterisk-g72x-1.4.5
 rm ipp -rf
 
 
@@ -39,6 +37,10 @@ rm -f %{buildroot}%{_libdir}/asterisk/modules/*.*a
 
 
 %changelog
+* Tue Nov 25 2026 Telephony <telephony@spearline.com> - 1.4.5-1
+- Update asterisk-g72x to 1.4.5
+- Use released tarball instead of git commit
+
 * Tue Nov 24 2026 Telephony <telephony@spearline.com> - 0.1-0.2git
 - Rebuild against Asterisk 24 headers
 
