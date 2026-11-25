@@ -47,7 +47,7 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
 # Add asterisk-amr codec support
-Source10:         asterisk-amr-420ab33.tar.gz
+Source10:         asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21.tar.gz
 
 # Patches
 #Patch0:           codec_dahdi-container-fix.patch
@@ -167,8 +167,8 @@ cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/include/asterisk/amr.
 cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/res/res_format_attr_amr.c res/
 
 # Apply AMR codec patches
-%patch -P 1 --fuzz=2
-%patch -P 2 --fuzz=2
+%patch -P 1 -p1
+%patch -P 2 -p1
 
 %build
 
@@ -338,8 +338,11 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
-* Mon Nov 04 2024 Telephony <telephony@spearline.com> - 24.0.0-2
-- Add AMR (Adaptive Multi-Rate) codec support with OpenCORE AMR and VO AMR-WB Encoder
+* Wed Nov 25 2026 Telephony <telephony@spearline.com> - 24.0.0-2
+- Add AMR and AMR-WB codec support from traud/asterisk-amr 420ab33,
+  with codec_amr.patch and build_tools.patch rebased onto Asterisk 24.0.0
+
+* Mon Nov 23 2026 Telephony <telephony@spearline.com> - 24.0.0-1
 - Update asterisk to 24.0.0
 - Update pjproject to 2.17 (version bundled with Asterisk 24)
 - Fix DAHDI graceful failure handling in container environments
