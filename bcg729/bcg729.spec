@@ -26,14 +26,6 @@ bcg729 supports concurrent channels encoding/decoding for multi call
 application such conferencing.
 
 
-%package       devel
-Summary:       Development files for %{name}
-Requires:      %{name}%{?_isa} = %{version}-%{release}
-
-%description   devel
-Development files for %{name}.
-
-
 %prep
 %autosetup
 # unzip -qq -d test %%{SOURCE1}
@@ -56,15 +48,8 @@ Development files for %{name}.
 %{_libdir}/lib%{name}.so.0*
 
 
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/lib%{name}.pc
-%{_libdir}/cmake/Bcg729/
-
-
 %changelog
-* Fri Nov 25 2024 Telephony <telephony@spearline.com> - 1.0.2-1
+* Mon Nov 04 2024 Telephony <telephony@spearline.com> - 1.0.2-1
 - Update bcg729 to version 1.0.2 from BelledonneCommunications/bcg729
 
 * Thu Nov 03 2022 Patrick Coakley <patrick.coakley@spearline.com> - 1.1.1-5
