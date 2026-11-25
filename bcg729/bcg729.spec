@@ -26,6 +26,14 @@ bcg729 supports concurrent channels encoding/decoding for multi call
 application such conferencing.
 
 
+%package       devel
+Summary:       Development files for %{name}
+Requires:      %{name}%{?_isa} = %{version}-%{release}
+
+%description   devel
+Development files for %{name}.
+
+
 %prep
 %autosetup
 # unzip -qq -d test %%{SOURCE1}
@@ -46,6 +54,11 @@ application such conferencing.
 
 %files
 %{_libdir}/lib%{name}.so.0*
+
+
+%files devel
+%{_libdir}/lib%{name}.so
+%{_datadir}/Bcg729/cmake/
 
 
 %changelog
