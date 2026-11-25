@@ -10,7 +10,7 @@ Source0:       https://github.com/BelledonneCommunications/bcg729/archive/%{vers
 # Source1:       http://www.belledonne-communications.com/downloads/bcg729-patterns.zip
 
 # Fix cmake installation dir
-Patch0:        bcg729_cmakedir.patch
+# Patch0:        bcg729_cmakedir.patch
 
 BuildRequires: cmake
 BuildRequires: gcc
@@ -35,7 +35,7 @@ Development files for %{name}.
 
 
 %prep
-%autosetup -p1
+%autosetup
 # unzip -qq -d test %%{SOURCE1}
 
 
@@ -66,7 +66,7 @@ Development files for %{name}.
 
 
 %changelog
-* Tue Nov 25 2026 Telephony <telephony@spearline.com> - 1.0.2-1
+* Fri Nov 25 2024 Telephony <telephony@spearline.com> - 1.0.2-1
 - Update bcg729 to version 1.0.2 from BelledonneCommunications/bcg729
 
 * Thu Nov 03 2022 Patrick Coakley <patrick.coakley@spearline.com> - 1.1.1-5
