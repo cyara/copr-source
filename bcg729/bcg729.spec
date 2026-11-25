@@ -53,8 +53,6 @@ Development files for %{name}.
 
 
 %files
-%doc AUTHORS.md README.md CHANGELOG.md
-%license LICENSE.txt
 %{_libdir}/lib%{name}.so.0*
 
 
