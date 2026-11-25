@@ -16,7 +16,7 @@ Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            3
 Version:          24.0.0
-Release:          1%{?dist}
+Release:          2%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
 
@@ -46,8 +46,13 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
+# Add asterisk-amr codec support
+Source10:         asterisk-amr-420ab33.tar.gz
+
 # Patches
 #Patch0:           codec_dahdi-container-fix.patch
+Patch1:           codec_amr.patch
+Patch2:           build_tools.patch
 
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
@@ -93,6 +98,8 @@ BuildRequires:    libpri-devel
 BuildRequires:    speex-devel
 BuildRequires:    speexdsp-devel
 BuildRequires:    opus-devel
+BuildRequires:    opencore-amr-devel
+BuildRequires:    vo-amrwbenc-devel
 
 BuildRequires:    systemd-rpm-macros
 
@@ -151,6 +158,17 @@ chmod -x contrib/scripts/dbsep.cgi
 tar -xvf %{SOURCE9}
 mv ./asterisk-res_json* ./asterisk-res_json
 ./asterisk-res_json/install.sh
+
+# Extract and add asterisk-amr codec support
+tar -xvf %{SOURCE10}
+cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/codecs/codec_amr.c codecs/
+cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/codecs/ex_amr.h codecs/
+cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/include/asterisk/amr.h include/asterisk/
+cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/res/res_format_attr_amr.c res/
+
+# Apply AMR codec patches
+%patch -P 1 --fuzz=2
+%patch -P 2 --fuzz=2
 
 %build
 
@@ -320,7 +338,8 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
-* Mon Nov 23 2026 Telephony <telephony@spearline.com> - 24.0.0-1
+* Mon Nov 04 2024 Telephony <telephony@spearline.com> - 24.0.0-2
+- Add AMR (Adaptive Multi-Rate) codec support with OpenCORE AMR and VO AMR-WB Encoder
 - Update asterisk to 24.0.0
 - Update pjproject to 2.17 (version bundled with Asterisk 24)
 - Fix DAHDI graceful failure handling in container environments
