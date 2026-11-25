@@ -1,4 +1,5 @@
 %global           pjsip_version   2.14.1
+%global           amr_commit      420ab33f236e15955351e45bf9fbb256228afe21
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
@@ -16,7 +17,7 @@ Summary:          The Open Source PBX
 Name:             asterisk
 Epoch:            2
 Version:          20.9.3
-Release:          1%{?dist}
+Release:          2%{?dist}
 License:          GPLv2
 URL:              http://www.asterisk.org/
 
@@ -45,6 +46,9 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 
 # Add asterisk-res_json
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
+
+# AMR / AMR-WB transcoding, traud/asterisk-amr @ %{amr_commit}
+Source10:         https://github.com/traud/asterisk-amr/archive/%{amr_commit}/asterisk-amr-%{amr_commit}.tar.gz
 
 # Asterisk now builds against a bundled copy of pjproject, as they apply some patches
 # directly to pjproject before the build against it
@@ -90,6 +94,8 @@ BuildRequires:    libpri-devel
 BuildRequires:    speex-devel
 BuildRequires:    speexdsp-devel
 BuildRequires:    opus-devel
+BuildRequires:    opencore-amr-devel
+BuildRequires:    vo-amrwbenc-devel
 
 BuildRequires:    systemd-rpm-macros
 
@@ -145,6 +151,17 @@ chmod -x contrib/scripts/dbsep.cgi
 tar -xvf %{SOURCE9}
 mv ./asterisk-res_json* ./asterisk-res_json
 ./asterisk-res_json/install.sh
+
+# Copy AMR codec sources into the tree, then apply the two Asterisk patches.
+# opencore-amr.patch is for the OpenCORE library itself and is not applied here.
+tar -xf %{SOURCE10}
+amr_src=asterisk-amr-%{amr_commit}
+cp -a ${amr_src}/codecs/codec_amr.c ${amr_src}/codecs/ex_amr.h codecs/
+cp -a ${amr_src}/include/asterisk/amr.h include/asterisk/
+cp -a ${amr_src}/res/res_format_attr_amr.c res/
+patch -p0 < ${amr_src}/codec_amr.patch
+patch -p0 < ${amr_src}/build_tools.patch
+rm -rf ${amr_src}
 
 %build
 
@@ -314,6 +331,9 @@ rm -f %{buildroot}%{_sysconfdir}/asterisk/motif.conf
 %{_libdir}/libasteriskpj.so
 
 %changelog
+* Tue Nov 24 2026 Telephony - 20.9.3-2
+- Add AMR and AMR-WB transcoding from traud/asterisk-amr 420ab33
+
 * Mon Oct 14 2024 Telephony - 20.9.3
 - Update asterisk to 20.9.3
 - Update pjproject to 2.14.1
