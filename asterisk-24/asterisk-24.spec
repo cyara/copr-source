@@ -1,4 +1,5 @@
 %global           pjsip_version   2.17
+%global           amr_commit      420ab33f236e15955351e45bf9fbb256228afe21
 
 %global           optflags        %{optflags} -Werror-implicit-function-declaration -DLUA_COMPAT_MODULE
 %ifarch s390 %{arm} aarch64 %{mips}
@@ -47,7 +48,7 @@ Source8:          https://raw.githubusercontent.com/asterisk/third-party/master/
 Source9:          https://github.com/felipem1210/asterisk-res_json/archive/asterisk-res_json-7081ef68a880eeb2b0a9c181d7fd72dd15ba7c65.tar.gz
 
 # Add asterisk-amr codec support
-Source10:         asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21.tar.gz
+Source10:         https://github.com/traud/asterisk-amr/archive/%{amr_commit}/asterisk-amr-%{amr_commit}.tar.gz
 
 # Patches
 #Patch0:           codec_dahdi-container-fix.patch
@@ -160,15 +161,14 @@ mv ./asterisk-res_json* ./asterisk-res_json
 ./asterisk-res_json/install.sh
 
 # Extract and add asterisk-amr codec support
-tar -xvf %{SOURCE10}
-cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/codecs/codec_amr.c codecs/
-cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/codecs/ex_amr.h codecs/
-cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/include/asterisk/amr.h include/asterisk/
-cp ./asterisk-amr-420ab33f236e15955351e45bf9fbb256228afe21/res/res_format_attr_amr.c res/
-
-# Apply AMR codec patches
-%patch -P 1 -p1
-%patch -P 2 -p1
+tar -xf %{SOURCE10}
+amr_src=asterisk-amr-%{amr_commit}
+cp -a ${amr_src}/codecs/codec_amr.c ${amr_src}/codecs/ex_amr.h codecs/
+cp -a ${amr_src}/include/asterisk/amr.h include/asterisk/
+cp -a ${amr_src}/res/res_format_attr_amr.c res/
+patch -p0 < ${amr_src}/codec_amr.patch
+patch -p0 < ${amr_src}/build_tools.patch
+rm -rf ${amr_src}
 
 %build
 
